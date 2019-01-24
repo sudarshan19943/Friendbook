@@ -9,6 +9,6 @@
   <title>Azure Samples Hello World</title>
 </head>
 <body>
-  <H1>Hello Azure! This is Group 1</H1>
+  <H1>Hello Group 1 !!!</H1>
 </body>
 </html>
