@@ -25,6 +25,9 @@
 <fmt:setBundle basename="locale" var="loc"/>
 <fmt:message bundle="${loc}" key="local.label.sign_in_continue" var="sign_in_continue"/>
 <fmt:message bundle="${loc}" key="local.button.sign_in" var="sign_in"/>
+<fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
+<fmt:message bundle="${loc}" key="local.label.new_user" var="new_user"/>
+<fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
 
 <body>
 <div class="container" style="margin-top:40px">
@@ -53,7 +56,7 @@
                                     <input class="form-control" placeholder='${password}' name="password" type="password" value="" autocomplete="off" required maxlength="255">
                                 </div>
                             </div>
-                            <c:if test="${not empty errorMessage}">
+	                            <c:if test="${not empty errorMessage}">
                                 <div class="alert alert-danger">
                                     <strong>
                                         ${errorMessage}
@@ -63,10 +66,18 @@
                             <div class="form-group">
                                 <input type="submit" class="btn btn-lg btn-primary btn-block" value=${sign_in}>
                             </div>
+                            <div class="form-group">
+				                    ${forgor_password} <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
+				             </div>
                         </div>
                     </form>
+                     </div>
+                 <div class="panel-footer">
+                     ${new_user} <a href="registration.jsp" onClick=""> ${sign_up_here} </a> 
                 </div>
             </div>
         </div>
+    </div>
+</div>
 </body>
 </html>
