@@ -1,4 +1,4 @@
-package com.macs.groupone.friendbookapplication;
+/*package com.macs.groupone.friendbookapplication;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,4 +14,4 @@ public class FriendBookApplicationTests {
 	}
 
 }
-
+*/
