@@ -1,9 +1,9 @@
-package com.macs.groupone.model;
+package com.macs.groupone.friendbookapplication.model;
 
 import java.sql.Timestamp;
 
-import com.macs.groupone.beans.MessageBean;
-import com.macs.groupone.service.UserService;
+import com.macs.groupone.friendbookapplication.beans.MessageBean;
+import com.macs.groupone.friendbookapplication.service.UserService;
 
 public class Message {
 	

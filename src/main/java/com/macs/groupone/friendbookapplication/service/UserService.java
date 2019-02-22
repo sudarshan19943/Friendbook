@@ -1,4 +1,4 @@
-package com.macs.groupone.service;
+package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.macs.groupone.common.DBUtil;
-import com.macs.groupone.interfaces.UserDao;
-import com.macs.groupone.model.User;
+import com.macs.groupone.friendbookapplication.interfaces.UserDao;
+import com.macs.groupone.friendbookapplication.model.User;
 
 
 @Service
@@ -80,6 +80,12 @@ public class UserService implements UserDao {
 	public void changePassword(User user, String password) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public User findUserByResetToken(String resetToken)
+	{
+		return null;
+		
 	}
 
 	/*

@@ -1,9 +1,9 @@
-package com.macs.groupone.service;
+package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Collection;
 
-import com.macs.groupone.interfaces.FriendsDao;
-import com.macs.groupone.model.User;
+import com.macs.groupone.friendbookapplication.interfaces.FriendsDao;
+import com.macs.groupone.friendbookapplication.model.User;
 
 public class FriendsService implements FriendsDao{
 
