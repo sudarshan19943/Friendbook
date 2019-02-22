@@ -1,0 +1,75 @@
+body { 
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .header {
+    background-color: #365899;
+    padding: 5px 5px;
+  }
+  
+  .header a{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    line-height: 1px;
+  }
+  
+  
+  .sign-up{
+    position: relative;
+    margin: 5% auto;
+    width: 600px;
+    height: 400px;
+    background: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px #365899;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+  
+  input[type="text"], input[type="password"], input[type="email"]
+  {
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 4px;
+    width: 220px;
+    height: 32px;
+    border: none;
+    border-bottom: 1px solid #AAA;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    transition: 0.2s ease;
+  }
+  
+  button[type="submit"]
+  {
+    margin-top: 5px;
+    width: 100px;
+    height: 32px;
+    background: #365899;
+    border: none;
+    border-radius: 2px;
+    color: #FFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: 0.1s ease;
+    cursor: pointer;
+  }
+  
+  .footer {
+    background-color: #365899;
+    padding: 5px 5px;
+    line-height: 1px;
+    color: white;
+    text-align: center;
+  }
+  
+  
+  
