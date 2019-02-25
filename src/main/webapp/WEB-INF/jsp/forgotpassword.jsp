@@ -23,10 +23,11 @@
 </head>
 
 <fmt:setBundle basename="locale" var="loc"/>
-<fmt:message bundle="${loc}" key="local.label.reset" var="reset"/>
 <fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
 
 <body>
+<h2 align = "center">Instructions:</h2>
+<h4 align="center">Please enter the email address associated with your Friendbook account. A link containing on how to reset your password will be emailed to you.</h4>
 <div class="container" style="margin-top:40px">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
@@ -35,30 +36,19 @@
                     <strong>${forgot_password}</strong>
                 </div>
                 <div class="panel-body">
-                    <form role="form" action="/login" method="post" autocomplete="off">
-                        <div class="form-group">
-                                <div class="input-group">
-                                      <span class="input-group-addon">
-                                          <i class="glyphicon glyphicon-user"></i>
-                                      </span>
-                                    <input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text" autofocus required autocomplete="off" maxlength="255" >
-                                </div>
+                    <form role="form" action="/login" method="post">
+                        <div class="form-group"> 
+                                <p>Email Address:</p>
+                            	<input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text"> 
                             </div>
-                            </div>
-                            <c:if test="${not empty errorMessage}">
-                                <div class="alert alert-danger">
-                                    <strong>
-                                        ${errorMessage}
-                                    </strong>
-                                </div>
-                            </c:if>
                             <div class="form-group">
                                 <input type="submit" class="btn btn-lg btn-primary btn-block" value=${forgot_password} />
                             </div>
-                        </div>
                     </form>
                 </div>
             </div>
         </div>
+      </div>
+   </div>
 </body>
 </html>
