@@ -51,20 +51,11 @@
                     <form role="form" action="/login" method="post" autocomplete="off">
                         <div class="col-sm-12 col-md-10 col-md-offset-1 ">
                             <div class="form-group">
-                                <div class="input-group">
-                                      <span class="input-group-addon">
-                                          <i class="glyphicon glyphicon-user"></i>
-                                      </span>
-                                    <input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text" autofocus required autocomplete="off" maxlength="255" >
-                                </div>
+                                    <input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text" autofocus required>
+                                
                             </div>
                             <div class="form-group">
-                                <div class="input-group">
-                                      <span class="input-group-addon">
-                                          <i class="glyphicon glyphicon-lock"></i>
-                                      </span>
                                     <input class="form-control" placeholder='${password}' name="password" type="password" value="" autocomplete="off" required maxlength="255">
-                                </div>
                             </div>
 	                            <c:if test="${not empty errorMessage}">
                                 <div class="alert alert-danger">
