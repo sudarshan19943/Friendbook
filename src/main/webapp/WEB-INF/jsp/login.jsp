@@ -33,7 +33,7 @@
 <body>
 
 <div class="header">
-    <h2>Friends Book</h2>
+    <h2>Friend Book</h2>
 </div>
 
 <div class="container-fluid" style="margin-top:50px">
@@ -74,10 +74,10 @@
                                 </div>
                                 </c:if>
                             <div class="form-group">
-                                <input type="submit" class="btn btn-lg btn-primary btn-block" value=${sign_in}>
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="${sign_in}">
                             </div>
-                            <div class="form-group">
-				                    ${forgor_password} <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
+                            <div class="form-group"> 
+                                    <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
 				             </div>
                         </div>
                     </form>
