@@ -9,6 +9,7 @@
 <style type="text/css">
     <%@include file="css/bootstrap.min.css"%>
     <%@include file="css/bootstrap-formhelpers.min.css"%>
+    <%@include file="css/style.css"%>
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
@@ -30,12 +31,21 @@
 <fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
 
 <body>
-<div class="container" style="margin-top:40px">
+
+<div class="header">
+    <h2>Friend Book</h2>
+</div>
+
+<div class="container-fluid" style="margin-top:50px">
     <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
+        <div class="col-sm-6 order-sm-1">
+            <h2>Connect with your friends around the world</h2>
+        </div>
+        <div class="col-sm-6 col-md-4 col-md-offset-6">
+            
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong>${sign_in_continue}</strong>
+                    <strong>${sign_in}</strong>
                 </div>
                 <div class="panel-body">
                     <form role="form" action="/login" method="post" autocomplete="off">
@@ -62,18 +72,20 @@
                                         ${errorMessage}
                                     </strong>
                                 </div>
-                            </c:if>
+                                </c:if>
                             <div class="form-group">
-                                <input type="submit" class="btn btn-lg btn-primary btn-block" value=${sign_in}>
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="${sign_in}">
                             </div>
-                            <div class="form-group">
-				                    ${forgor_password} <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
+                            <div class="form-group"> 
+                                    <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
 				             </div>
                         </div>
                     </form>
                      </div>
                  <div class="panel-footer">
-                     ${new_user} <a href="registration.jsp" onClick=""> ${sign_up_here} </a> 
+                     <strong>${new_user}</strong> 
+                     <p>
+                     <a href="registration.jsp" onClick=""> ${sign_up_here} </a> 
                 </div>
             </div>
         </div>
