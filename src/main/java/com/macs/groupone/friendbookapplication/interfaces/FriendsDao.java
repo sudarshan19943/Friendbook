@@ -1,8 +1,8 @@
-package com.macs.groupone.interfaces;
+package com.macs.groupone.friendbookapplication.interfaces;
 
 import java.util.Collection;
 
-import com.macs.groupone.model.User;
+import com.macs.groupone.friendbookapplication.model.User;
 
 public interface FriendsDao {
 	

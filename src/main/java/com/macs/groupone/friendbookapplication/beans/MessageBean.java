@@ -1,4 +1,4 @@
-package com.macs.groupone.beans;
+package com.macs.groupone.friendbookapplication.beans;
 
 import java.sql.Timestamp;
 

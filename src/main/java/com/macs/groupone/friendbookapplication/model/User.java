@@ -1,6 +1,4 @@
-package com.macs.groupone.model;
-
-
+package com.macs.groupone.friendbookapplication.model;
 
 public class User {
 

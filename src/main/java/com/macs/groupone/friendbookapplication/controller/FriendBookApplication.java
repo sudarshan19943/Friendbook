@@ -1,4 +1,4 @@
-package com.macs.groupone.friendbookapplication;
+package com.macs.groupone.friendbookapplication.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
