@@ -7,6 +7,7 @@
     <%@include file="css/chat.css"%>
     <%@include file="css/bootstrap.min.css"%>
     <%@include file="css/bootstrap-formhelpers.min.css"%>
+    <%@include file="css/style.css"%>
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
@@ -27,6 +28,11 @@
 
 
 <body>
+
+<div class="header">
+    <h2>Friend Book</h2>
+</div>
+
 <div class="container" style="margin-top:40px">
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
