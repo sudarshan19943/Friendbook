@@ -25,7 +25,7 @@ public class RegistrationController {
 	EmailService emailService;
 
 	// show registration
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	@RequestMapping(value = "/registeration", method = RequestMethod.GET)
 	public ModelAndView showSignUpPage(ModelAndView modelAndView, User user) {
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName(Constants.REGISTER_VIEW);
@@ -33,7 +33,7 @@ public class RegistrationController {
 	}
 
 	// Process form input data
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/registeration", method = RequestMethod.POST)
 	public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid User user,
 			BindingResult bindingResult, HttpServletRequest request) {
 
