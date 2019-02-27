@@ -13,9 +13,12 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Service;
+
 import com.macs.groupone.common.Config;
 import com.macs.groupone.friendbookapplication.constants.Constants;
 
+@Service
 public class EmailService {
 	public EmailService() {
 
