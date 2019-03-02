@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.macs.groupone.friendbookapplication.constants.Constants;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
 public class LoginController {
-
+	private String ERRORMESSAGE="errorMessage";
+	private String USER_DOES_NOT_EXIST="Oops user does not exist.";
+	private String LOGIN_VIEW="login";
+	private String PROFILE_VIEW="profile";
 	@Autowired
 	UserService userService;
 
@@ -32,10 +34,10 @@ public class LoginController {
 			HttpServletRequest request) {
 		User userByEmail= userService.getUserByEmailPassword(user.getEmail(), user.getPassword());
 		if (userByEmail == null) {
-			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.USER_DOES_NOT_EXISTS);
-			modelAndView.setViewName(Constants.LOGIN_VIEW);
+			modelAndView.addObject(ERRORMESSAGE, USER_DOES_NOT_EXIST);
+			modelAndView.setViewName(LOGIN_VIEW);
 		} else {
-			modelAndView.setViewName(Constants.PROFILE_VIEW);
+			modelAndView.setViewName(PROFILE_VIEW);
 		}
 		return modelAndView;
 	}

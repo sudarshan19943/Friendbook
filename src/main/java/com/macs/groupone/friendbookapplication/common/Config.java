@@ -5,14 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.macs.groupone.friendbookapplication.constants.Constants;
 
 public class Config {
-	
+	private static String APPLICATION_PROPERTIES="src/main/resources/application.properties";
 	private static Properties defaultProps = new Properties();
 	  static {
 	    try {
-	        FileInputStream in = new FileInputStream(Constants.APPLICATION_PROPERTIES);
+	        FileInputStream in = new FileInputStream(APPLICATION_PROPERTIES);
 	        defaultProps.load(in);
 	        in.close();
 	    }catch (FileNotFoundException e) {

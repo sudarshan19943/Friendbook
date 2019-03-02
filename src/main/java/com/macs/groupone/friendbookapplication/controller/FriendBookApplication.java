@@ -15,7 +15,7 @@ public class FriendBookApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FriendBookApplication.class, args);
-		logger.trace("Frindbook Application has been started..");
+		logger.trace("Friendbook Application has been started..");
 	}
 	
 	@Override

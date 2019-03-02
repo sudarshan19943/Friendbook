@@ -24,19 +24,16 @@ public class UserService implements UserDao {
 
 	@Override
 	public User getUserById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public User getUserByEmail(String email) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public User getUserByEmailPassword(String email, String password) {
-		// TODO Auto-generated method stub
 		DBUtil db = new DBUtil();
 		try {
 			if(db.readDataBase())
@@ -44,7 +41,6 @@ public class UserService implements UserDao {
 				
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -52,33 +48,27 @@ public class UserService implements UserDao {
 
 	@Override
 	public Collection<User> getUserList() {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
 		
 		return null;
 	}
 
 	@Override
 	public Optional<User> addUser(String email, String password, String first_name, String last_name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void updateUser(User user) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void removeUser(User user) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void changePassword(User user, String password) {
-		// TODO Auto-generated method stub
 
 	}
 
