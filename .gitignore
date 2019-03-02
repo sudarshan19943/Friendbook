@@ -1,7 +1,18 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+
+###Eclipse###
 .metadata
-.mvn/wrapper
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
 
 ### STS ###
 .apt_generated
