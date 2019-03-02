@@ -2,8 +2,8 @@
 !.mvn/wrapper/maven-wrapper.jar
 
 ###Eclipse###
-.metadata
-.mvn/wrapper
+.metadata/
+.mvn/wrapper/
 
 ### STS ###
 .apt_generated
