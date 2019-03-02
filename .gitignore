@@ -4,6 +4,7 @@
 ###Eclipse###
 .metadata
 .mvn/wrapper
+/bin/
 
 ### STS ###
 .apt_generated
