@@ -16,12 +16,15 @@ import java.util.Date;
 import java.util.List;
 
 import com.macs.groupone.friendbookapplication.common.Config;
-import com.macs.groupone.friendbookapplication.constants.Constants;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
 public class JdbcManagerImpl implements JdbcManager {
+	
+	private String URL = "spring.datasource.url";
+	private String USERNAME = "spring.datasource.username";
+	private String PASSWORD = "spring.datasource.password";
 
 	private String url;
 	private String username;
@@ -29,9 +32,9 @@ public class JdbcManagerImpl implements JdbcManager {
 
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(Constants.URL);
-		this.username = Config.getProperty(Constants.USERNAME);
-		this.password = Config.getProperty(Constants.PASSWORD);
+		this.url = Config.getProperty(URL);
+		this.username = Config.getProperty(USERNAME);
+		this.password = Config.getProperty(PASSWORD);
 	}
 
 	protected final Connection getConnection() {

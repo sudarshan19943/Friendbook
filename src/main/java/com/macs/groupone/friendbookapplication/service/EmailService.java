@@ -1,4 +1,4 @@
-package com.macs.groupone.service;
+package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Date;
 import java.util.Properties;
@@ -15,8 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.stereotype.Service;
 
-import com.macs.groupone.common.Config;
-import com.macs.groupone.friendbookapplication.constants.Constants;
+import com.macs.groupone.friendbookapplication.common.Config;
 
 @Service
 public class EmailService {
@@ -27,14 +26,21 @@ public class EmailService {
 	private Properties properties;
 	private Session session;
 	private InternetAddress fromAddress;
+	
+	public String PORT="mail.smtp.port";
+	public String HOST="mail.smtp.host";
+	public String ENABLED="mail.smtp.starttls.enable";
+	public String AUTH="mail.smtp.auth";
+	public String MAIL_USERNAME="mail.smtp.username";
+	public String MAIL_PASSWORD="mail.smtp.password";
 
 	private void createFromAddress(String userName) throws AddressException {
 		fromAddress = new InternetAddress(userName);
 	}
 
 	private void createSession() {
-		final String userName = Config.getProperty(Constants.MAIL_USERNAME);
-		final String password = Config.getProperty(Constants.MAIL_PASSWORD);
+		final String userName = Config.getProperty(MAIL_USERNAME);
+		final String password = Config.getProperty(MAIL_PASSWORD);
 		Authenticator auth = new Authenticator() {
 			public PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(userName, password);
@@ -45,17 +51,17 @@ public class EmailService {
 
 	private void createProperties() {
 		properties = new Properties();
-		properties.put(Constants.HOST, Config.getProperty(Constants.HOST));
-		properties.put(Constants.PORT, Config.getProperty(Constants.PORT));
-		properties.put(Constants.AUTH, Config.getProperty(Constants.AUTH));
-		properties.put(Constants.ENABLED, Config.getProperty(Constants.ENABLED));
+		properties.put(HOST, Config.getProperty(HOST));
+		properties.put(PORT, Config.getProperty(PORT));
+		properties.put(AUTH, Config.getProperty(AUTH));
+		properties.put(ENABLED, Config.getProperty(ENABLED));
 	}
 
 	public void sendEmail(String toAddress, String subject, String message) throws MessagingException {
 
 		createProperties();
 		createSession();
-		createFromAddress(Config.getProperty(Constants.MAIL_USERNAME));
+		createFromAddress(Config.getProperty(MAIL_USERNAME));
 
 		Message msg = new MimeMessage(session);
 		msg.setFrom(fromAddress);

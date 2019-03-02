@@ -9,6 +9,8 @@
 .settings
 .springBeans
 .sts4-cache
+.metadata
+.mvn/wrapper
 
 ### IntelliJ IDEA ###
 .idea
