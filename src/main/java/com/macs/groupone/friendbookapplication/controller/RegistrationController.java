@@ -1,19 +1,20 @@
 package com.macs.groupone.friendbookapplication.controller;
 
 import javax.servlet.http.HttpServletRequest;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import com.macs.groupone.friendbookapplication.service.EmailService;
+
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.EmailService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
-
+@Controller
 public class RegistrationController {
 	private String ALREADY_REGISTERED="alreadyRegisteredMessage";
 	private String ALREADY_REGISTERED_ERROR= "Oops!  There is already a user registered with the email provided.";
@@ -26,7 +27,7 @@ public class RegistrationController {
 	EmailService emailService;
 
 	// show registration
-	@RequestMapping(value = "/registeration", method = RequestMethod.GET)
+	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public ModelAndView showSignUpPage(ModelAndView modelAndView, User user) {
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName(REGISTER_VIEW);
@@ -34,7 +35,7 @@ public class RegistrationController {
 	}
 
 	// Process form input data
-	@RequestMapping(value = "/registeration", method = RequestMethod.POST)
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid User user,
 			BindingResult bindingResult, HttpServletRequest request) {
 
