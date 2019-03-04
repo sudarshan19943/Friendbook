@@ -68,7 +68,7 @@
                                 <input type="submit" class="btn btn-lg btn-primary btn-block" value="${sign_in}">
                             </div>
                             <div class="form-group"> 
-                                    <a href="forgotpassword.jsp" onClick=""> ${forgot_password} </a>
+                                    <a href="forgotpassword" onClick=""> ${forgot_password} </a>
 				             </div>
                         </div>
                     </form>
@@ -76,7 +76,7 @@
                  <div class="panel-footer">
                      <strong>${new_user}</strong> 
                      <p>
-                     <a href="registration.jsp" onClick=""> ${sign_up_here} </a> 
+                     <a href="register" onClick=""> ${sign_up_here} </a> 
                 </div>
             </div>
         </div>
