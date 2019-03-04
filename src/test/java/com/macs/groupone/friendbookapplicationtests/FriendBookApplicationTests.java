@@ -1,3 +1,4 @@
+package com.macs.groupone.friendbookapplicationtests;
 /*package com.macs.groupone.friendbookapplication;
 
 import org.junit.Test;

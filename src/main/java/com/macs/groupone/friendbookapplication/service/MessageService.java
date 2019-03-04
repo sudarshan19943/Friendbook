@@ -2,7 +2,7 @@ package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Collection;
 
-import com.macs.groupone.friendbookapplication.interfaces.MessageDao;
+import com.macs.groupone.friendbookapplication.dao.MessageDao;
 import com.macs.groupone.friendbookapplication.model.Message;
 import com.macs.groupone.friendbookapplication.model.User;
 

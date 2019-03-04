@@ -21,10 +21,6 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessExceptio
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
 public class JdbcManagerImpl implements JdbcManager {
-	
-	private String URL = "spring.datasource.url";
-	private String USERNAME = "spring.datasource.username";
-	private String PASSWORD = "spring.datasource.password";
 
 	private String url;
 	private String username;
@@ -32,9 +28,9 @@ public class JdbcManagerImpl implements JdbcManager {
 
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(URL);
-		this.username = Config.getProperty(USERNAME);
-		this.password = Config.getProperty(PASSWORD);
+		this.url = Config.getProperty(JDBCConstants.URL);
+		this.username = Config.getProperty(JDBCConstants.USERNAME);
+		this.password = Config.getProperty(JDBCConstants.PASSWORD);
 	}
 
 	protected final Connection getConnection() {
