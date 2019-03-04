@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.common.DBUtil;
-import com.macs.groupone.friendbookapplication.interfaces.UserDao;
+import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
 

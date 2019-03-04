@@ -2,7 +2,7 @@ package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Collection;
 
-import com.macs.groupone.friendbookapplication.interfaces.FriendsDao;
+import com.macs.groupone.friendbookapplication.dao.FriendsDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
 public class FriendsService implements FriendsDao{
