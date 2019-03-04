@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
-import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.CountryAndStateService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
@@ -34,8 +33,8 @@ public class ProfileController {
 	@Autowired
 	CountryAndStateService countryAndStateService;
 	
-	@Autowired
-	AvatarService avatarService;
+	/*@Autowired
+	AvatarService avatarService;*/
 
 	// show login page
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
@@ -53,7 +52,7 @@ public class ProfileController {
 		modelAndView.addObject("Countries",countryList);
 		
 		//initially default avatar
-		avatarService.getDeafultProfileAvatar(userByEmail.getId());
+		//avatarService.getDeafultProfileAvatar(userByEmail.getId());
 		
 		modelAndView.setViewName("profile");
 	    return modelAndView;
