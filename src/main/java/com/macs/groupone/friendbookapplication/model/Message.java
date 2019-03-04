@@ -2,7 +2,7 @@ package com.macs.groupone.friendbookapplication.model;
 
 import java.sql.Timestamp;
 
-import com.macs.groupone.friendbookapplication.beans.MessageBean;
+import com.macs.groupone.friendbookapplication.beans.Message;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 public class Message {
@@ -13,7 +13,7 @@ public class Message {
     private User recipient;
     private String body;
 
-    private static Message from(MessageBean messageBean, User sender, User recipient) {
+    private static Message from(Message messageBean, User sender, User recipient) {
 
         Message message = new Message();
         message.id = messageBean.getId();
@@ -26,7 +26,7 @@ public class Message {
 
     }
 
-    public static Message from(MessageBean messageBean, UserService userDao) {
+    public static Message from(Message messageBean, UserService userDao) {
         User sender = userDao.getUserById(messageBean.getSender());
         User recipient = userDao.getUserById(messageBean.getRecipient());
         return from(messageBean, sender, recipient);

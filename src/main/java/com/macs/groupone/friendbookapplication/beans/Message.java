@@ -2,7 +2,7 @@ package com.macs.groupone.friendbookapplication.beans;
 
 import java.sql.Timestamp;
 
-public class MessageBean {
+public class Message {
 
 	private int id;
 	private Timestamp date;

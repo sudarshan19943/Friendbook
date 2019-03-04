@@ -1,6 +1,6 @@
 package com.macs.groupone.friendbookapplication.beans;
 
-public class FriendBean {
+public class Friend {
 	
 	private int userid;
 	private int friendid;
