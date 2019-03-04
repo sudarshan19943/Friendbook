@@ -58,20 +58,18 @@ public class ProfileController {
 	    return modelAndView;
 	}
 	
-	   // show profile page for cities
-		@RequestMapping(value = "/profile", method = RequestMethod.GET)
-		public ModelAndView showProfileForSelctedCountry(ModelAndView modelAndView ,@RequestParam("Country")String country) {
-			if(country!=null || country.equalsIgnoreCase("canada")||country.equalsIgnoreCase("USA"))
-			{
-				ArrayList<String> provinveorStates=countryAndStateService.getCities(country);
-				if(provinveorStates!=null)
-				{
-					modelAndView.addObject("cities",provinveorStates);
-					modelAndView.setViewName("profile");
-				}
-			}
-		    return modelAndView;
-		}
+	/*
+	 * // show profile page for cities
+	 * 
+	 * @RequestMapping(value = "/profile", method = RequestMethod.GET) public
+	 * ModelAndView showProfileForSelctedCountry(ModelAndView modelAndView
+	 * ,@RequestParam("Country")String country) { if(country!=null ||
+	 * country.equalsIgnoreCase("canada")||country.equalsIgnoreCase("USA")) {
+	 * ArrayList<String> provinveorStates=countryAndStateService.getCities(country);
+	 * if(provinveorStates!=null) {
+	 * modelAndView.addObject("cities",provinveorStates);
+	 * modelAndView.setViewName("profile"); } } return modelAndView; }
+	 */
 
 
 	// Process login
