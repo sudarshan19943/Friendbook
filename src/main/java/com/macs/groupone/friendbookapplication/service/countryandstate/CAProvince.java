@@ -1,7 +1,7 @@
 package com.macs.groupone.friendbookapplication.service.countryandstate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public enum CAProvince implements StateProvinceEnum{
 	//Provinces
@@ -37,20 +37,6 @@ public enum CAProvince implements StateProvinceEnum{
 	public String getName(){
 		return provinceName;
 	}
-	
-
-	public static CAProvince getProvince(String code){
-		if (code!=null || !code.equalsIgnoreCase("")){
-			String codeUpper = code.toUpperCase().trim();
-			for (CAProvince p : CAProvince.values()){
-				if (codeUpper.equals(p.provinceCode)){
-					return p;
-				}
-			}
-		}
-		return null;
-	}
-	
 	
 	public static ArrayList<String> getListOfProvinces(){
 		ArrayList<String> provincesnames=new ArrayList<String>();
