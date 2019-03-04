@@ -7,7 +7,8 @@ import java.util.Properties;
 
 
 public class Config {
-	private static String APPLICATION_PROPERTIES="src/main/resources/application.properties";
+	
+	public static final String APPLICATION_PROPERTIES = "src/main/resources/application.properties";
 	private static Properties defaultProps = new Properties();
 	  static {
 	    try {
@@ -26,3 +27,4 @@ public class Config {
 	  }
 
 }
+

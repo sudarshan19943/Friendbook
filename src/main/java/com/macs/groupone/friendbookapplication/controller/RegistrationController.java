@@ -3,6 +3,8 @@ package com.macs.groupone.friendbookapplication.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,10 +18,10 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
 public class RegistrationController {
-	private String ALREADY_REGISTERED="alreadyRegisteredMessage";
-	private String ALREADY_REGISTERED_ERROR= "Oops!  There is already a user registered with the email provided.";
-	private String REGISTER_VIEW="registration";
-	private String PROFILE_VIEW="profile";
+
+	private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
+
+	
 	@Autowired
 	UserService userService;
 
@@ -27,29 +29,29 @@ public class RegistrationController {
 	EmailService emailService;
 
 	// show registration
-	@RequestMapping(value = "/registration", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public ModelAndView showSignUpPage(ModelAndView modelAndView, User user) {
 		modelAndView.addObject("user", user);
-		modelAndView.setViewName(REGISTER_VIEW);
+		modelAndView.setViewName(Constants.REGISTER_VIEW);
 		return modelAndView;
 	}
 
 	// Process form input data
-	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView processRegistrationForm(ModelAndView modelAndView, @Valid User user,
 			BindingResult bindingResult, HttpServletRequest request) {
 
 		User userExists = userService.getUserByEmail(user.getEmail());
 		if (userExists != null) {
-			modelAndView.addObject(ALREADY_REGISTERED,ALREADY_REGISTERED_ERROR);
-			modelAndView.setViewName(REGISTER_VIEW);
-			//bindingResult.reject("email");
+			modelAndView.addObject(Constants.ALREADY_REGISTERED, Constants.ALREADY_REGISTERED_ERROR);
+			modelAndView.setViewName(Constants.REGISTER_VIEW);
+			// bindingResult.reject("email");
 		}
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName(REGISTER_VIEW);
+			modelAndView.setViewName(Constants.REGISTER_VIEW);
 		} else {
 			userService.addUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName());
-			modelAndView.setViewName(PROFILE_VIEW);
+			modelAndView.setViewName(Constants.PROFILE_VIEW);
 		}
 
 		return modelAndView;

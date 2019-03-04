@@ -28,16 +28,4 @@ public class Constants {
 	public static final String RESET_VIEW="resetpassword";
 	public static final String FORGOTPASSWORD_VIEW="forgotpassword";
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
