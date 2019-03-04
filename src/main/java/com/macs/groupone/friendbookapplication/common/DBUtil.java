@@ -1,4 +1,4 @@
-package com.macs.groupone.common;
+package com.macs.groupone.friendbookapplication.common;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+
 
 public class DBUtil {
 
