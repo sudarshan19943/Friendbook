@@ -1,92 +1,70 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import java.util.Collection;
-import java.util.Optional;
 
+import java.util.Collection;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.macs.groupone.friendbookapplication.common.Util;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
-
 @Service
-public class UserService implements UserDao {
+public class UserService {
 
-	UserService() {
+	@Autowired
+	UserDao userDao;
+
+	public UserService() {
+
 	}
 
-	@Override
 	public int getNumberOfUsers() {
-		
+
 		return 0;
 	}
 
-	@Override
 	public User getUserById(int id) {
-		return null;
+		return userDao.getUserById(id);
 	}
 
-	@Override
 	public User getUserByEmail(String email) {
-		return null;
+		return userDao.getUserByEmail(email);
 	}
 
-	@Override
 	public User getUserByEmailPassword(String email, String password) {
-	//	DBUtil db = new DBUtil();
-		try {
-			/*if(db.readDataBase())
-			{
-				
-			}*/
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return userDao.getUserByEmailPassword(email,password);
 	}
 
-	@Override
 	public Collection<User> getUserList() {
+
+		return null;
+	}
+
+	public int addUser(String email, String password, String first_name, String last_name) {
+		String encrpytedPassword=Util.encrypPasswordtSHY2(password);
+		int user=userDao.addUser(email, encrpytedPassword, first_name, last_name);
+		return user;
+	}
+	
+	public User findUserByResetToken(String resetToken)
+	{
+		return userDao.findUserByResetToken(resetToken);
 		
-		return null;
 	}
 
-	@Override
-	public Optional<User> addUser(String email, String password, String first_name, String last_name) {
-		return null;
-	}
-
-	@Override
 	public void updateUser(User user) {
-
+		 userDao.updateUser(user);
 	}
 
-	@Override
 	public void removeUser(User user) {
-
+		userDao.removeUser(user);
 	}
 
-	@Override
 	public void changePassword(User user, String password) {
 
 	}
 
-	public User findUserByResetToken(String resetToken)
-	{
-		return null;
-		
-	}
-
-	/*
-	 * public User findByEmail(String email) {
-	 * 
-	 * DBUtil db=new DBUtil(); try { db.readDataBase(); } catch (Exception e) { //
-	 * TODO Auto-generated catch block e.printStackTrace(); } return null; }
-	 * 
-	 * public User findByConfirmationToken(String confirmationToken) { return
-	 * userRepository.findByConfirmationToken(confirmationToken); }
-	 * 
-	 * public void saveUser(User user) { userRepository.save(user); }
-	 */
 }

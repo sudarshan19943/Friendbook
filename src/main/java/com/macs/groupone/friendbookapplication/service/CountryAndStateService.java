@@ -11,6 +11,8 @@ import com.macs.groupone.friendbookapplication.service.countryandstate.USState;
 @Service
 public class CountryAndStateService {
 	
+	
+
 	public ArrayList<String> getListOfCountries(Locale locale) {
 		ArrayList<String> countryList=new ArrayList<String>();
 		String[] locales = Locale.getISOCountries();
