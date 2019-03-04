@@ -19,8 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
-import com.macs.groupone.friendbookapplication.service.AvatarService;
-import com.macs.groupone.friendbookapplication.service.CountryAndStateService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.macs.groupone.friendbookapplication.common.DBUtil;
+
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
@@ -34,12 +34,12 @@ public class UserService implements UserDao {
 
 	@Override
 	public User getUserByEmailPassword(String email, String password) {
-		DBUtil db = new DBUtil();
+	//	DBUtil db = new DBUtil();
 		try {
-			if(db.readDataBase())
+			/*if(db.readDataBase())
 			{
 				
-			}
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
