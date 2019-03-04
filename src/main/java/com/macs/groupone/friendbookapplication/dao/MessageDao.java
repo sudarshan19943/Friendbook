@@ -1,4 +1,4 @@
-package com.macs.groupone.friendbookapplication.interfaces;
+package com.macs.groupone.friendbookapplication.dao;
 
 import java.util.Collection;
 
