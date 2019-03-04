@@ -1,9 +1,13 @@
 package com.macs.groupone.friendbookapplication.controller;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,41 +16,52 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.EmailService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
 public class PasswordController {
-	private String RESET_VIEW="resetpassword";
-	private String FORGOTPASSWORD_VIEW="forgotpassword";
-	private String ERRORMESSAGE="errorMessage";
-	private String INVALID_PASSWORD_LINK="Oops!  This is an invalid password reset link.";
-	private String SUCCESSMESSAGE="successMessage";
-	private String PASSWORD_RESET_SUCCESS="You have successfully reset your password.  You may now login.";
+	
+	private static final Logger log = LoggerFactory.getLogger(PasswordController.class);
+
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	EmailService emailService;
 
 	// show password page
 	@RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
 	public ModelAndView showForgetPassword(ModelAndView modelAndView) {
-		modelAndView.setViewName(FORGOTPASSWORD_VIEW);
+		modelAndView.setViewName(Constants.FORGOTPASSWORD_VIEW);
 		return modelAndView;
 	}
 
-	// Send a POST request for forgot password
+	// Forget Password POST Request
 	@RequestMapping(value = "/forgotpassword", method = RequestMethod.POST)
 	public @ResponseBody ModelAndView processForgetPassword(ModelAndView modelAndView,
-		@RequestParam("email") String userEmail, HttpServletRequest request) throws MessagingException {
+			@RequestParam("email") String userEmail, HttpServletRequest request) throws MessagingException {
 
 		User user = userService.getUserByEmail(userEmail);
-
-		userService.updateUser(user);
+		if (user == null) {
+			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
+		} else {
+			user.setConfirmationToken(UUID.randomUUID().toString());
+			userService.updateUser(user);
+			String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+			String message = "To reset your password, click the link below:\n" + appUrl + "/reset?token="
+					+ user.getConfirmationToken();
+			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);
+			modelAndView.addObject(Constants.SUCCESSMESSAGE, Constants.PASSWORD_LINK_SENT + userEmail);
+		}
 
 		modelAndView.setViewName("forgotPassword");
 		return modelAndView;
 	}
 
+	// Display form to reset password
 	@RequestMapping(value = "/reset", method = RequestMethod.GET)
 	public ModelAndView processResetPasswordPage(ModelAndView modelAndView, @RequestParam("token") String token) {
 
@@ -54,9 +69,9 @@ public class PasswordController {
 		if (user != null) {
 			modelAndView.addObject("resetToken", token);
 		} else {
-			modelAndView.addObject(ERRORMESSAGE,INVALID_PASSWORD_LINK);
+			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.INVALID_PASSWORD_LINK);
 		}
-		modelAndView.setViewName(RESET_VIEW);
+		modelAndView.setViewName(Constants.RESET_VIEW);
 		return modelAndView;
 	}
 
@@ -70,12 +85,12 @@ public class PasswordController {
 			user.setPassword(requestParams.get("password"));
 			user.setConfirmationToken(null);
 			userService.updateUser(user);
-			redir.addFlashAttribute(SUCCESSMESSAGE, PASSWORD_RESET_SUCCESS);
+			redir.addFlashAttribute(Constants.SUCCESSMESSAGE, Constants.PASSWORD_RESET_SUCCESS);
 			modelAndView.setViewName("redirect:login");
 			return modelAndView;
 		} else {
-			modelAndView.addObject(ERRORMESSAGE, INVALID_PASSWORD_LINK);
-			modelAndView.setViewName(RESET_VIEW);
+			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.INVALID_PASSWORD_LINK);
+			modelAndView.setViewName(Constants.RESET_VIEW);
 		}
 		return modelAndView;
 	}

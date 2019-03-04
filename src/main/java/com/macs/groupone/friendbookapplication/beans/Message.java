@@ -1,20 +1,20 @@
 package com.macs.groupone.friendbookapplication.beans;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
-public class MessageBean {
+public class Message {
 
 	private int id;
-	private Timestamp date;
+	private Date date;
 	private int sender;
 	private int recipient;
 	private String body;
 
-	public Timestamp getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

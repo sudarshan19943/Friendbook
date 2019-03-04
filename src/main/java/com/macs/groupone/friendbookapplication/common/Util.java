@@ -3,12 +3,10 @@ package com.macs.groupone.friendbookapplication.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 import java.util.logging.Logger;
 
 
 public abstract class Util {
-	private static final Logger log = Logger.getLogger(Util.class.getSimpleName());
 
 	public static String encrypPasswordtSHY2(String password) {
 		MessageDigest messageDigest;
@@ -34,3 +32,4 @@ public abstract class Util {
 	
 
 }
+
