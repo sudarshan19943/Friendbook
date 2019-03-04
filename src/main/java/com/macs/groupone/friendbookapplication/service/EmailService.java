@@ -19,6 +19,7 @@ import com.macs.groupone.friendbookapplication.common.Config;
 
 @Service
 public class EmailService {
+
 	public EmailService() {
 
 	}
@@ -26,21 +27,14 @@ public class EmailService {
 	private Properties properties;
 	private Session session;
 	private InternetAddress fromAddress;
-	
-	public String PORT="mail.smtp.port";
-	public String HOST="mail.smtp.host";
-	public String ENABLED="mail.smtp.starttls.enable";
-	public String AUTH="mail.smtp.auth";
-	public String MAIL_USERNAME="mail.smtp.username";
-	public String MAIL_PASSWORD="mail.smtp.password";
 
 	private void createFromAddress(String userName) throws AddressException {
 		fromAddress = new InternetAddress(userName);
 	}
 
 	private void createSession() {
-		final String userName = Config.getProperty(MAIL_USERNAME);
-		final String password = Config.getProperty(MAIL_PASSWORD);
+		final String userName = Config.getProperty(ServiceConstants.MAIL_USERNAME);
+		final String password = Config.getProperty(ServiceConstants.MAIL_PASSWORD);
 		Authenticator auth = new Authenticator() {
 			public PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(userName, password);
@@ -51,17 +45,17 @@ public class EmailService {
 
 	private void createProperties() {
 		properties = new Properties();
-		properties.put(HOST, Config.getProperty(HOST));
-		properties.put(PORT, Config.getProperty(PORT));
-		properties.put(AUTH, Config.getProperty(AUTH));
-		properties.put(ENABLED, Config.getProperty(ENABLED));
+		properties.put(ServiceConstants.HOST, Config.getProperty(ServiceConstants.HOST));
+		properties.put(ServiceConstants.PORT, Config.getProperty(ServiceConstants.PORT));
+		properties.put(ServiceConstants.AUTH, Config.getProperty(ServiceConstants.AUTH));
+		properties.put(ServiceConstants.ENABLED, Config.getProperty(ServiceConstants.ENABLED));
 	}
 
 	public void sendEmail(String toAddress, String subject, String message) throws MessagingException {
 
 		createProperties();
 		createSession();
-		createFromAddress(Config.getProperty(MAIL_USERNAME));
+		createFromAddress(Config.getProperty(ServiceConstants.MAIL_USERNAME));
 
 		Message msg = new MimeMessage(session);
 		msg.setFrom(fromAddress);
@@ -73,5 +67,4 @@ public class EmailService {
 
 		Transport.send(msg);
 	}
-
 }

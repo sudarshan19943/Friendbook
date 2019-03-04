@@ -1,8 +1,6 @@
 package com.macs.groupone.friendbookapplication.dao;
 
 import java.util.Collection;
-import java.util.Optional;
-
 import org.springframework.stereotype.Component;
 
 import com.macs.groupone.friendbookapplication.model.User;
@@ -15,8 +13,10 @@ public interface UserDao{
 	User getUserByEmail(String email);
 	User getUserByEmailPassword(String email, String password);
 	Collection<User> getUserList();
-	Optional<User> addUser(String email, String password, String first_name, String last_name); 																						
+	int addUser(String email, String password, String first_name, String last_name); 																						
 	void updateUser(User user);
 	void removeUser(User user);
 	void changePassword(User user, String password);
+    User findUserByResetToken(String resetToken);
+	
 }

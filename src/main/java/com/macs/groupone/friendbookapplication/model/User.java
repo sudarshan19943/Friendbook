@@ -2,7 +2,6 @@ package com.macs.groupone.friendbookapplication.model;
 
 public class User {
 
-	
 	private int id;
 	private String email;
 	private String password;
@@ -10,8 +9,9 @@ public class User {
 	private String lastName;
 	private boolean enabled;
 	private String confirmationToken;
+	private String province;
+	private String country;
 
-	
 	public String getConfirmationToken() {
 		return confirmationToken;
 	}
@@ -19,7 +19,6 @@ public class User {
 	public void setConfirmationToken(String confirmationToken) {
 		this.confirmationToken = confirmationToken;
 	}
-
 
 	public int getId() {
 		return id;
@@ -69,5 +68,20 @@ public class User {
 		this.enabled = value;
 	}
 
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
 }
