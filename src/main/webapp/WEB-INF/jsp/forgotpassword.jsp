@@ -36,7 +36,7 @@
                     <strong>${forgot_password}</strong>
                 </div>
                 <div class="panel-body">
-                    <form role="form" action="/login" method="post">
+                    <form role="form" action="/reset" method="post">
                         <div class="form-group"> 
                                 <p>Email Address:</p>
                             	<input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text"> 

@@ -24,8 +24,8 @@ public class Constants {
 	//JSP Views
 	public static final String LOGIN_VIEW="login";
 	public static final String PROFILE_VIEW="profile";
-	public static final String REGISTER_VIEW="registration";
-	public static final String RESET_VIEW="resetpassword";
+	public static final String REGISTER_VIEW="register";
+	public static final String RESET_VIEW="reset";
 	public static final String FORGOTPASSWORD_VIEW="forgotpassword";
 	
 }

@@ -51,7 +51,7 @@ public class RegistrationController {
 			modelAndView.setViewName(Constants.REGISTER_VIEW);
 		} else {
 			userService.addUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName());
-			modelAndView.setViewName(Constants.PROFILE_VIEW);
+			modelAndView.setViewName(Constants.LOGIN_VIEW);
 		}
 
 		return modelAndView;

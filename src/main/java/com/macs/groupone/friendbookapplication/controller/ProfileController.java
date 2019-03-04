@@ -44,8 +44,8 @@ public class ProfileController {
 		String email=UserDetails.get("userEmail");
 		String password=UserDetails.get("password");
 		User userByEmail= userService.getUserByEmailPassword(email,password);
-		modelAndView.addObject("firstName",userByEmail.getFirstName());
-		modelAndView.addObject("lastName",userByEmail.getLastName());
+		modelAndView.addObject("first_name",userByEmail.getFirstName());
+		modelAndView.addObject("last_name",userByEmail.getLastName());
 		
 		//country list
 		ArrayList<String> countryList=countryAndStateService.getListOfCountries(Locale.ENGLISH);

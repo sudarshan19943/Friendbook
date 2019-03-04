@@ -34,9 +34,8 @@ public class PasswordController {
 
 	// show password page
 	@RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
-	public ModelAndView showForgetPassword(ModelAndView modelAndView) {
+	public void showForgetPassword(ModelAndView modelAndView) {
 		modelAndView.setViewName(Constants.FORGOTPASSWORD_VIEW);
-		return modelAndView;
 	}
 
 	// Forget Password POST Request
@@ -57,7 +56,7 @@ public class PasswordController {
 			modelAndView.addObject(Constants.SUCCESSMESSAGE, Constants.PASSWORD_LINK_SENT + userEmail);
 		}
 
-		modelAndView.setViewName("forgotPassword");
+		modelAndView.setViewName("forgotpassword");
 		return modelAndView;
 	}
 
