@@ -33,6 +33,7 @@ public class ProfileController {
 	@Autowired
 	CountryAndStateService countryAndStateService;
 
+<<<<<<< HEAD
 	@Autowired AvatarService avatarService;
 	 
 
@@ -48,6 +49,26 @@ public class ProfileController {
 		modelAndView.addObject("Countries", countryList);
 		modelAndView.addObject("city", userByEmail.getCity());
 		AvatarService.getProfileAvatar(userByEmail.getId());
+=======
+	// show login page
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public ModelAndView showDeafultProfilePage(ModelAndView modelAndView ,RedirectAttributes redir) {
+		
+		Map<String,String> UserDetails=(Map<String, String>) redir.getFlashAttributes();
+		String email=UserDetails.get("userEmail");
+		String password=UserDetails.get("password");
+		User userByEmail= userService.getUserByEmailPassword(email,password);
+		modelAndView.addObject("first_name",userByEmail.getFirstName());
+		modelAndView.addObject("last_name",userByEmail.getLastName());
+		
+		//country list
+		ArrayList<String> countryList=countryAndStateService.getListOfCountries(Locale.ENGLISH);
+		modelAndView.addObject("Countries",countryList);
+		
+		//initially default avatar
+		//avatarService.getDeafultProfileAvatar(userByEmail.getId());
+		
+>>>>>>> a21681f19b552585456ffc6e4cb39b987610daf4
 		modelAndView.setViewName("profile");
 		return modelAndView;
 	}
