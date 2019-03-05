@@ -42,9 +42,9 @@ public enum CAProvince implements StateProvinceEnum{
 	public static CAProvince getProvince(String code){
 		if (code!=null || !code.equalsIgnoreCase("")){
 			String codeUpper = code.toUpperCase().trim();
-			for (CAProvince p : CAProvince.values()){
-				if (codeUpper.equals(p.provinceCode)){
-					return p;
+			for (CAProvince province : CAProvince.values()){
+				if (codeUpper.equals(province.provinceCode)){
+					return province;
 				}
 			}
 		}

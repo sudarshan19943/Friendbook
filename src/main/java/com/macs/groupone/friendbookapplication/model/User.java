@@ -13,6 +13,15 @@ public class User {
 	private String country;
 	private String city;
 
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
 	public String getConfirmationToken() {
 		return confirmation_token;
 	}
@@ -85,11 +94,4 @@ public class User {
 		this.country = country;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
 }

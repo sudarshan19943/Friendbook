@@ -14,5 +14,6 @@ public interface FriendsDao {
     long getNumberOfFriends(User user, String searchText);
     Collection<User> getFriendList(User user);
     Collection<User> getFriendList(User user, int recordsPerPage, int i, String searchText);
+    Collection<User> getFriendList(User user);
 
 }

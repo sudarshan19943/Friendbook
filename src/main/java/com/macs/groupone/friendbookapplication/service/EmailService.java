@@ -13,6 +13,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.common.Config;
@@ -20,6 +22,8 @@ import com.macs.groupone.friendbookapplication.common.Config;
 @Service
 public class EmailService {
 
+	private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+	
 	public EmailService() {
 
 	}
