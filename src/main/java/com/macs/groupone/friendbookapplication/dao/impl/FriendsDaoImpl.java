@@ -81,6 +81,4 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		return null;
 	}
 
-
-
 }
