@@ -3,6 +3,8 @@ package com.macs.groupone.friendbookapplication.service;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.service.countryandstate.CAProvince;
@@ -11,16 +13,17 @@ import com.macs.groupone.friendbookapplication.service.countryandstate.USState;
 @Service
 public class CountryAndStateService {
 	
+	public static final String CANADA="canada";
+	public static final String USA="usa";
 	
-
+	private static final Logger log = LoggerFactory.getLogger(AvatarService.class);
 	public ArrayList<String> getListOfCountries(Locale locale) {
 		ArrayList<String> countryList=new ArrayList<String>();
 		String[] locales = Locale.getISOCountries();
 		for (String countryCode : locales) {
-			Locale obj = new Locale("", countryCode);
-			System.out.println(
-					"Country Code = " + obj.getCountry() + ", Country Name = " + obj.getDisplayCountry(locale));
-			countryList.add(obj.getCountry());
+			Locale localObject = new Locale("", countryCode);
+			log.info(localObject.getCountry());
+			countryList.add(localObject.getCountry());
 		}
 		return countryList;
 
@@ -28,10 +31,10 @@ public class CountryAndStateService {
 	
 	public ArrayList<String> getCities(String Country)
 	{
-		if(Country.equalsIgnoreCase("CANADA"))
+		if(Country.equalsIgnoreCase(CANADA))
 		{
 			return CAProvince.getListOfProvinces();
-		}else if(Country.equalsIgnoreCase("USA"))
+		}else if(Country.equalsIgnoreCase(USA))
 		{
 			return USState.getListOfStates();
 		}

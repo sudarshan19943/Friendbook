@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,18 +34,19 @@ public class LoginController {
 
 	// Process login
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView processLogin(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult,
-			HttpServletRequest request,RedirectAttributes redir) {
+	public String processLogin(Model model,ModelAndView modelAndView, @Valid User user, BindingResult bindingResult,
+			HttpServletRequest request,RedirectAttributes redirect) {
 		User userByEmail= userService.getUserByEmailPassword(user.getEmail(), user.getPassword());
 		if (userByEmail == null) {
-			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.USER_DOES_NOT_EXISTS);
+			modelAndView.addObject(Constants.ERRORMESSAGE,Constants.USER_DOES_NOT_EXISTS);
 			modelAndView.setViewName(Constants.LOGIN_VIEW);
+			return "login";  //need to check if it is not getting into loop
 		} else {
-			redir.addFlashAttribute("userEmail",user.getEmail());
-			redir.addFlashAttribute("password",user.getPassword());
-			modelAndView.setViewName("redirect:profile");
+			redirect.addFlashAttribute("userEmail",user.getEmail());
+			redirect.addFlashAttribute("password",user.getPassword());
+			return "redirect:profileValueLoader";
 		}
-		return modelAndView;
+		//return "redirect:profile";
 	}
 
 }

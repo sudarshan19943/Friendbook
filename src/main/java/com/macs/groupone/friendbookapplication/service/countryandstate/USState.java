@@ -78,28 +78,6 @@ public enum USState implements StateProvinceEnum {
 		return stateName;
 	}
 	
-	/**
-	 * Get the enumeration element from the state code.
-	 * @param code
-	 * @return the matching enumeration element or null if the code could not be found.
-	 */
-	public static USState fromCode(String code){
-		if (code!=null || code.equalsIgnoreCase("")){
-			String codeUpper = code.toUpperCase().trim();
-			for (USState s : USState.values()){
-				if (codeUpper.equals(s.stateCode)){
-					return s;
-				}
-			}
-		}
-		return null;
-	}
-	
-	/*public static ArrayList<USState> getListOfStates(){
-		return new ArrayList<USState>(Arrays.asList(USState.values()));
-		
-	}*/
-	
 	
 	public static ArrayList<String> getListOfStates(){
 		ArrayList<String> stateNames=new ArrayList<String>();

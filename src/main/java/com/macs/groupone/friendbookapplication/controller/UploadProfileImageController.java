@@ -14,35 +14,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.macs.groupone.friendbookapplication.service.AvatarService;
 
 @Controller
 public class UploadProfileImageController {
+
+	@Autowired AvatarService avatarService;
 	
 	private static final Logger log = LoggerFactory.getLogger(UploadProfileImageController.class);
 
-  
- 
-/*  @Autowired
-	AvatarService avatarService;*/
-  
-  
-  @RequestMapping("/")
-  public String index() {
-    return "index.html";
-  }
- 
-  @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-  @ResponseBody
-  public ResponseEntity<?> uploadFile(
-      @RequestParam("uploadfile") MultipartFile uploadfile) {
-	  try {
-		//avatarService.uploadAvatarAndSave(uploadfile);
-	} catch (Exception e) {
-		e.printStackTrace();
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
-    return new ResponseEntity<>(HttpStatus.OK);
-  } // method uploadFile
+	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<?> uploadFile(@RequestParam("uploadImage") MultipartFile uploadfile) {
+		try {
+			avatarService.uploadAvatarAndSave(uploadfile);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	} 
 
-} // class MainController
-
+	
+} 
