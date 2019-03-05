@@ -10,5 +10,6 @@ public interface FriendsDao {
     void removeFriend(User user, User friend);
     long getNumberOfFriends(User user, String searchText);
     Collection<User> getFriendList(User user, int recordsPerPage, int i, String searchText);
+    Collection<User> getFriendList(User user);
 
 }

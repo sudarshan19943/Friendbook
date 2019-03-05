@@ -25,7 +25,39 @@
 <fmt:setBundle basename="locale" var="loc"/>
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 
-
+ <script>
+  
+    // bind the on-change event for the input element (triggered when a file
+    // is chosen)
+    $(document).ready(function() {
+      $("#upload-file-input").on("change", uploadFile);
+    });
+    
+    /**
+     * Upload the file sending it via Ajax at the Spring Boot server.
+     */
+    function uploadFile() {
+      $.ajax({
+        url: "/uploadFile",
+        type: "POST",
+        data: new FormData($("#upload-file-form")[0]),
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function () {
+          // Handle upload success
+          $("#upload-file-message").text("File succesfully uploaded");
+        },
+        error: function () {
+          // Handle upload error
+          $("#upload-file-message").text(
+              "File not uploaded (perhaps it's too much big)");
+        }
+      });
+    } // function uploadFile
+  </script>
+  
 
 <body>
 
@@ -37,7 +69,13 @@
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
            <a href="login.jsp">
+            
            <img class="avatar" src="../../icons/avatar.png"/> 
+           <form id="upload-file-form" class="avatar">
+			    <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
+			    <br />
+			    <span id="upload-file-message"></span>
+			  </form>
            </a>
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">

@@ -11,6 +11,15 @@ public class User {
 	private String confirmationToken;
 	private String province;
 	private String country;
+	private String city;
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 
 	public String getConfirmationToken() {
 		return confirmationToken;

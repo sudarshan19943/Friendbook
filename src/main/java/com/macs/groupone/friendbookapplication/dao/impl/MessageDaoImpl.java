@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.macs.groupone.friendbookapplication.beans.Message;
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
@@ -14,10 +16,14 @@ import com.macs.groupone.friendbookapplication.model.User;
 
 public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
+	private static final Logger log = LoggerFactory.getLogger(MessageDaoImpl.class);
+	
 	public MessageDaoImpl() {
 
 	}
-
+	
+	public static   final String SQL_GET_LAST ="";
+			
 	private static final RowMapper<Message> MESSAGE_MAPPER = new RowMapper<Message>() {
 
 		@Override
@@ -51,7 +57,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 		final String SQL_GET_BY_USER = "SELECT id, date, sender, recipient, body FROM messages WHERE ((sender = ? and recipient = ?) or (sender = ? and recipient = ?)) ORDER BY date;";
 		final long userOneId = userOne.getId();
 		final long userTwoId = userTwo.getId();
-
+		log.debug(SQL_GET_BY_USER);
 		Collection<Message> messagesDb = jdbcManager().select(SQL_GET_BY_USER, MESSAGE_MAPPER, userOneId, userTwoId,
 				userTwoId, userOneId);
 
@@ -60,19 +66,9 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 	@Override
 	public Collection<Message> getLast(User userOne) {
-		  final String SQL_GET_LAST =
-	                "SELECT id, date, sender, recipient, body "
-	                        .concat("FROM messages ")
-	                        .concat("INNER JOIN ( SELECT MAX(id) AS most_recent_message_id ")
-	                        .concat("FROM messages ")
-	                        .concat("   GROUP BY CASE WHEN sender > recipient THEN recipient ELSE sender END, ")
-	                        .concat("   CASE WHEN sender < recipient THEN recipient ELSE sender END ")
-	                        .concat(") T ON T.most_recent_message_id = messages.id ")
-	                        .concat("WHERE sender = ? OR recipient = ? ")
-	                        .concat("ORDER BY date DESC;");
 	        final long userId = userOne.getId();
+	        log.debug(SQL_GET_LAST);
 	        Collection<Message> messagesDb = jdbcManager().select(SQL_GET_LAST, MESSAGE_MAPPER, userId, userId);
-	       
 		return messagesDb;
 	}
 
