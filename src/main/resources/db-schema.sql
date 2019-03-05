@@ -7,8 +7,10 @@ CREATE TABLE users
   reg_date TIMESTAMP DEFAULT now() NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  phone VARCHAR(255),
-  sex CHAR
+  city VARCHAR(255),
+  country VARCHAR(255),
+  confirmation_token VARCHAR(255),
+  enabled CHAR
 );
 
 CREATE UNIQUE INDEX users_email_uindex ON users (email);
