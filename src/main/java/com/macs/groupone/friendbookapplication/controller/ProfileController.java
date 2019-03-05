@@ -2,6 +2,7 @@ package com.macs.groupone.friendbookapplication.controller;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,7 +34,6 @@ public class ProfileController {
 	@Autowired
 	CountryAndStateService countryAndStateService;
 
-<<<<<<< HEAD
 	@Autowired AvatarService avatarService;
 	 
 
@@ -49,7 +49,9 @@ public class ProfileController {
 		modelAndView.addObject("Countries", countryList);
 		modelAndView.addObject("city", userByEmail.getCity());
 		AvatarService.getProfileAvatar(userByEmail.getId());
-=======
+		return modelAndView;
+	}
+
 	// show login page
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showDeafultProfilePage(ModelAndView modelAndView ,RedirectAttributes redir) {
@@ -67,8 +69,7 @@ public class ProfileController {
 		
 		//initially default avatar
 		//avatarService.getDeafultProfileAvatar(userByEmail.getId());
-		
->>>>>>> a21681f19b552585456ffc6e4cb39b987610daf4
+
 		modelAndView.setViewName("profile");
 		return modelAndView;
 	}

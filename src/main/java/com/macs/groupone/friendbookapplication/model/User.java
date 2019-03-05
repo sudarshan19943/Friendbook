@@ -12,7 +12,6 @@ public class User {
 	private String province;
 	private String country;
 	private String city;
-<<<<<<< HEAD
 
 	public String getCity() {
 		return city;
@@ -21,8 +20,7 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
-=======
->>>>>>> a21681f19b552585456ffc6e4cb39b987610daf4
+
 
 	public String getConfirmationToken() {
 		return confirmation_token;
@@ -96,11 +94,4 @@ public class User {
 		this.country = country;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
 }
