@@ -8,7 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(scanBasePackages={"com.macs.groupone.friendbookapplication", "com.macs.groupone.friendbookapplication.controller","com.macs.groupone.model","com.macs.groupone.service","com.macs.groupone.interfaces","com.macs.groupone.dao"})
+@SpringBootApplication(scanBasePackages={"com.macs.groupone.friendbookapplication", "com.macs.groupone.friendbookapplication.controller","com.macs.groupone.friendbookapplication.model","com.macs.groupone.friendbookapplication.service","com.macs.groupone.interfaces","com.macs.groupone.friendbookapplication.dao"})
 public class FriendBookApplication extends SpringBootServletInitializer {
 	
 	static Logger logger = LoggerFactory.getLogger(FriendBookApplication.class);

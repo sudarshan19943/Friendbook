@@ -46,7 +46,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		}
 	};
 
-	
 
 	@Override
 	public User getUserById(int id) {

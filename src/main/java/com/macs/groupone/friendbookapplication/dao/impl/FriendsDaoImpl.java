@@ -5,13 +5,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
 import com.macs.groupone.friendbookapplication.dao.FriendsDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.User;
 
-public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
+@Service
+public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
+	
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(FriendsDaoImpl.class);
+
+	static final String SQL_GET_FRIEND_LIST = "SELECT id, email, first_name, last_name, city, country"
+			.concat("CONCAT_aWS(' ', first_name, last_name) AS name ")
+			.concat("FROM users ")
+			.concat("INNER JOIN friends AS userFriendsList ON users.id = userFriendsList.friendid AND userFriendsList.userid = ? ")
+			.concat("LEFT JOIN friends AS FriendsOfUser ON users.id = FriendsOfUser.userid AND FriendsOfUser.friendid = ? ")
+			.concat("ORDER BY name; ");
+	
+	
 	public FriendsDaoImpl() {
 
 	}
@@ -22,69 +40,47 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		public User map(final ResultSet resultSet) throws SQLException {
 			final User user = new User();
 			user.setId(resultSet.getInt("id"));
+			user.setEmail(resultSet.getString("email"));
+			user.setFirstName(resultSet.getString("first_name"));
+			user.setLastName(resultSet.getString("last_name"));
+			user.setCity(resultSet.getString("city"));
+			user.setCountry(resultSet.getString("country"));
 			return user;
 		}
 	};
 
 	@Override
 	public long addFriend(User user, User friend) {
-		final long id = jdbcManager().insertAndGetId("INSERT INTO friends (userid, friendid) VALUES (?, ?)",
-				user.getId(), friend.getId());
+		final long id = jdbcManager().insertAndGetId("INSERT INTO friends (userid, friendid) VALUES (?, ?)",user.getId(), friend.getId());
 		return (int) id;
 	}
 
 	@Override
 	public void removeFriend(User user, User friend) {
 		jdbcManager().update("DELETE FROM friends WHERE userid = ? AND friendid = ?", user.getId(), friend.getId());
+		
+	}
+
+	
+
+	@Override
+	public Collection<User> getFriendList(User user) {
+		         log.info(SQL_GET_FRIEND_LIST);
+			return (ArrayList<User>) jdbcManager().select(SQL_GET_FRIEND_LIST, FRIENDS_MAPPER, user.getId(),
+					user.getId());
+	
 	}
 
 	@Override
 	public long getNumberOfFriends(User user, String searchText) {
-		ArrayList<User> users = null;
-		final String SQL_GET_NUMBER_OF_FRIENDS = "SELECT count(friendid) AS id FROM friends "
-				.concat("WHERE friends.userid = ?;");
-		final String SQL_GET_NUMBER_OF_FRIENDS_WITH_SEARCH_PARAMETER = "SELECT count(id) AS id FROM users ".concat(
-				"INNER JOIN friends AS userfriends ON users.id = userfriends.friendid AND userfriends.userid = ? ")
-				.concat("WHERE LOWER(CONCAT_WS(' ', first_name, last_name)) LIKE LOWER(?) ");
-		if (searchText == null || searchText.isEmpty()) {
-			users = (ArrayList<User>) jdbcManager().select(SQL_GET_NUMBER_OF_FRIENDS, FRIENDS_MAPPER, user.getId());
-		}
-
-		else
-			users = (ArrayList<User>) jdbcManager().select(SQL_GET_NUMBER_OF_FRIENDS_WITH_SEARCH_PARAMETER,
-					FRIENDS_MAPPER, user.getId(), "%" + searchText + "%");
-
-		return users.size();
+		return 0;
 	}
 
 	@Override
 	public Collection<User> getFriendList(User user, int recordsPerPage, int i, String searchText) {
-		final String SQL_GET_FRIEND_LIST = "SELECT id, email, first_name, last_name, birth_date, phone, reg_date, sex, "
-				.concat("CONCAT_WS(' ', first_name, last_name) AS name, ")
-				.concat("CASE WHEN userfriends.friendid ISNULL THEN FALSE ELSE TRUE END AS isuserfriend, ")
-				.concat("CASE WHEN friendofuser.userid ISNULL THEN FALSE ELSE TRUE END AS isfriendofuser ")
-				.concat("FROM users ")
-				.concat("INNER JOIN friends AS userfriends ON users.id = userfriends.friendid AND userfriends.userid = ? ")
-				.concat("LEFT JOIN friends AS friendofuser ON users.id = friendofuser.userid AND friendofuser.friendid = ? ")
-				.concat("ORDER BY name ").concat("limit ? offset ?;");
-		final String SQL_GET_FRIEND_LIST_WITH_SEARCH_PARAMETER = "SELECT id, email, first_name, last_name, birth_date, phone, reg_date, sex, "
-				.concat("CONCAT_WS(' ', first_name, last_name) AS name, ")
-				.concat("CASE WHEN userfriends.friendid ISNULL THEN FALSE ELSE TRUE END AS isuserfriend, ")
-				.concat("CASE WHEN friendofuser.userid ISNULL THEN FALSE ELSE TRUE END AS isfriendofuser ")
-				.concat("FROM users ")
-				.concat("INNER JOIN friends AS userfriends ON users.id = userfriends.friendid AND userfriends.userid = ? ")
-				.concat("LEFT JOIN friends AS friendofuser ON users.id = friendofuser.userid AND friendofuser.friendid = ? ")
-				.concat("WHERE LOWER(CONCAT_WS(' ', first_name, last_name)) LIKE LOWER(?) ").concat("ORDER BY name ")
-				.concat("limit ? offset ?;");
-
-		if (searchText == null || searchText.isEmpty()) {
-			return (ArrayList<User>) jdbcManager().select(SQL_GET_FRIEND_LIST, FRIENDS_MAPPER, user.getId(),
-					user.getId(), recordsPerPage, i, "");
-		} else {
-			return (ArrayList<User>) jdbcManager().select(SQL_GET_FRIEND_LIST_WITH_SEARCH_PARAMETER, FRIENDS_MAPPER,
-					user.getId(), user.getId(), "%" + searchText + "%", recordsPerPage, i);
-		}
-
+		return null;
 	}
+
+
 
 }
