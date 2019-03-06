@@ -37,7 +37,7 @@ public class FriendsService{
 	}
 	
 	public Collection<User> getFriendList(User user) {
-		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user, 1, 1, "");
+		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user);
 		return friends;
 	}
 

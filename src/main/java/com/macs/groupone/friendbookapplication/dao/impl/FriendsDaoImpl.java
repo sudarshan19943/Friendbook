@@ -26,7 +26,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 			.concat("CONCAT_aWS(' ', first_name, last_name) AS name ")
 			.concat("FROM users ")
 			.concat("INNER JOIN friends AS userFriendsList ON users.id = userFriendsList.friendid AND userFriendsList.userid = ? ")
-			.concat("LEFT JOIN friends AS FriendsOfUser ON users.id = FriendsOfUser.userid AND FriendsOfUser.friendid = ? ")
 			.concat("ORDER BY name; ");
 	
 	

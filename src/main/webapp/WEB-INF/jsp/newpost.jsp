@@ -81,13 +81,14 @@
   <textarea class="form-control" rows="5" id="comment"></textarea>
   <br></br>
   <div class="form-group">
-  	<input type="submit" class="btn btn-lg btn-primary" value="${post}">
+  	<input type="submit" class="btn btn-lg btn-primary" name = "post" value="${post}">
   </div>
   <br></br>
   <h4> Or click here to post a photo on your timeline!</h4>
     <div class="form-group">
-  	<input type="submit" class="btn btn-lg btn-primary" value="${post_photo}">
+  	<input type="submit" class="btn btn-lg btn-primary" name = "postphoto" value="${post_photo}">
   </div>
+
 </div>
 </div>
 </div>

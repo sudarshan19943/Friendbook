@@ -23,6 +23,11 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 	}
 	
 	public static   final String SQL_GET_LAST ="";
+	static final String SQL_GET_MESSAGE_LIST = "SELECT id, email, first_name, last_name, city, country"
+			.concat("CONCAT_aWS(' ', first_name, last_name) AS name ")
+			.concat("FROM users ")
+			.concat("INNER JOIN friends AS userFriendsList ON users.id = userFriendsList.friendid AND userFriendsList.userid = ? ")
+			.concat("ORDER BY name; ");
 			
 	private static final RowMapper<Message> MESSAGE_MAPPER = new RowMapper<Message>() {
 
@@ -40,8 +45,8 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 	};
 
 	@Override
-	public void addNew(User sender, User recipient, String text) {
-		final String SQL_ADD_NEW = "INSERT INTO messages (sender, recipient, body) VALUES (?, ?, ?);";
+	public void addNewPost(User sender, User recipient, String text) {
+		final String SQL_ADD_NEW = "INSERT INTO post (sender_id, recipient_id, post) VALUES (?, ?, ?);";
 		jdbcManager().update(SQL_ADD_NEW, sender.getId(), recipient.getId(), text);
 
 	}
