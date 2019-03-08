@@ -7,7 +7,6 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.macs.groupone.friendbookapplication.common.Util;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
@@ -44,8 +43,7 @@ public class UserService {
 	}
 
 	public int addUser(String email, String password, String first_name, String last_name) {
-		String encrpytedPassword=Util.encrypPasswordtSHY2(password);
-		int user=userDao.addUser(email, encrpytedPassword, first_name, last_name);
+		int user=userDao.addUser(email, password, first_name, last_name);
 		return user;
 	}
 	

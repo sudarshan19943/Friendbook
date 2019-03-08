@@ -16,14 +16,15 @@ public class CountryAndStateService {
 	public static final String CANADA="canada";
 	public static final String USA="usa";
 	
-	private static final Logger log = LoggerFactory.getLogger(AvatarService.class);
+	private static final Logger log = LoggerFactory.getLogger(CountryAndStateService.class);
+	
 	public ArrayList<String> getListOfCountries(Locale locale) {
 		ArrayList<String> countryList=new ArrayList<String>();
 		String[] locales = Locale.getISOCountries();
 		for (String countryCode : locales) {
 			Locale localObject = new Locale("", countryCode);
-			log.info(localObject.getCountry());
-			countryList.add(localObject.getCountry());
+			log.info(localObject.getDisplayCountry());
+			countryList.add(localObject.getDisplayCountry());
 		}
 		return countryList;
 
