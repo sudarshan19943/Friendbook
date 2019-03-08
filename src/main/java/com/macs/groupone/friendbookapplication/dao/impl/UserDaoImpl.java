@@ -59,9 +59,17 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	@Override
+	/*@Override
 	public User getUserByEmailPassword(String email, String password) {
 		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL_PASSWORD, USER_MAPPER, email, password);
+		return result.isEmpty() ? null : result.get(0);
+		
+		
+	}*/
+	
+	@Override
+	public User getUserByEmailPassword(String email, String password) {
+		final List<User> result = jdbcManager().select("{call getUserByEmailPassword(?, ?)}", USER_MAPPER, email, password);
 		return result.isEmpty() ? null : result.get(0);
 	}
 

@@ -4,6 +4,7 @@
 package com.macs.groupone.friendbookapplication.jdbc;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -117,16 +118,18 @@ public class JdbcManagerImpl implements JdbcManager {
 	}
 
 	@Override
-	public <T> List<T> select(final String sql, final RowMapper<T> rowMapper, final Object... parameters)
+	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
 			throws DatabaseAccessException {
 		Connection connection = null;
-		PreparedStatement statement = null;
+		CallableStatement statement = null;
+		 
+		//PreparedStatement statement = null;
 		ResultSet resultSet = null;
 
 		final List<T> result = new ArrayList<T>();
 		try {
 			connection = getConnection();
-			statement = connection.prepareStatement(sql);
+			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
