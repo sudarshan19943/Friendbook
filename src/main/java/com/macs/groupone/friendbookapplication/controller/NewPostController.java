@@ -49,7 +49,6 @@ public class NewPostController {
 	  while(itr.hasNext()) {
 		 messageService.addNewPost((user), itr.next(), post);
 		}
-	  
 	  return modelAndView; 
 	  }
 	 
