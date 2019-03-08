@@ -1,0 +1,41 @@
+.header {
+  background-color: #365899;
+  padding: 5px 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  line-height: 1px;
+}
+
+
+.form-group{
+	text-align: center;
+}
+
+.form-group-firstname{
+	text-align: center;
+	border:1px solid #365899;
+	margin-bottom: 5px;
+}
+
+.form-group-lastname{
+	text-align: center;
+	border:1px solid #365899;
+	margin-bottom: 5px;
+}
+
+
+.button-group{
+	display: inline-flex;
+	padding: 25px;
+}
+
+.avatar{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 25%;
+	border:1px solid #021a40;
+}
+
