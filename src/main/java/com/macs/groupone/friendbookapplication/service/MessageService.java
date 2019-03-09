@@ -1,6 +1,7 @@
 package com.macs.groupone.friendbookapplication.service;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,12 @@ public class MessageService {
 
 	@Autowired
 	MessageDaoImpl messageDaoImpl;
+	 public MessageService() {
+		 
+	 }
 	
-	public void addNewPost(User sender, User recipient, String text) {
-		messageDaoImpl.addNewPost(sender, recipient, text);
+	public void addNewPost(User sender, User recipient, String post, Message message) {
+		messageDaoImpl.addNewPost(sender, recipient, post, message);
 	}
 
 	
@@ -27,6 +31,11 @@ public class MessageService {
 	
 	public Collection<Message> getLast(User userOne) {
 		return null;
+	}
+
+	public void display(String post) {
+		
+		
 	}
 
 	

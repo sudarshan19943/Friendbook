@@ -1,8 +1,7 @@
 package com.macs.groupone.friendbookapplication.controller;
 
-
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.macs.groupone.friendbookapplication.model.Message;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
-import com.macs.groupone.friendbookapplication.service.UserService;
 
 
 
@@ -34,6 +33,8 @@ public class NewPostController {
 	@Autowired
 	MessageService messageService;
 	
+	private Date timestamp;
+	
 	  @RequestMapping(value = "/newpost", method = RequestMethod.GET) 
 	  public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
 			modelAndView.setViewName(Constants.NEW_POST_VIEW);
@@ -42,25 +43,20 @@ public class NewPostController {
 	 
 	  
 	  @RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	  public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("postphoto") String post) { 
-	  Collection<User> friends = friendsService.getFriendList(user); 
+	  public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
+	  //Collection<User> friends = friendsService.getFriendList(user); 
 	  //Iterate over collection of users and add the post in their timeline
-	  Iterator<User> itr = friends.iterator();
-	  while(itr.hasNext()) {
-		 messageService.addNewPost((user), itr.next(), post);
-		}
+		
+		/*
+		 * Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
+		 * messageService.addNewPost(user, itr.next(), post, message);
+		 * messageService.display(post); }
+		 */
+		 
+		  messageService.addNewPost(user, user, post, message);
+	  
 	  return modelAndView; 
 	  }
 	 
-	  @RequestMapping(value = "/newpost", params="postphoto", method = RequestMethod.POST) 
-	  public ModelAndView processPostPhoto(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("postphoto") String postphoto) { 
-	  Collection<User> friends = friendsService.getFriendList(user); 
-	  //Iterate over collection of users and add the post in their timeline
-	  Iterator<User> itr = friends.iterator();
-	  while(itr.hasNext()) {
-		 messageService.addNewPost((user), itr.next(), postphoto);
-		}
-	  return modelAndView; 
-	  }
 	 
 }

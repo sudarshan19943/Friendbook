@@ -1,12 +1,15 @@
 package com.macs.groupone.friendbookapplication.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Message {
 	
 	private long id;
     private Date date;
     private User sender;
+	private User recipient;
+    private String text;
+    
     public long getId() {
 		return id;
 	}
@@ -16,9 +19,9 @@ public class Message {
 	}
 
 	public Date getDate() {
-		return date;
+		return  new Date();
 	}
-
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -27,46 +30,37 @@ public class Message {
 		return sender;
 	}
 
-	public void setSender(User sender) {
-		this.sender = sender;
+	public void setSender(int sender_id) {
+		sender.setId(sender_id);
 	}
 
 	public User getRecipient() {
 		return recipient;
 	}
 
-	public void setRecipient(User recipient) {
-		this.recipient = recipient;
+	public void setRecipient(int recipient_id) {
+		recipient.setId(recipient_id);
 	}
 
 	public String getBody() {
-		return body;
+		return text;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setBody(String text) {
+		this.text= text;
 	}
 
-	private User recipient;
-    private String body;
+
 
     private static Message from(Message messageBean, User sender, User recipient) {
 
         Message message = new Message();
         message.id = messageBean.getId();
-        message.date = messageBean.getDate();
-        message.body = messageBean.getBody();
+        message.text = messageBean.getBody();
         message.sender = sender;
         message.recipient = recipient;
 
         return message;
 
     }
-
-   /* public static Message from(Message messageBean, UserDaoImpl userDao) {
-        User sender = userDao.getUserById(messageBean.getSender());
-        User recipient = userDao.getUserById(messageBean.getRecipient());
-        return from(messageBean, sender, recipient);
-    }
-*/
 }
