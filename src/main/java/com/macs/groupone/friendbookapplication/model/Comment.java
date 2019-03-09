@@ -2,20 +2,20 @@ package com.macs.groupone.friendbookapplication.model;
 
 import java.util.Date;
 
-public class Message {
+public class Comment {
 
-	private long id;
-	private Date date;
+	private long comment_id;
+	private Date timestamp;
 	private User sender;
 	private User recipient;
-	private String text;
+	private String comment;
 
 	public long getId() {
-		return id;
+		return comment_id;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this.comment_id = id;
 	}
 
 	public Date getDate() {
@@ -23,7 +23,7 @@ public class Message {
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.timestamp = date;
 	}
 
 	public User getSender() {
@@ -34,8 +34,8 @@ public class Message {
 		sender.setId(sender_id);
 	}
 
-	public User getRecipient() {
-		return recipient;
+	public int getRecipient() {
+		return recipient.getId();
 	}
 
 	public void setRecipient(int recipient_id) {
@@ -43,24 +43,11 @@ public class Message {
 	}
 
 	public String getBody() {
-		return text;
+		return comment;
 	}
 
 	public void setBody(String text) {
-		this.text= text;
-	}
-
-
-
-	private static Message from(Message messageBean, User sender, User recipient) {
-
-		Message message = new Message();
-		message.id = messageBean.getId();
-		message.text = messageBean.getBody();
-		message.sender = sender;
-		message.recipient = recipient;
-
-		return message;
-
+		this.comment= text;
 	}
 }
+

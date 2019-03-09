@@ -33,6 +33,7 @@
 
 # Mac OS garbage
 *.DS_Store
+~$ FriendBook.docx
 
 # Compiled class file
 *.class
