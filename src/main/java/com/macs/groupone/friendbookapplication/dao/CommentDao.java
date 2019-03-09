@@ -9,8 +9,8 @@ import com.macs.groupone.friendbookapplication.model.Message;
 import com.macs.groupone.friendbookapplication.model.User;
 @Component
 public interface CommentDao {
-	
-    Collection<Comment> getComment(Message message);
+
+	Collection<Comment> getComment(Message message);
 	void addNewComment(User sender, User recipient, String comment, Comment comment2);
-    
+
 }

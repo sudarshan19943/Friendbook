@@ -26,37 +26,37 @@ import com.macs.groupone.friendbookapplication.service.MessageService;
 
 @Controller
 public class NewPostController {
-	
+
 	@Autowired
 	FriendsService friendsService;
-	
+
 	@Autowired
 	MessageService messageService;
-	
+
 	private Date timestamp;
-	
-	  @RequestMapping(value = "/newpost", method = RequestMethod.GET) 
-	  public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
-			modelAndView.setViewName(Constants.NEW_POST_VIEW);
-			return modelAndView; 
-	  }
-	 
-	  
-	  @RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	  public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
-	  //Collection<User> friends = friendsService.getFriendList(user); 
-	  //Iterate over collection of users and add the post in their timeline
-		
-		/*
-		 * Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
-		 * messageService.addNewPost(user, itr.next(), post, message);
-		 * messageService.display(post); }
-		 */
-		 
-		  messageService.addNewPost(user, user, post, message);
-	  
-	  return modelAndView; 
-	  }
-	 
-	 
+
+	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
+	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
+		modelAndView.setViewName(Constants.NEW_POST_VIEW);
+		return modelAndView; 
+	}
+
+
+	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
+	public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
+		Collection<User> friends = friendsService.getFriendList(user); 
+		//Iterate over collection of users and add the post in their timeline
+
+
+		Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
+			messageService.addNewPost(user, itr.next(), post, message);
+			messageService.display(post); }
+
+
+		messageService.addNewPost(user, user, post, message);
+
+		return modelAndView; 
+	}
+
+
 }

@@ -3,14 +3,14 @@ package com.macs.groupone.friendbookapplication.model;
 import java.util.Date;
 
 public class Message {
-	
+
 	private long id;
-    private Date date;
-    private User sender;
+	private Date date;
+	private User sender;
 	private User recipient;
-    private String text;
-    
-    public long getId() {
+	private String text;
+
+	public long getId() {
 		return id;
 	}
 
@@ -21,7 +21,7 @@ public class Message {
 	public Date getDate() {
 		return  new Date();
 	}
-	
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -52,15 +52,15 @@ public class Message {
 
 
 
-    private static Message from(Message messageBean, User sender, User recipient) {
+	private static Message from(Message messageBean, User sender, User recipient) {
 
-        Message message = new Message();
-        message.id = messageBean.getId();
-        message.text = messageBean.getBody();
-        message.sender = sender;
-        message.recipient = recipient;
+		Message message = new Message();
+		message.id = messageBean.getId();
+		message.text = messageBean.getBody();
+		message.sender = sender;
+		message.recipient = recipient;
 
-        return message;
+		return message;
 
-    }
+	}
 }
