@@ -22,9 +22,9 @@ import com.macs.groupone.friendbookapplication.service.EmailService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
-public class PasswordController {
+public class ForgetPasswordController {
 	
-	private static final Logger log = LoggerFactory.getLogger(PasswordController.class);
+	private static final Logger log = LoggerFactory.getLogger(ForgetPasswordController.class);
 
 	@Autowired
 	UserService userService;
@@ -57,40 +57,6 @@ public class PasswordController {
 		}
 
 		modelAndView.setViewName("forgotpassword");
-		return modelAndView;
-	}
-
-	// Display form to reset password
-	@RequestMapping(value = "/reset", method = RequestMethod.GET)
-	public ModelAndView processResetPasswordPage(ModelAndView modelAndView, @RequestParam("token") String token) {
-
-		User user = userService.findUserByResetToken(token);
-		if (user != null) {
-			modelAndView.addObject("resetToken", token);
-		} else {
-			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.INVALID_PASSWORD_LINK);
-		}
-		modelAndView.setViewName(Constants.RESET_VIEW);
-		return modelAndView;
-	}
-
-	// Process reset password form
-	@RequestMapping(value = "/reset/{token}", method = RequestMethod.POST)
-	public ModelAndView setNewPassword(ModelAndView modelAndView, @RequestParam Map<String, String> requestParams,
-			@RequestParam("token") String token, RedirectAttributes redir) {
-
-		User user = userService.findUserByResetToken(token);
-		if (user != null) {
-			user.setPassword(requestParams.get("password"));
-			user.setConfirmationToken(null);
-			userService.updateUser(user);
-			redir.addFlashAttribute(Constants.SUCCESSMESSAGE, Constants.PASSWORD_RESET_SUCCESS);
-			modelAndView.setViewName("redirect:login");
-			return modelAndView;
-		} else {
-			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.INVALID_PASSWORD_LINK);
-			modelAndView.setViewName(Constants.RESET_VIEW);
-		}
 		return modelAndView;
 	}
 }
