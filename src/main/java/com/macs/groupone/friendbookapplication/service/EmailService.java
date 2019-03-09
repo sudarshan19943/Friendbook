@@ -3,6 +3,11 @@ package com.macs.groupone.friendbookapplication.service;
 import java.util.Date;
 import java.util.Properties;
 
+
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetupTest;
+
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -60,7 +65,6 @@ public class EmailService {
 		createProperties();
 		createSession();
 		createFromAddress(Config.getProperty(ServiceConstants.MAIL_USERNAME));
-
 		Message msg = new MimeMessage(session);
 		msg.setFrom(fromAddress);
 		InternetAddress[] toAddresses = { new InternetAddress(toAddress) };
@@ -68,7 +72,6 @@ public class EmailService {
 		msg.setSubject(subject);
 		msg.setSentDate(new Date());
 		msg.setContent(message, "text/html");
-
 		Transport.send(msg);
 	}
 }

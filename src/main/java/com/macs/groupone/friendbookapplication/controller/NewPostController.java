@@ -47,13 +47,9 @@ public class NewPostController {
 		Collection<User> friends = friendsService.getFriendList(user); 
 		//Iterate over collection of users and add the post in their timeline
 
-
 		Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
 			messageService.addNewPost(user, itr.next(), post, message);
 			messageService.display(post); }
-
-
-		messageService.addNewPost(user, user, post, message);
 
 		return modelAndView; 
 	}
