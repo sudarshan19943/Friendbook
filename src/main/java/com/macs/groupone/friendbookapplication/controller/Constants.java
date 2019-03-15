@@ -28,5 +28,6 @@ public class Constants {
 	public static final String RESET_VIEW="reset";
 	public static final String FORGOTPASSWORD_VIEW="forgotpassword";
 	public static final String NEW_POST_VIEW="newpost";
+	public static final String TIMELINE_VIEW="timeline";
 	
 }

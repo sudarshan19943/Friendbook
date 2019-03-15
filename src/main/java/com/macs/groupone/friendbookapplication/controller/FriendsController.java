@@ -31,10 +31,10 @@ public class FriendsController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	MessageService messageService;
-	
+
 	@Autowired
 	FriendsService friendsService;
 
@@ -42,7 +42,7 @@ public class FriendsController {
 	CountryAndStateService countryAndStateService;
 
 	@Autowired AvatarService avatarService;
-	 
+
 
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
@@ -55,29 +55,29 @@ public class FriendsController {
 		modelAndView.setViewName("friends");
 		return modelAndView;
 	}
-	
-	
-	   // add friend 
-		@RequestMapping(value = "/addFriend", method = RequestMethod.POST)
-		public ModelAndView addFriends(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
-				RedirectAttributes redirect) {
-			//get list of friends
-			friendsService.addFriend(user1,user2);
-			//all the posts related to this person must be visible on user timeline 
-			return modelAndView;
-		}
-		
-		
-		 // delete friend 
-		@RequestMapping(value = "/deleteFriend", method = RequestMethod.DELETE)
-		public ModelAndView deleteFriend(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
-				RedirectAttributes redirect) {
-			//get list of friends
-			friendsService.removeFriend(user1,user2);
-			//all the posts related to this person must be deleted from timeline
-			return modelAndView;
-		}
-		
+
+
+	// add friend 
+	@RequestMapping(value = "/addFriend", method = RequestMethod.POST)
+	public ModelAndView addFriends(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
+			RedirectAttributes redirect) {
+		//get list of friends
+		friendsService.addFriend(user1,user2);
+		//all the posts related to this person must be visible on user timeline 
+		return modelAndView;
+	}
+
+
+	// delete friend 
+	@RequestMapping(value = "/deleteFriend", method = RequestMethod.DELETE)
+	public ModelAndView deleteFriend(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
+			RedirectAttributes redirect) {
+		//get list of friends
+		friendsService.removeFriend(user1,user2);
+		//all the posts related to this person must be deleted from timeline
+		return modelAndView;
+	}
+
 
 
 }

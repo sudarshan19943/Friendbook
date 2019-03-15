@@ -21,12 +21,8 @@ import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 
-
-
-
 @Controller
-public class NewPostController {
-
+class TimelineController {
 	@Autowired
 	FriendsService friendsService;
 
@@ -35,14 +31,14 @@ public class NewPostController {
 
 	private Date timestamp;
 
-	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
+	@RequestMapping(value = "/timeline", method = RequestMethod.GET) 
 	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
-		modelAndView.setViewName(Constants.NEW_POST_VIEW);
+		modelAndView.setViewName(Constants.TIMELINE_VIEW);
 		return modelAndView; 
 	}
 
 
-	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
+	@RequestMapping(value = "/timeline", params="post", method = RequestMethod.POST) 
 	public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
 		Collection<User> friends = friendsService.getFriendList(user); 
 		//Iterate over collection of users and add the post in their timeline
@@ -53,6 +49,5 @@ public class NewPostController {
 
 		return modelAndView; 
 	}
-
 
 }

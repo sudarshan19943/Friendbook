@@ -19,7 +19,7 @@ public class AvatarService {
 
 	private static final Logger log = LoggerFactory.getLogger(AvatarService.class);
 	private static final ClassLoader loader = AvatarService.class.getClassLoader();
-	private static final String AVATAR_FOLDER = Config.getProperty("uploadedImages");
+	private static final String AVATAR_FOLDER = Config.getProperty("avatarImages");
 	private static final String AVATART_DEFAULT_IMAGE = "undefined.gif";
 	private static final String AVATAR_IMAGE_EXTENSION = ".jpg";
 
@@ -27,11 +27,11 @@ public class AvatarService {
 	}
 
 	public static String getProfileAvatar(int id) {
-		final String path = AVATAR_FOLDER + String.valueOf(id) + AVATAR_IMAGE_EXTENSION;
+		final String path = AVATAR_FOLDER +"/"+ String.valueOf(id) + AVATAR_IMAGE_EXTENSION;
 		if (null != loader.getResource(path)) {
 			return path;
 		}
-		return AVATAR_FOLDER + AVATART_DEFAULT_IMAGE;
+		return AVATAR_FOLDER +"/"+ AVATART_DEFAULT_IMAGE;
 	}
 
 	public void uploadAvatarAndSave(MultipartFile uploadfile) {

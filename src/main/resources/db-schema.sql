@@ -1,47 +1,49 @@
-CREATE TABLE users
-(
-  id BIGINT PRIMARY KEY NOT NULL,
-  first_name VARCHAR(255) NOT NULL,
-  last_name VARCHAR(255),
-  birth_date DATE,
-  reg_date TIMESTAMP DEFAULT now() NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  city VARCHAR(255),
-  country VARCHAR(255),
-  confirmation_token VARCHAR(255),
-  enabled CHAR
-);
+CREATE TABLE `friends` (
+  `user_id` int(11) DEFAULT NULL,
+  `first_name` varchar(45) DEFAULT NULL,
+  `last_name` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
+  `province` varchar(45) DEFAULT NULL,
+  `friend_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`friend_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
-CREATE UNIQUE INDEX users_email_uindex ON users (email);
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
+  `province` varchar(45) DEFAULT NULL,
+  `enabled` tinyint(4) DEFAULT NULL,
+  `confirmation_token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
-CREATE TABLE friends (
-  userid bigint NOT NULL,
-  friendid bigint NOT NULL
-);
+CREATE TABLE `post` (
+  `post_id` int(11) NOT NULL AUTO_INCREMENT,
+  `post` varchar(255) DEFAULT NULL,
+  `sender_id` int(11) DEFAULT NULL,
+  `recipient_id` int(11) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`post_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=latin1;
 
 
-ALTER TABLE  friends ADD CONSTRAINT friends_users_userid_fk FOREIGN KEY (userid) REFERENCES users(id);
+CREATE TABLE `comment` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment` varchar(255) DEFAULT NULL,
+  `sender_id` int(11) DEFAULT NULL,
+  `receiver_id` int(11) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT NULL,
+  `post_id_fk` int(11) DEFAULT NULL,
+  PRIMARY KEY (`comment_id`),
+  KEY `post_id_fk_idx` (`post_id_fk`),
+  CONSTRAINT `post_id_fk` FOREIGN KEY (`post_id_fk`) REFERENCES `post` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE  friends ADD CONSTRAINT friends_users_friendid_fk FOREIGN KEY (friendid) REFERENCES users(id);
-
-ALTER TABLE `friends` ADD UNIQUE `unique_index`(`userid`, `friendid`);
-
-CREATE TABLE messages (
-  id bigint NOT NULL,
-  date timestamp DEFAULT now(),
-  sender bigint NOT NULL,
-  recipient bigint NOT NULL,
-  body character varying(255) NOT NULL
-);
-
-
-ALTER TABLE  messages ADD CONSTRAINT messages_id_pk PRIMARY KEY (id);
-
-ALTER TABLE  messages ADD CONSTRAINT messages_recipient_id_fk FOREIGN KEY (recipient) REFERENCES users(id);
-
-ALTER TABLE  messages ADD CONSTRAINT messages_sender_id_fk FOREIGN KEY (sender) REFERENCES users(id);
-
-CREATE INDEX fki_messages_sender_id_fk ON messages (sender);
-
-CREATE UNIQUE INDEX messages_id_uindex ON messages (id);
