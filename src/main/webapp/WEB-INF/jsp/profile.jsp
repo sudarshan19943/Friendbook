@@ -80,11 +80,11 @@
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">
                     <form role="form" action="/profile" method="post" autocomplete="off">
-                        <div class="form-group-firstname">
-                            <label for="firstname">First Name</label>
+                        <div class="form-group-first_name">
+                            <label for="first_name">First Name</label>
                         </div>
-                        <div class="form-group-lastname">
-                            <label for="lastname">Last Name</label>
+                        <div class="form-group-last_name">
+                            <label for="last_name">Last Name</label>
                         </div>
                         <div class="form-group">
                             <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${param.city}'>

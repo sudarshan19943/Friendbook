@@ -40,22 +40,19 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 			@Override
 			public void addNewPost(User sender, User recipient, String post, Message message) {
-				final String SQL_ADD_NEW = "INSERT INTO post (sender_id, recipient_id, post, timestamp) VALUES (?, ?, ?, ?);";
-				jdbcManager().update(SQL_ADD_NEW, sender.getId(), recipient.getId(), post, message.getDate());
+				jdbcManager().update("{call addNewPost(?)}", sender.getId(), recipient.getId(), post, message.getDate());
 
 			}
 
 			@Override
 			public void removePost(Message message) {
-				final String SQL_REMOVE_POST= "DELETE from post WHERE post_id = ?";
-				jdbcManager().update(SQL_REMOVE_POST, message.getId());
+				jdbcManager().update("{call removePost(?)}", message.getId());
 
 			}
 
 			@Override
 			public Collection<Message> getMessage(User user) {
-				final String SQL_GET_NEW_MESSAGE = "SELECT * from post where sender_id = ?";
-				Collection<Message> messageDb = jdbcManager().select(SQL_GET_NEW_MESSAGE,MESSAGE_MAPPER,  user.getId());
+				Collection<Message> messageDb = jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER,  user.getId());
 				return messageDb;
 			}
 

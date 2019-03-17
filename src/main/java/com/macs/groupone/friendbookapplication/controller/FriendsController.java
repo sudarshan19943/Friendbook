@@ -3,15 +3,12 @@ package com.macs.groupone.friendbookapplication.controller;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +24,7 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 @Controller
 public class FriendsController {
 
-	private static final Logger log = LoggerFactory.getLogger(FriendsController.class);
+	private static final Logger log = Logger.getLogger(FriendsController.class);
 
 	@Autowired
 	UserService userService;
@@ -53,6 +50,7 @@ public class FriendsController {
 		ArrayList<User>friendList=(ArrayList<User>) friendsService.getFriendList(user);
 		modelAndView.addObject("friendList",friendList);
 		modelAndView.setViewName("friends");
+		log.info("List of friends" + friendList);
 		return modelAndView;
 	}
 
@@ -61,9 +59,8 @@ public class FriendsController {
 	@RequestMapping(value = "/addFriend", method = RequestMethod.POST)
 	public ModelAndView addFriends(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
 			RedirectAttributes redirect) {
-		//get list of friends
 		friendsService.addFriend(user1,user2);
-		//all the posts related to this person must be visible on user timeline 
+		log.debug("Friend added");
 		return modelAndView;
 	}
 
@@ -74,6 +71,7 @@ public class FriendsController {
 			RedirectAttributes redirect) {
 		//get list of friends
 		friendsService.removeFriend(user1,user2);
+		log.debug("Friend removed");
 		//all the posts related to this person must be deleted from timeline
 		return modelAndView;
 	}

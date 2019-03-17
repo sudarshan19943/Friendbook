@@ -58,10 +58,12 @@ public class PasswordResetController {
 			user.setConfirmationToken(null);
 			userService.updateUser(user);
 			redir.addFlashAttribute(Constants.SUCCESSMESSAGE, Constants.PASSWORD_RESET_SUCCESS);
+			log.debug("Redirect to login");
 			modelAndView.setViewName("redirect:login");
 			return modelAndView;
 		} else {
 			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.INVALID_PASSWORD_LINK);
+			log.error("Error while resetting password");
 			modelAndView.setViewName(Constants.RESET_VIEW);
 		}
 		return modelAndView;
