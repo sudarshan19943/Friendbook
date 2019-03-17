@@ -3,8 +3,7 @@ package com.macs.groupone.friendbookapplication.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,7 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 @Controller
 public class LoginController {
 	
-	  private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+	  private static final Logger log = Logger.getLogger(LoginController.class);
 
 	@Autowired
 	UserService userService;
@@ -43,10 +42,10 @@ public class LoginController {
 			return "login";  //need to check if it is not getting into loop
 		} else {
 			redirect.addFlashAttribute("userEmail",user.getEmail());
+			log.debug("User email:" +user.getEmail());
 			redirect.addFlashAttribute("password",user.getPassword());
-			return "redirect:profileValueLoader";
+			return "redirect:profile";
 		}
-		//return "redirect:profile";
 	}
 
 }

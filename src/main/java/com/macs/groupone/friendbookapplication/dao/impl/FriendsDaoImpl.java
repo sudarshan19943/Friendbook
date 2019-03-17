@@ -22,8 +22,8 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	
 	private static final Logger log = LoggerFactory.getLogger(FriendsDaoImpl.class);
 
-	static final String SQL_GET_FRIEND_LIST = "SELECT id, email, first_name, last_name, city, country"
-			.concat("CONCAT_aWS(' ', first_name, last_name) AS name ")
+	static final String SQL_GET_FRIEND_LIST = "SELECT id, email, first_name, lastname, city, country"
+			.concat("CONCAT_aWS(' ', first_name, lastname) AS name ")
 			.concat("FROM users ")
 			.concat("INNER JOIN friends AS userFriendsList ON users.id = userFriendsList.friendid AND userFriendsList.userid = ? ")
 			.concat("ORDER BY name; ");
@@ -41,7 +41,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 			user.setId(resultSet.getInt("id"));
 			user.setEmail(resultSet.getString("email"));
 			user.setFirstName(resultSet.getString("first_name"));
-			user.setLastName(resultSet.getString("last_name"));
+			user.setLastName(resultSet.getString("lastname"));
 			user.setCity(resultSet.getString("city"));
 			user.setCountry(resultSet.getString("country"));
 			return user;
@@ -50,13 +50,13 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	@Override
 	public long addFriend(User user, User friend) {
-		final long id = jdbcManager().insertAndGetId("INSERT INTO friends (userid, friendid) VALUES (?, ?)",user.getId(), friend.getId());
+		final long id = jdbcManager().insertAndGetId("{call addFriend(?, ?)}",user.getId(), friend.getId());
 		return (int) id;
 	}
 
 	@Override
 	public void removeFriend(User user, User friend) {
-		jdbcManager().update("DELETE FROM friends WHERE userid = ? AND friendid = ?", user.getId(), friend.getId());
+		jdbcManager().update("{call removeFriend(?, ?)}", user.getId(), friend.getId());
 		
 	}
 

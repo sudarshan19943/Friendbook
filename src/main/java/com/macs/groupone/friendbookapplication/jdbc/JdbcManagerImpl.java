@@ -10,13 +10,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.macs.groupone.friendbookapplication.common.Config;
+import com.macs.groupone.friendbookapplication.controller.LoginController;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
@@ -27,6 +29,7 @@ public class JdbcManagerImpl implements JdbcManager {
 	private String username;
 	private String password;
 
+	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
 	
 	public JdbcManagerImpl() {
 		this.url = Config.getProperty(JDBCConstants.URL);
@@ -38,6 +41,7 @@ public class JdbcManagerImpl implements JdbcManager {
 		try {
 			return DriverManager.getConnection(url, username, password);
 		} catch (final SQLException e) {
+			log.error("Connection failure" + e);
 			throw new DatabaseConnectionFailure(e);
 		}
 
@@ -49,21 +53,24 @@ public class JdbcManagerImpl implements JdbcManager {
 		if (null != connection)
 			try {
 				connection.close();
-			} catch (final SQLException e) {
+			} catch (final Exception e) {
+				log.error("Connection cannot be closed" + e);
 				e.printStackTrace();
 			}
 		
 		if (null != statement)
 			try {
 				statement.close();
-			} catch (final SQLException e) {
+			} catch (final Exception e) {
+				log.error("Statement cannot be closed" + e);
 				e.printStackTrace();
 			}
 		
 		if (null != resultSet)
 			try {
 				resultSet.close();
-			} catch (final SQLException e) {
+			} catch (final Exception e) {
+				log.error("Resultset cannot be closed" + e);
 				e.printStackTrace();
 			}
 
@@ -73,7 +80,8 @@ public class JdbcManagerImpl implements JdbcManager {
 		if (null != connection) {
 			try {
 				connection.rollback();
-			} catch (final SQLException e) {
+			} catch (final Exception e) {
+				log.error("Connection error" + e);
 				e.printStackTrace();
 			}
 		}
@@ -136,23 +144,25 @@ public class JdbcManagerImpl implements JdbcManager {
 				result.add(rowMapper.map(resultSet));
 			}
 		} catch (final SQLException e) {
+			log.error("Database Exception" + e);
 			throw new DatabaseOperationException(e);
 		} finally {
 			closeConnection(connection, statement, resultSet);
+			log.info("Connection closed");
 		}
 		return result;
 	}
 
 	@Override
-	public long insertAndGetId(final String sql, final Object... parameters) throws DatabaseAccessException {
+	public long insertAndGetId(final String procedureName, final Object... parameters) throws DatabaseAccessException {
 		Connection connection = null;
-		PreparedStatement statement = null;
+		CallableStatement statement = null;
 		ResultSet resultSet = null;
 
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			final int result = statement.executeUpdate();
 			Long id = null;
@@ -168,10 +178,12 @@ public class JdbcManagerImpl implements JdbcManager {
 			connection.commit();
 			return id;
 		} catch (final DatabaseAccessException e) {
+			log.error("Database exception" + e);
 			rollback(connection);
 			throw e;
 		} catch (final Exception e) {
 			rollback(connection);
+			log.error("Database Exception" + e);
 			throw new DatabaseOperationException(e);
 		} finally {
 			closeConnection(connection, statement, resultSet);
@@ -179,7 +191,7 @@ public class JdbcManagerImpl implements JdbcManager {
 	}
 
 	@Override
-	public int update(final String sql, final Object... parameters) throws DatabaseAccessException {
+	public int update(final String procedureName, final Object... parameters) throws DatabaseAccessException {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		final ResultSet resultSet = null;
@@ -187,16 +199,18 @@ public class JdbcManagerImpl implements JdbcManager {
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			statement = connection.prepareStatement(sql);
+			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			final int result = statement.executeUpdate();
 			connection.commit();
 			return result;
 		} catch (final DatabaseAccessException e) {
 			rollback(connection);
+			log.error("Database Exception" + e);
 			throw e;
 		} catch (final Exception e) {
 			rollback(connection);
+			log.error("Database Exception" + e);
 			throw new DatabaseOperationException(e);
 		} finally {
 			closeConnection(connection, statement, resultSet);
