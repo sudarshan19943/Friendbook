@@ -1,11 +1,11 @@
 package com.macs.groupone.friendbookapplication.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Message {
 
 	private long id;
-	private Date date;
+	private Timestamp time;
 	private User sender;
 	private User recipient;
 	private String text;
@@ -18,12 +18,12 @@ public class Message {
 		this.id = id;
 	}
 
-	public Date getDate() {
-		return  new Date();
+	public String getDate() {
+		return  time.toString();
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDate(Timestamp timestamp) {
+		this.time = timestamp;
 	}
 
 	public User getSender() {

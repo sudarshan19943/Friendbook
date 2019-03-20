@@ -47,10 +47,10 @@ public class FriendsController {
 			RedirectAttributes redirect) {
 		//get list of friends
 		user.setId(1);
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.getFriendList(user);
-		modelAndView.addObject("friendList",friendList);
-		modelAndView.setViewName("friends");
-		log.info("List of friends" + friendList);
+//		ArrayList<User>friendList=(ArrayList<User>) friendsService.getFriendList(user);
+//		modelAndView.addObject("friendList",friendList);
+//		modelAndView.setViewName("friends");
+//		log.info("List of friends" + friendList);
 		return modelAndView;
 	}
 

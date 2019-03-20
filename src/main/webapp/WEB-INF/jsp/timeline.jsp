@@ -52,28 +52,36 @@
 		<div class="search-box">
 		<input type="text" placeholder="Find Friends...">
 		</div>
-
 		<div class="col-md-8">
 			<br></br>
-			<form role="form" action="/timeline" method="post" autocomplete="off">
-
-
-
-				<div class="form-group-post-details">
-                            <label for="post-details"></label>
-                 </div>
-				<div class="form-group">
-					<input style="height:50px" class="form-control" name="post" value='${param.post}'
-						type="text">
-				</div>
-				<div class="button-group">
-					<input type="submit" class="btn btn-lg btn-primary btn-block"
-						value="comment">
-				</div>
-				<br></br>
-			</form>
+			<%-- <div>Friends: ${friends.get(0).getFriendid()}</div>  --%>
+			<c:forEach var="friends" items="${friends}" varStatus="status">
+				<div>${friends.getFirstName()} ${friends.getLastName()} </div>
+				<c:forEach var="post" items="${message}" varStatus="status">
+					<div>Posted on ${post.getDate()}</div>
+					<div>${post.getBody()}</div>
+					<c:set var="sender_id" value="${post.getSenderId()}" />
+					<c:set var="recipient_id" value="${post.getRecipientId()}" />
+					<c:if test="${sender_id != recipient_id}">
+						<form role="form" action="/timeline" method="post"
+							autocomplete="off">
+							<div class="form-group-post-details">
+								<label for="post-details"></label>
+							</div>
+							<div class="form-group">
+								<input style="height: 50px" class="form-control" name="post"
+									value='${param.comment}' type="text">
+							</div>
+							<div class="button-group">
+								<input type="submit" class="btn btn-lg btn-primary btn-block"
+									value="comment">
+							</div>
+							<br></br>
+						</form>
+					</c:if>
+				</c:forEach>
+			</c:forEach>
 		</div>
-
 		<div class="col-md-8">
 			<br></br>
 			<form role="form" action="/timeline" method="post" autocomplete="off">

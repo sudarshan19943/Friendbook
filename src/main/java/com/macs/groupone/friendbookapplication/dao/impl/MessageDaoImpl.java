@@ -2,6 +2,7 @@ package com.macs.groupone.friendbookapplication.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -30,7 +31,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 		@Override public Message map(final ResultSet resultSet) throws SQLException {
 			final Message messagebean = new Message();
 			messagebean.setId(resultSet.getInt("post_id"));
-			messagebean.setDate(resultSet.getDate("timestamp"));
+			messagebean.setDate(resultSet.getTimestamp("post_time"));
 			messagebean.setRecipient(resultSet.getInt("recipient_id"));
 			messagebean.setSender(resultSet.getInt("sender_id"));
 			messagebean.setBody(resultSet.getString("post"));
@@ -39,8 +40,8 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 
 			@Override
-			public void addNewPost(User sender, User recipient, String post, Message message) {
-				jdbcManager().update("{call addNewPost(?)}", sender.getId(), recipient.getId(), post, message.getDate());
+			public void addNewPost(User sender, User recipient, String post) {
+				jdbcManager().update("{call addNewPost(?, ?, ?)}", sender.getId(), recipient.getId(), post);
 
 			}
 
@@ -52,27 +53,8 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 			@Override
 			public Collection<Message> getMessage(User user) {
-				Collection<Message> messageDb = jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER,  user.getId());
-				return messageDb;
+				Collection<Message> results = new ArrayList<>(); 
+				results.addAll(jdbcManager().select("{call getMessage(0)}",MESSAGE_MAPPER));
+				return results;
 			}
-
-			/*
-			 * @Override public Collection<Message> getAll(User userOne, User userTwo) {
-			 * final String SQL_GET_BY_USER =
-			 * "SELECT id, date, sender, recipient, body FROM messages WHERE ((sender = ? and recipient = ?) or (sender = ? and recipient = ?)) ORDER BY date;"
-			 * ; final long userOneId = userOne.getId(); final long userTwoId =
-			 * userTwo.getId(); log.debug(SQL_GET_BY_USER); Collection<Message> messagesDb =
-			 * jdbcManager().select(SQL_GET_BY_USER, MESSAGE_MAPPER, userOneId, userTwoId,
-			 * userTwoId, userOneId);
-			 * 
-			 * return messagesDb; }
-			 */
-
-			/*
-			 * @Override public Collection<Message> getLast(User userOne) { final long
-			 * userId = userOne.getId(); log.debug(SQL_GET_LAST); Collection<Message>
-			 * messagesDb = jdbcManager().select(SQL_GET_LAST, MESSAGE_MAPPER, userId,
-			 * userId); return messagesDb; }
-			 */
-
 }
