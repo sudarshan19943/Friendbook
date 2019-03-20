@@ -43,15 +43,7 @@ public class NewPostController {
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
 	public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
-		Collection<User> friends = friendsService.getFriendList(user); 
-		log.debug("Friend list:" +friendsService.getFriendList(user));
-		//Iterate over collection of users and add the post in their timeline
-
-		Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
-			messageService.addNewPost(user, itr.next(), post, message);
-			log.debug("New post added!");
-			messageService.display(post); }
-
+		messageService.addNewPost(user, user, post);
 		return modelAndView; 
 	}
 

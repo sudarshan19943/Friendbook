@@ -19,8 +19,8 @@ public class MessageService {
 		 
 	 }
 	
-	public void addNewPost(User sender, User recipient, String post, Message message) {
-		messageDaoImpl.addNewPost(sender, recipient, post, message);
+	public void addNewPost(User sender, User recipient, String post) {
+		messageDaoImpl.addNewPost(sender, recipient, post);
 	}
 
 	
@@ -33,9 +33,8 @@ public class MessageService {
 		return null;
 	}
 
-	public void display(String post) {
-		
-		
+	public void getMessage(User user) {
+		messageDaoImpl.getMessage(user);
 	}
 
 	

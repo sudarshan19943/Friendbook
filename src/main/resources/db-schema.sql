@@ -127,3 +127,11 @@ CREATE PROCEDURE `removeFriend` (IN userid BIGINT(20), friendid BIGINT(20))
 BEGIN
 DELETE FROM friends WHERE userid = userid AND friendid = friendid;
 END
+
+CREATE PROCEDURE `getFriendList`(IN id INT(11))
+BEGIN
+SELECT *
+FROM users
+INNER JOIN  friends ON friends.friendid = users.id
+where id = friends.userid;
+END
