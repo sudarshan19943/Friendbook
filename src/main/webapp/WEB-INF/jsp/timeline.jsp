@@ -57,7 +57,7 @@
 			<%-- <div>Friends: ${friends.get(0).getFriendid()}</div>  --%>
 			<c:forEach var="friends" items="${friends}" varStatus="status">
 				<div>${friends.getFirstName()} ${friends.getLastName()} </div>
-				<c:forEach var="post" items="${message}" varStatus="status">
+<%-- 				<c:forEach var="post" items="${message}" varStatus="status">
 					<div>Posted on ${post.getDate()}</div>
 					<div>${post.getBody()}</div>
 					<c:set var="sender_id" value="${post.getSenderId()}" />
@@ -79,7 +79,7 @@
 							<br></br>
 						</form>
 					</c:if>
-				</c:forEach>
+				</c:forEach> --%>
 			</c:forEach>
 		</div>
 		<div class="col-md-8">
