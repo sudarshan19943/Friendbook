@@ -19,12 +19,12 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
 
-	public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
-	public static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email = ?";
-	public static final String GET_USER_BY_EMAIL_PASSWORD = "SELECT * FROM user WHERE email = ? and password = ?";
-	public static final String INSER_INTO_USER = "INSERT INTO user (email, password, first_name, last_name) VALUES (?, ?, ?, ?)";
-	public static final String UPDATE_USER_BY_ID = "UPDATE user SET confirmation_token=?, email=?, enabled=?, first_name=?, last_name=?, password =?, province=?,country=? WHERE  id=?";
-	public static final String GET_USER_BY_RESET_TOKEN="SELECT * FROM user WHERE confirmation_token = ?";
+	public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
+	public static final String GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
+	public static final String GET_USER_BY_EMAIL_PASSWORD = "SELECT * FROM users WHERE email = ? and password = ?";
+	public static final String INSER_INTO_USER = "INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)";
+	public static final String UPDATE_USER_BY_ID = "UPDATE users SET confirmation_token=?, email=?, enabled=?, first_name=?, last_name=?, password =?, province=?,country=? WHERE  id=?";
+	public static final String GET_USER_BY_RESET_TOKEN="SELECT * FROM users WHERE confirmation_token = ?";
 	
 	
 	public UserDaoImpl() {
@@ -49,13 +49,13 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public User getUserById(int id) {
-		final List<User> result = jdbcManager().select(GET_USER_BY_ID, USER_MAPPER, id);
+		final List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	@Override
 	public User getUserByEmail(String email) {
-		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL, USER_MAPPER, email);
+		final List<User> result = jdbcManager().select("{call getUserByEmail(?)}", USER_MAPPER, email);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
@@ -81,20 +81,20 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public int addUser(String email, String password, String first_name, String last_name) {
-		final long id = jdbcManager().insertAndGetId(INSER_INTO_USER, email, password, first_name, last_name);
+		final long id = jdbcManager().insertAndGetId("{call addUser(?, ?, ?, ?)}", email, password, first_name, last_name);
 		return (int) id;
 	}
 
 	@Override
 	public void updateUser(User user) {
-		jdbcManager().update(UPDATE_USER_BY_ID, user.getConfirmationToken(), user.getEmail(), user.getEnabled(),
+		jdbcManager().update("{call updateUser(?, ?, ?, ?, ?, ?, ?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled(),
 				user.getFirstName(), user.getLastName(), user.getPassword(), user.getId(),user.getProvince(),user.getCountry());
 
 	}
 	
 	@Override
 	public User findUserByResetToken(String resetToken) {
-		final List<User> result = jdbcManager().select(GET_USER_BY_RESET_TOKEN, USER_MAPPER,
+		final List<User> result = jdbcManager().select("{call findUserByResetToken(?)}", USER_MAPPER,
 				resetToken);
 		return result.isEmpty() ? null : result.get(0);
 	}

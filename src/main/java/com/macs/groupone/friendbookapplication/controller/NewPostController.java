@@ -7,6 +7,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,11 +23,9 @@ import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 
 
-
-
 @Controller
 public class NewPostController {
-
+	private static final Logger log = Logger.getLogger(LoginController.class);
 	@Autowired
 	FriendsService friendsService;
 
@@ -44,13 +43,7 @@ public class NewPostController {
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
 	public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
-		Collection<User> friends = friendsService.getFriendList(user); 
-		//Iterate over collection of users and add the post in their timeline
-
-		Iterator<User> itr = friends.iterator(); while(itr.hasNext()) {
-			messageService.addNewPost(user, itr.next(), post, message);
-			messageService.display(post); }
-
+		messageService.addNewPost(user, user, post);
 		return modelAndView; 
 	}
 

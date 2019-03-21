@@ -50,15 +50,13 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
 
 			@Override
 			public void addNewComment(User sender, User recipient, String comments, Comment comment) {
-				final String SQL_ADD_NEW = "INSERT INTO comment (sender_id, receiver_id, comment, timestamp, comment_id) VALUES (?, ?, ?, ?, ?);";
-				jdbcManager().update(SQL_ADD_NEW, sender.getId(), recipient.getId(), comments, comment.getDate(), comment.getId());
+				jdbcManager().update("{call addNewComment(?, ?, ?, ?, ?)}", sender.getId(), recipient.getId(), comments, comment.getDate(), comment.getId());
 
 			}
 
 			@Override
 			public Collection<Comment> getComment(Message message) {
-				final String SQL_GET_NEW_COMMENT = "SELECT * from comment where post_id = ?";
-				Collection<Comment> commentDb = jdbcManager().select(SQL_GET_NEW_COMMENT,COMMENT_MAPPER,  message.getId());
+				Collection<Comment> commentDb = jdbcManager().select("{call getComment(?)}",COMMENT_MAPPER,  message.getId());
 				return commentDb;
 			}
 

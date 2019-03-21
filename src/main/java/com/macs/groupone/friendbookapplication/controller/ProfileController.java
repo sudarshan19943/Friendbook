@@ -6,8 +6,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 @Controller
 public class ProfileController {
 
-	private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
+	private static final Logger log = Logger.getLogger(ProfileController.class);
 
 	@Autowired
 	UserService userService;
@@ -36,18 +35,23 @@ public class ProfileController {
 	@Autowired AvatarService avatarService;
 	 
 
-	@RequestMapping(value = "/profileValueLoader", method = RequestMethod.GET)
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showDeafultProfilePage(Model model, ModelAndView modelAndView, HttpServletRequest request,
 			RedirectAttributes redirect) {
 		String email = (String) model.asMap().get("userEmail");
 		String password = (String) model.asMap().get("password");
 		User userByEmail = userService.getUserByEmailPassword(email, password);
-		modelAndView.addObject("firstName", userByEmail.getFirstName());
-		modelAndView.addObject("lastName", userByEmail.getLastName());
+		modelAndView.addObject("first_name", userByEmail.getFirstName());
+		log.debug("Country List:" +userByEmail.getFirstName());
+		modelAndView.addObject("last_name", userByEmail.getLastName());
+		log.debug("Country List:" +userByEmail.getLastName());
 		ArrayList<String> countryList = countryAndStateService.getListOfCountries(Locale.ENGLISH);
+		log.debug("Country List:" +countryList);
 		modelAndView.addObject("Countries", countryList);
 		modelAndView.addObject("city", userByEmail.getCity());
+		log.debug("City:" +userByEmail.getCity());
 		AvatarService.getProfileAvatar(userByEmail.getId());
+		log.debug("Country List:" +countryList);
 		modelAndView.setViewName("profile");
 		return modelAndView;
 	}

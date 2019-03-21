@@ -3,8 +3,7 @@ package com.macs.groupone.friendbookapplication.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,7 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 @Controller
 public class RegistrationController {
 
-	private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
+	private static final Logger log = Logger.getLogger(RegistrationController.class);
 
 	
 	@Autowired
@@ -44,14 +43,17 @@ public class RegistrationController {
 		User userExists = userService.getUserByEmail(user.getEmail());
 		if (userExists != null) {
 			modelAndView.addObject(Constants.ALREADY_REGISTERED, Constants.ALREADY_REGISTERED_ERROR);
+			log.debug("Already Registered");
 			modelAndView.setViewName(Constants.REGISTER_VIEW);
 			// bindingResult.reject("email");
 		}
 		if (bindingResult.hasErrors()) {
+			log.error("Error in registration");
 			modelAndView.setViewName(Constants.REGISTER_VIEW);
 		} else {
 			userService.addUser(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName());
 			modelAndView.setViewName(Constants.LOGIN_VIEW);
+			
 		}
 
 		return modelAndView;

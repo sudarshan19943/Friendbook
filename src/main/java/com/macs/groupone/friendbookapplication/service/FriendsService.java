@@ -32,7 +32,7 @@ public class FriendsService{
 
 	
 	public Collection<User> getFriendList(User user, int recordsPerPage, int i, String searchText) {
-		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user, 10, 10, "");
+		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user);
 		return friends;
 	}
 	
