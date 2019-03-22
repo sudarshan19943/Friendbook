@@ -27,7 +27,7 @@ public class ProfileController {
 	private static final Logger log = Logger.getLogger(ProfileController.class);
 
 	@Autowired
-	UserService userService;
+	UserService userService
 
 	@Autowired
 	CountryAndStateService countryAndStateService;
