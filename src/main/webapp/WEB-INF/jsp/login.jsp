@@ -30,6 +30,38 @@
 <fmt:message bundle="${loc}" key="local.label.new_user" var="new_user"/>
 <fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
 
+<script type="text/javascript">
+
+// Yet to commit
+    function validateUser()
+    {
+        var email_pattern = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;
+        var email_value=document.form.email.value;
+        var email_value_1=email_pattern.test(document.form.email.value);
+        var password_value=document.form.password.value;
+
+        if(email_value=="")
+        {
+            alert("Please Enter Email ID");
+            document.form.email.focus();
+            return false;
+        }
+        if(email_value_1==false)
+        {
+            alert("Please Enter a valid Email ID");
+            document.form.email.focus();
+            return false;
+        }
+        if(password_value=="")
+        {
+            alert("Password don't match");
+            document.form.password.focus();
+            return false; 
+        }
+    }
+
+</script>
+
 <body>
 
 <div class="header">
@@ -38,17 +70,18 @@
 
 <div class="container-fluid" style="margin-top:50px">
     <div class="row">
-        <div class="col-sm-6 order-sm-1">
-            <h2>Connect with your friends around the world</h2>
+        <div class="col-sm-7">
+            <h3>Connect with your friends around the world</h3>
+            <img src="../../icons/promotional_image.jpg" alt="promotional image" border="2">
         </div>
-        <div class="col-sm-6 col-md-4 col-md-offset-6">
+        <div class="col-sm-5">
             
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <strong>${sign_in}</strong>
                 </div>
                 <div class="panel-body">
-                    <form role="form" action="/login" method="post" autocomplete="off">
+                    <form role="form" action="/login" name="form" method="post" autocomplete="off">
                         <div class="col-sm-12 col-md-10 col-md-offset-1 ">
                             <div class="form-group">
                                     <input class="form-control" placeholder='${email}' value='${param.email}' name="email" type="text" autofocus required>

@@ -11,9 +11,9 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordEncryptionService {
 
-	public static final String ALGORITHAM = "PBKDF2WithHmacSHA1";
+	public static final String ALGORITHM = "PBKDF2WithHmacSHA1";
 	public static final int DERIVEDKEYLENGTH = 160;
-	public static final int IERATIONS = 20000;
+	public static final int ITERATIONS = 20000;
 
 	public boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -23,8 +23,8 @@ public class PasswordEncryptionService {
 
 	public byte[] getEncryptedPassword(String password, byte[] salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, IERATIONS, DERIVEDKEYLENGTH);
-		SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHAM);
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, DERIVEDKEYLENGTH);
+		SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
 		return f.generateSecret(spec).getEncoded();
 	}
 

@@ -52,7 +52,7 @@ public class ProfileController {
 		log.debug("City:" +userByEmail.getCity());
 		AvatarService.getProfileAvatar(userByEmail.getId());
 		log.debug("Country List:" +countryList);
-		modelAndView.setViewName("profile");
+		modelAndView.setViewName(Constants.PROFILE_VIEW);
 		return modelAndView;
 	}
 
