@@ -25,28 +25,26 @@
 <fmt:setBundle basename="locale" var="loc"/>
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 
- <script>
+ <script type="text/javascript">
   
-  
-     $("#upload-file-message").text("File succesfully uploaded");
-        },
-        error: function () 
-        {
-          $("#upload-file-message").text(
-              "File not uploaded (perhaps it's too much big)");
-        }
-      });
-    }  
     
     var loadImage = function(event){
-    	
-    	var output = document.getElementById('output');
-    	output.src = URL.createObjectURL(event.target.files[0]);  
+        
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+
+    function openfileDialog() {
+    $("#fileLoader").click();
+}
+
+   
     
  </script>
+    
+    
   
 
-<body>
+<body>  
 
 <div class="header">
     <h2>Friend Book</h2>
@@ -55,14 +53,9 @@
 <div class="container" style="margin-top:40px">
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-           <a href="login.jsp">
+           <a href="function()">
             
            <img class="avatar" src="../../icons/avatar.png"/> 
-           <form id="upload-file-form" class="avatar">
-			    <input id="upload-file-input" type="file" name="uploadfile" accept="*" />
-			    <br />
-			    <span id="upload-file-message"></span>
-			  </form>
            </a>
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">
@@ -77,7 +70,7 @@
                             <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${param.city}'>
                         </div>
                         <div class="form-group">
-                            <select>
+                            <select id="countries">
                                   <option value="country">Country</option>
                             </select>
                         </div>
