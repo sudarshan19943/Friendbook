@@ -31,8 +31,6 @@
 <fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
 
 <script type="text/javascript">
-
-// Yet to commit
     function validateUser()
     {
         var email_pattern = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;

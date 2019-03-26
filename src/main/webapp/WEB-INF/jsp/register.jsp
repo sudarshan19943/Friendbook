@@ -26,7 +26,7 @@
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 <script type="text/javascript">
     
-// Yet to commit
+
 function validateUser(){
 
     var email_pattern = /^\w+[\+\.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;

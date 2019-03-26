@@ -37,18 +37,6 @@
     $("#fileLoader").click();
 }
 
-// Pre-populate country dropdown
-
-// var select=document.getElementById("countries");
-// var options=["1","2","3"];
-// for(var i=0;i<options.lenght;i++)
-// {
-//     var opt=options[i];
-//     var el=document.createElement("option")
-//     el.textContent=opt;
-//     el.value=opt;
-//     select.appendChild(el);
-// }
    
     
  </script>
@@ -68,11 +56,6 @@
            <a href="function()">
             
            <img class="avatar" src="../../icons/avatar.png"/> 
-          <!--  <form id="upload-file-form" class="avatar">
-			    <input id="upload-file-input" type="file" name="uploadfile" accept="*" /> 
-			    <br />
-			    <span id="upload-file-message"></span>
-		   </form> -->
            </a>
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">
