@@ -7,6 +7,8 @@ CREATE TABLE `friends` (
   CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+ALTER TABLE `friends` 
+CHANGE COLUMN `friend_token` `friend_token` TINYINT(4) NULL DEFAULT 0 ;
 
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL,
@@ -60,7 +62,7 @@ CREATE TABLE `logs` (
 
 CREATE PROCEDURE `getUserById` (IN id BIGINT(20))
 BEGIN
-SELECT * FROM users WHERE id = id;
+SELECT * FROM users WHERE users.id = id;
 END
 
 CREATE PROCEDURE `getUserByEmailPassword`(IN email VARCHAR(45), password VARCHAR(45))
@@ -86,6 +88,13 @@ END
 CREATE PROCEDURE `findUserByResetToken` (IN confirmation_token VARCHAR(255))
 BEGIN
 SELECT * FROM users WHERE confirmation_token = confirmation_token;
+END
+
+CREATE PROCEDURE `getUserList`()
+BEGIN
+select * from
+users
+where  first_name LIKE '%%'AND last_name LIKE '%%' AND city LIKE '%Halifax%' AND country LIKE '%%';
 END
 
 ###POST SECTION######
@@ -118,20 +127,25 @@ SELECT * from comment where post_id = comment_id;
 END
 
 #####FRIENDS####
-CREATE PROCEDURE `addFriend`(IN userid BIGINT(20), friendid BIGINT(20))
+CREATE PROCEDURE `addFriend`(IN friendid BIGINT(20))
 BEGIN
-INSERT INTO friends (userid, friendid) VALUES (userid = userid, friendid = friendid);
+INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
 END
 
-CREATE PROCEDURE `removeFriend` (IN userid BIGINT(20), friendid BIGINT(20))
+CREATE PROCEDURE `removeFriend`(IN id BIGINT(20))
 BEGIN
-DELETE FROM friends WHERE userid = userid AND friendid = friendid;
+DELETE FROM friends WHERE  friends.friendid = id;
 END
 
-CREATE PROCEDURE `getFriendList`(IN id INT(11))
+##Change parameters to pass different fields
+CREATE PROCEDURE `findFriends`(IN id INT(11))
 BEGIN
-SELECT *
-FROM users
+SELECT * FROM users 
 INNER JOIN  friends ON friends.friendid = users.id
-where id = friends.userid;
+where id = friends.userid and friends.friend_token = 1;
+END
+
+CREATE PROCEDURE `confirmFriend` (id INT(20))
+BEGIN
+UPDATE `friends` SET `friend_token` = '1' WHERE (`friendid` = id);
 END

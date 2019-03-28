@@ -1,13 +1,14 @@
 package com.macs.groupone.friendbookapplication.service;
 
-
 import java.util.Collection;
 
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.dao.UserDao;
+import com.macs.groupone.friendbookapplication.dao.impl.UserDaoImpl;
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Service
@@ -15,6 +16,8 @@ public class UserService {
 
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserDaoImpl userDaoimpl;
 
 	public UserService() {
 
@@ -57,12 +60,9 @@ public class UserService {
 		 userDao.updateUser(user);
 	}
 
-	public void removeUser(User user) {
-		userDao.removeUser(user);
-	}
-
-	public void changePassword(User user, String password) {
-
+	public Collection<User> findUsers(@Valid User user) {
+		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(user);
+		return users;
 	}
 
 }

@@ -9,8 +9,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -45,37 +49,67 @@ public class FriendsController {
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView, @Valid User user,
 			RedirectAttributes redirect) {
-		//get list of friends
-		user.setId(1);
-//		ArrayList<User>friendList=(ArrayList<User>) friendsService.getFriendList(user);
-//		modelAndView.addObject("friendList",friendList);
-//		modelAndView.setViewName("friends");
-//		log.info("List of friends" + friendList);
 		return modelAndView;
 	}
-
-
-	// add friend 
-	@RequestMapping(value = "/addFriend", method = RequestMethod.POST)
-	public ModelAndView addFriends(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
+	
+	//On clicking the find friends button, combined results of friends and users are shown
+	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
+	public ModelAndView findFriends(Model model, ModelAndView modelAndView,  @Valid User user,
 			RedirectAttributes redirect) {
-		friendsService.addFriend(user1,user2);
-		log.debug("Friend added");
+
+		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
+		modelAndView.addObject("friends", friendList);
+		ArrayList<User>userList=(ArrayList<User>) userService.findUsers(user);
+		
+		//Removes all friends from the user list
+		for ( int userListIndex =0; userListIndex< userList.size(); userListIndex++)
+		{
+			for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
+			{
+				if(userList.get(userListIndex).getId() == friendList.get(friendListIndex).getId())
+				{
+					userList.remove(userListIndex);
+				}
+			}
+		}
+		
+		modelAndView.addObject("users", userList);
+		modelAndView.setViewName("friends");
+		log.info("List of friends" + friendList);
 		return modelAndView;
 	}
 
 
 	// delete friend 
-	@RequestMapping(value = "/deleteFriend", method = RequestMethod.DELETE)
-	public ModelAndView deleteFriend(Model model, ModelAndView modelAndView, @Valid User user1,@Valid User user2,
+	@RequestMapping(value = "/removeFriends", method = RequestMethod.POST)
+	public String deleteFriend(Model model, ModelAndView modelAndView,@ModelAttribute("user") User user,
 			RedirectAttributes redirect) {
 		//get list of friends
-		friendsService.removeFriend(user1,user2);
+		friendsService.removeFriend(user);
+		modelAndView.addObject("user", user);
 		log.debug("Friend removed");
 		//all the posts related to this person must be deleted from timeline
-		return modelAndView;
+		return "redirect:friends";
+	}
+	
+	//confirm friend request
+	@RequestMapping(value = "/confirmFriend", method = RequestMethod.GET)
+	public String confirmFriend(Model model, ModelAndView modelAndView,@Valid User user,
+			RedirectAttributes redirect) {
+		friendsService.confirmFriend(user);
+		log.debug("Friend added");
+		return "redirect:friends";
 	}
 
+	//add friend
+	@RequestMapping(value = "/addFriends", method = RequestMethod.GET)
+	public String addFriend(Model model, ModelAndView modelAndView,@Valid User user,
+			RedirectAttributes redirect) {
+		friendsService.addFriend(user);
+		log.debug("Friend added");
+		//all the posts related to this person must be deleted from timeline
+		return "redirect:friends";
+	}
 
 
 }

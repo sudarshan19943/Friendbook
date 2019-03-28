@@ -5,8 +5,8 @@ public class User {
 	private int id;
 	private String email;
 	private String password;
-	private String first_name;
-	private String last_name;
+	private String firstName;
+	private String lastName;
 	private boolean enabled;
 	private String confirmation_token;
 	private String province;
@@ -20,7 +20,6 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 
 	public String getConfirmationToken() {
 		return confirmation_token;
@@ -47,19 +46,19 @@ public class User {
 	}
 
 	public String getFirstName() {
-		return first_name;
+		return firstName;
 	}
 
 	public void setFirstName(String firstname) {
-		this.first_name = firstname;
+		this.firstName = firstname;
 	}
 
 	public String getLastName() {
-		return last_name;
+		return lastName;
 	}
 
 	public void setLastName(String lastname) {
-		this.last_name = lastname;
+		this.lastName = lastname;
 	}
 
 	public String getEmail() {
