@@ -18,7 +18,9 @@ public class Constants {
 	//success messages
 	public static final String SUCCESSMESSAGE="successMessage";
 	public static final String PASSWORD_LINK_SENT="A password reset link has been sent to";
+	public static final String PASSWORD_DOES_NOT_MATCH="Unable to Authenticate User, Please recheck Password.";
 	public static final String PASSWORD_RESET_SUCCESS="You have successfully reset your password.  You may now login.";
+	public static final String REGISTRATIONSUCCESS="You have been sucessfully registered, and email has been sent to your registered email.";
 	
 	
 	//JSP Views
