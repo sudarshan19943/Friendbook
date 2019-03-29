@@ -4,12 +4,12 @@ package com.macs.groupone.friendbookapplication.service;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class PasswordEncryptionServiceTest {
 
-	@Autowired
-	PasswordEncryptionService passwordEncryptionService;
+	/*@Autowired
+	PasswordEncryptionService passwordEncryptionService;*/
 	
 	@Before
 	public void setUp() throws Exception {
