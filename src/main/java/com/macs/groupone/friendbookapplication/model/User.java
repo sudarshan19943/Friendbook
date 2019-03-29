@@ -9,25 +9,10 @@ public class User {
 	private String lastName;
 	private boolean enabled;
 	private String confirmation_token;
-<<<<<<< HEAD
-	private String province;
-	private String country;
-	private String city;
-	private String passwordConfirm;
-
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
-=======
 	private String stateId;
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 
 	public String getPasswordConfirm() {
 		return passwordConfirm;

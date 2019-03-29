@@ -60,12 +60,7 @@ public class ProfileController {
 		System.out.println("First Name" +userByEmail.getFirstName());
 		modelAndView.addObject("lastName", userByEmail.getLastName());
 		System.out.println("Last Name:" +userByEmail.getLastName());
-<<<<<<< HEAD
-		modelAndView.addObject("city", userByEmail.getCity());
-		System.out.println("City:" +userByEmail.getCity());
-=======
 		modelAndView.addObject("city", userByEmail.getCityId());
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 		String pathHardCode="../../avatarImages/smn.singh666@gmail.com.JPG";
 		System.out.println("pathHardCode : "+pathHardCode);
 		modelAndView.addObject("avatarpic",pathHardCode);
@@ -96,21 +91,4 @@ public class ProfileController {
 		
 		
 
-<<<<<<< HEAD
-	    // Process login
-		@RequestMapping(value = "/profile", method = RequestMethod.POST)
-		public ModelAndView processLogin(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult,
-				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic,
-	            RedirectAttributes redirectAttributes) {
-			userService.updateUser(user);
-			avatarService.uploadAvatarAndSave(profilepic,user.getEmail());
-			modelAndView.setViewName(Constants.PROFILE_VIEW);
-			return modelAndView;
-		}
-		
-		
-		
-		
-=======
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 
