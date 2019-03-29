@@ -23,6 +23,7 @@
 <meta charset="utf-8" name="viewport"
 	content="width=device-width, initial-scale=1">
 </head>
+		
 
 <fmt:setBundle basename="locale" var="loc" />
 <fmt:message bundle="${loc}" key="local.label.logout" var="logout" />
@@ -35,14 +36,15 @@
 <body>
 
 	<div class="header">
+		<div class="search-container" style="float: right;">
+			<input type="text" placeholder="Search..">
+			<button type="button" onclick="location.href='/friends'" value="Find Friends" name="findFriends"><i class="fa fa-search"></i></button>
+		</div>
 		<h2>Friend Book</h2>
+	</div>
 
-      
-  
-  </div>
-  
- 
-      <!-- <button type="button"><i class="fa fa-search"></i></button> -->
+
+	<!--  -->
 
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
@@ -52,10 +54,7 @@
 				href="profile_update" onClick=""> ${profile_update} </a> <br></br> <a
 				href="return_to_timeline" onClick=""> ${return_to_timeline} </a> <br></br>
 		</div>
-		
-		 <div class="search-box">
-		  <input  type="text" placeholder="Search.." >
-		  </div>
+
 		<div class="col-md-8">
 			<br></br>
 			<form role="form" action="/newpost" method="post" autocomplete="off">
