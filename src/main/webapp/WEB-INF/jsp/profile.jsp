@@ -30,6 +30,7 @@ $(document).ready(function(){
 <fmt:setBundle basename="locale" var="loc"/>
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 
+<<<<<<< HEAD
 <style>
 
 
@@ -72,6 +73,28 @@ cursor:pointer;
     
   </script>
 <body>
+=======
+ <script type="text/javascript">
+  
+    
+    var loadImage = function(event){
+        
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+
+    function openfileDialog() {
+    $("#fileLoader").click();
+}
+
+   
+    
+ </script>
+    
+    
+  
+
+<body>  
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 
 <div class="header">
     <h2>Friend Book</h2>
@@ -80,9 +103,16 @@ cursor:pointer;
 <div class="container" style="margin-top:40px">
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+<<<<<<< HEAD
           <!--   <img class="avatar" id="profilepic" src="../../icons/avatar.png"/>
 		    <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />			  -->
            
+=======
+           <a href="function()">
+            
+           <img class="avatar" src="../../icons/avatar.png"/> 
+           </a>
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">
                     <form role="form" action="/profile" enctype="multipart/form-data" method="post" autocomplete="off">
@@ -97,8 +127,15 @@ cursor:pointer;
                         <div class="form-group-firstname">
                             <label for="fullName">${fullName}</label>
                         </div>
+<<<<<<< HEAD
                         <div class="form-group-lastname">
                             <label for="city" class="tbh">${city}</label>
+=======
+                        <div class="form-group">
+                            <select id="countries">
+                                  <option value="country">Country</option>
+                            </select>
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
                         </div>
                        <%--  <div class="form-group">
                             <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${city}'>

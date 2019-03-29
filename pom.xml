@@ -139,7 +139,11 @@
 					<source>1.8</source>
 					<target>1.8</target>
 					<fork>true</fork>
+<<<<<<< HEAD
 					<executable>C:\Program Files\Java\jdk1.8.0_191\bin\javac</executable>
+=======
+					<executable>C:\Program Files\Java\jdk1.8.0_102\bin\javac</executable>
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 				</configuration>
 			</plugin>
 			<plugin>

@@ -41,6 +41,7 @@ public class ProfileController {
 		String email = (String) model.asMap().get("email");
 		String password = (String) model.asMap().get("password");
 		User userByEmail = userService.getUserByEmailPassword(email, password);
+<<<<<<< HEAD
 		modelAndView.addObject("fullName", userByEmail.getFirstName()+" "+userByEmail.getLastName());
 		System.out.println("First Name" +userByEmail.getFirstName());
 		modelAndView.addObject("lastName", userByEmail.getLastName());
@@ -51,6 +52,20 @@ public class ProfileController {
 		modelAndView.addObject("avatarpic",pathHardCode);
 		System.out.println("profile pic path : "+AvatarService.getProfileAvatar(userByEmail.getEmail()));
 		modelAndView.setViewName("profile");
+=======
+		modelAndView.addObject("first_name", userByEmail.getFirstName());
+		log.debug("Country List:" +userByEmail.getFirstName());
+		modelAndView.addObject("last_name", userByEmail.getLastName());
+		log.debug("Country List:" +userByEmail.getLastName());
+		ArrayList<String> countryList = countryAndStateService.getListOfCountries(Locale.ENGLISH);
+		log.debug("Country List:" +countryList);
+		modelAndView.addObject("Countries", countryList);
+		modelAndView.addObject("city", userByEmail.getCity());
+		log.debug("City:" +userByEmail.getCity());
+		AvatarService.getProfileAvatar(userByEmail.getId());
+		log.debug("Country List:" +countryList);
+		modelAndView.setViewName(Constants.PROFILE_VIEW);
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 		return modelAndView;
 	}
 

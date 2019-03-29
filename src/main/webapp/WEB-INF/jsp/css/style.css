@@ -7,3 +7,10 @@
   text-align: center;
   line-height: 1px;
 }
+
+img
+{
+	width:50%;
+	height:50%;
+	margin-left: 10px;
+}

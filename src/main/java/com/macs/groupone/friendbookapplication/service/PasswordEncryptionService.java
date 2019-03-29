@@ -16,10 +16,16 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class PasswordEncryptionService implements IService{
 
+<<<<<<< HEAD
 	public static final String UTF8 = "UTF-8";
 	public static final String SHA1 = "SHA-1";
 	public static final String AES = "AES";
 	public static final String AES_ECB_PKCS5PADDING = "AES/ECB/PKCS5PADDING";
+=======
+	public static final String ALGORITHM = "PBKDF2WithHmacSHA1";
+	public static final int DERIVEDKEYLENGTH = 160;
+	public static final int ITERATIONS = 20000;
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 
 	
 	public static String encrypt(String toEncrypt, String secret)
@@ -37,6 +43,7 @@ public class PasswordEncryptionService implements IService{
 		}
 		return null;
 	}
+<<<<<<< HEAD
 	public  static String decrypt(String toDecrypt, String secret)
 	{
 		try
@@ -51,6 +58,14 @@ public class PasswordEncryptionService implements IService{
 			System.out.println("Error while decrypting: " + e.toString());
 		}
 		return null;
+=======
+
+	public byte[] getEncryptedPassword(String password, byte[] salt)
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, DERIVEDKEYLENGTH);
+		SecretKeyFactory f = SecretKeyFactory.getInstance(ALGORITHM);
+		return f.generateSecret(spec).getEncoded();
+>>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 	}
 	
 	private static  SecretKeySpec generateSecretKey(String secret) throws UnsupportedEncodingException, NoSuchAlgorithmException
