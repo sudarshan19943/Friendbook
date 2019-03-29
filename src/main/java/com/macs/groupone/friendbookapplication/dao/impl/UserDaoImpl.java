@@ -2,8 +2,11 @@ package com.macs.groupone.friendbookapplication.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,15 +45,18 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setLastName(resultSet.getString("last_name"));
 			user.setPassword(resultSet.getString("password"));
 			user.setEnabled(resultSet.getBoolean("enabled"));
+			user.setCity(resultSet.getString("city"));
+			user.setProvince(resultSet.getString("province"));
+			user.setCountry(resultSet.getString("country"));
 			return user;
 		}
 	};
 
 
 	@Override
-	public User getUserById(int id) {
-		final List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
-		return result.isEmpty() ? null : result.get(0);
+	public List<User> getUserById(int id) {
+		List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
+		return result;
 	}
 
 	@Override
@@ -98,22 +104,11 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	@Override
-	public void removeUser(User user) {
-
+	public Collection<User> findUsers(@Valid User user) {
+		Collection<User> results = new ArrayList<>(); 
+		results.addAll(jdbcManager().select("{call getUserList()}", USER_MAPPER)); 
+		return results;
 	}
-
-	@Override
-	public void changePassword(User user, String password) {
-
-	}
-	
-	@Override
-	public int getNumberOfUsers() {
-
-		return 0;
-	}
-
 	
 
 }

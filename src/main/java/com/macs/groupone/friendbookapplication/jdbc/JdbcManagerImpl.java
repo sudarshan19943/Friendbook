@@ -131,6 +131,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			}
 		}
 	}
+	
 
 	@Override
 	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
@@ -216,4 +217,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			closeConnection(connection, statement, resultSet);
 		}
 	}
+
+
+
 }

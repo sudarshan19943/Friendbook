@@ -42,7 +42,7 @@ class TimelineController {
 	@RequestMapping(value = "/timeline", method = RequestMethod.GET) 
 	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
 		modelAndView.setViewName(Constants.TIMELINE_VIEW);
-		modelAndView.addObject("friends", friendsDaoimpl.getFriendList(user));
+		modelAndView.addObject("friends", friendsDaoimpl.findFriends(user));
 		modelAndView.addObject("message", messagedaoimpl.getMessage(user));
 		modelAndView.setViewName("timeline");
 		return modelAndView; 

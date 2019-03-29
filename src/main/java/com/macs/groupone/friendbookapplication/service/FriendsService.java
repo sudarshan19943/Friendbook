@@ -1,7 +1,9 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,29 +18,24 @@ public class FriendsService implements IService{
 	@Autowired
 	FriendsDaoImpl friendsDaoImpl;
 	
-	public void addFriend(User user, User friend) {
-		
+	public void addFriend(User user) {
+		friendsDaoImpl.addFriend(user);
 	}
 
 	
-	public void removeFriend(User user, User friend) {
-		friendsDaoImpl.removeFriend(user, friend);
+	public void removeFriend(User user) {
+		friendsDaoImpl.removeFriend(user);
 	}
 
 	
-	public long getNumberOfFriends(User user, String searchText) {
-		return 0;
-	}
-
-	
-	public Collection<User> getFriendList(User user, int recordsPerPage, int i, String searchText) {
-		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user);
-		return friends;
-	}
-	
-	public Collection<User> getFriendList(User user) {
-		ArrayList<User> friends=(ArrayList<User>) friendsDaoImpl.getFriendList( user);
+	public Collection<User> findFriends(User user) {
+		Collection<User> friends=(Collection<User>) friendsDaoImpl.findFriends(user);
 		return friends;
 	}
 
+
+	public void confirmFriend(@Valid User user) {
+		friendsDaoImpl.confirmFriend(user);
+	}
+	
 }
