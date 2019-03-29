@@ -74,11 +74,6 @@ public class AvatarService implements IService {
          	String pathToReturn=directory+AVATART_DEFAULT_IMAGE;
          	System.out.println("pathToReturn : "+pathToReturn);
              return pathToReturn;
-        }
-       
-        	
+        }   	
     }
-
-
-
 }

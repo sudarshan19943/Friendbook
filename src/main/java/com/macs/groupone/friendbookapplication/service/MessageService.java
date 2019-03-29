@@ -11,7 +11,7 @@ import com.macs.groupone.friendbookapplication.model.Message;
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Service
-public class MessageService implements IService{
+public class MessageService {
 
 	@Autowired
 	MessageDaoImpl messageDaoImpl;

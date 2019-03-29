@@ -1,24 +1,22 @@
 package com.macs.groupone.friendbookapplication.controller;
 
+import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.EmailService;
 import com.macs.groupone.friendbookapplication.service.UserService;
-import com.macs.groupone.friendbookapplication.validator.ForgetPasswordValidator;
-import com.macs.groupone.friendbookapplication.validator.ResetPasswordValidator;
 
 @Controller
 public class ForgetPasswordController {
@@ -31,91 +29,34 @@ public class ForgetPasswordController {
 	@Autowired
 	EmailService emailService;
 
-	@Autowired
-	private ForgetPasswordValidator forgetPasswordValidator;
-	
-	@Autowired
-	private ResetPasswordValidator resetPasswordValidator;
-
-
-    @GetMapping("/forgotpassword")
-    public String registration(Model model) {
-        model.addAttribute("forgotPasswordForm", new User());
-
-        return "forgotpassword";
-    }
-
-    @PostMapping("/forgotpassword")
-    public String registration(@ModelAttribute("forgotPasswordForm") User forgotPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
-    	forgetPasswordValidator.validate(forgotPasswordForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "forgotpassword";
-        }
-       else {
-			User user = userService.getUserByEmail(forgotPasswordForm.getEmail());
-			user.setConfirmationToken(UUID.randomUUID().toString());
-			user.setEnabled(true);
-			userService.updateUser(user);
-			String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-			String message = "To reset your password, click the link below:\n" + appUrl + "/resetpassword?token="
-					+ user.getConfirmationToken();
-			try {
-			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);}
-			catch(Exception e )
-			{
-				e.printStackTrace();
-			}
-			logger.debug("Email sent");
-			return "redirect:/forgotpassword";
-		}
-
-    }
-  
-    
-	private static String tokenVal = null;
-
-	// Display form to reset password
-	@GetMapping(value = "/resetpassword")
-	public String displayResetPasswordPage(Model model,@ModelAttribute("resetPasswordForm") User resetPasswordForm, @RequestParam("token") String token,
-			BindingResult bindingResult) {
-		User user = userService.findUserByResetToken(token);
-		if (user != null) {
-			tokenVal = token;
-		} else {
-			model.addAttribute("errorMessage",  "Oops!  This is an invalid password reset link.");
-		}
-		return "resetpassword";
+	// show password page
+	@RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
+	public void showForgetPassword(ModelAndView modelAndView) {
+		modelAndView.setViewName(Constants.FORGOTPASSWORD_VIEW);
 	}
 
-	// Process reset password form
-	
-	@PostMapping("/resetpassword")
-    public String setNewPassword(Model model,@ModelAttribute("resetPasswordForm") User resetPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
-		resetPasswordValidator.validate(resetPasswordForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "resetpassword";
-        }
-       else {
-    	   User user = userService.findUserByResetToken(tokenVal);
-   		if (user != null) {
-   			User resetUser = user;
-   			resetUser.setPassword(resetPasswordForm.getPassword());
-   			resetUser.setConfirmationToken(null);
-   			resetUser.setEnabled(false);
-   			userService.resetUserPassword(resetUser);
-   			model.addAttribute("successMessage", "You have successfully reset your password.  You may now login.");
-   			return "redirect:/login";
-   		} else {
-   			model.addAttribute("errorMessage", "Oops!  This is an invalid password reset link.");
-   			return "redirect:/resetpassword";
-   		}
+	// Forget Password POST Request
+	@RequestMapping(value = "/forgotpassword", method = RequestMethod.POST)
+	public @ResponseBody ModelAndView processForgetPassword(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request) throws MessagingException {
+
+		User user = userService.getUserByEmail(userEmail);
+		if (user == null) 
+		{
+			modelAndView.addObject(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
+			logger.error("Account not found");
+		} 
+		else {
+			user.setConfirmationToken(UUID.randomUUID().toString());
+			userService.updateUser(user);
+			String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+			String message = "To reset your password, click the link below:\n" + appUrl + "/reset?token="
+					+ user.getConfirmationToken();
+			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);
+			logger.debug("Email sent");
+			modelAndView.addObject(Constants.SUCCESSMESSAGE, Constants.PASSWORD_LINK_SENT + userEmail);
 		}
 
-    }
-	
-	/*// Going to reset page without a token redirects to login page
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-		return new ModelAndView("redirect:login");
-	}*/
+		modelAndView.setViewName("forgotpassword");
+		return modelAndView;
+	}
 }

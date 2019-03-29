@@ -1,14 +1,17 @@
 package com.macs.groupone.friendbookapplication.service;
 
+
+import java.util.Collection;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Service
-public class UserService  implements IService{
-
-	public static final String SECRET = "secret";
+public class UserService {
 
 	@Autowired
 	UserDao userDao;
@@ -31,35 +34,35 @@ public class UserService  implements IService{
 	}
 
 	public User getUserByEmailPassword(String email, String password) {
-		return userDao.getUserByEmailPassword(email, getEncryptedPassword(password));
-
+		return userDao.getUserByEmailPassword(email,password);
 	}
 
-	public int addUser(String email, String password, String firstName, String lastName) {
-		return userDao.addUser(email, getEncryptedPassword(password), firstName, lastName);
+	public Collection<User> getUserList() {
 
+		return null;
 	}
 
-	public User findUserByResetToken(String resetToken) {
+	public int addUser(String email, String password, String first_name, String last_name) {
+		int user=userDao.addUser(email, password, first_name, last_name);
+		return user;
+	}
+	
+	public User findUserByResetToken(String resetToken)
+	{
 		return userDao.findUserByResetToken(resetToken);
+		
 	}
 
 	public void updateUser(User user) {
-		userDao.updateUser(user);
-	}
-
-	public void resetUserPassword(User user) {
-		user.setPassword(getEncryptedPassword(user.getPassword()));
-		userDao.resetUserPassword(user);
+		 userDao.updateUser(user);
 	}
 
 	public void removeUser(User user) {
 		userDao.removeUser(user);
 	}
-	
-	private String getEncryptedPassword(String password) {
-		return PasswordEncryptionService.encrypt(password, SECRET);
-	}
 
+	public void changePassword(User user, String password) {
+
+	}
 
 }

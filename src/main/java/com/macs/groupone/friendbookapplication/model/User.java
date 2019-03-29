@@ -5,22 +5,22 @@ public class User {
 	private int id;
 	private String email;
 	private String password;
-	private String firstName;
-	private String lastName;
+	private String first_name;
+	private String last_name;
 	private boolean enabled;
 	private String confirmation_token;
-	private String stateId;
-	private String countryId;
-	private String cityId;
-	private String passwordConfirm;
+	private String province;
+	private String country;
+	private String city;
 
-	public String getPasswordConfirm() {
-		return passwordConfirm;
+	public String getCity() {
+		return city;
 	}
 
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
+	public void setCity(String city) {
+		this.city = city;
 	}
+
 
 	public String getConfirmationToken() {
 		return confirmation_token;
@@ -47,19 +47,19 @@ public class User {
 	}
 
 	public String getFirstName() {
-		return firstName;
+		return first_name;
 	}
 
 	public void setFirstName(String firstname) {
-		this.firstName = firstname;
+		this.first_name = firstname;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return last_name;
 	}
 
 	public void setLastName(String lastname) {
-		this.lastName = lastname;
+		this.last_name = lastname;
 	}
 
 	public String getEmail() {
@@ -78,29 +78,20 @@ public class User {
 		this.enabled = value;
 	}
 
-	public String getStateId() {
-		return stateId;
+	public String getProvince() {
+		return province;
 	}
 
-	public void setStateId(String stateId) {
-		this.stateId = stateId;
-	}
-	
-	public String getCityId() {
-		return cityId;
+	public void setProvince(String province) {
+		this.province = province;
 	}
 
-	public void setCityId(String cityId) {
-		this.cityId = cityId;
-	}
-	
-	
-	public String getCountryId() {
-		return countryId;
+	public String getCountry() {
+		return country;
 	}
 
-	public void setCountryId(String countryId) {
-		this.countryId = countryId;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 }
