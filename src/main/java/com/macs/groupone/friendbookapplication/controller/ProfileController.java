@@ -33,22 +33,7 @@ public class ProfileController {
 	@Autowired AvatarService avatarService;
 	 
 
-	/*@GetMapping("/profile")
-	public String showDeafultProfilePage(Model model, HttpServletRequest request,
-			RedirectAttributes redirect) {
-		String email = (String) model.asMap().get("email");
-		String firstName = (String) model.asMap().get("firstName");
-		String lastName = (String) model.asMap().get("lastName");
-		User user=userService.getUserByEmail(email);
-		model.addAttribute("fullName", firstName+" "+lastName);
-		model.addAttribute("city", user.getCityId());
-		String pathHardCode="../../avatarImages/smn.singh666@gmail.com.JPG";
-		System.out.println("pathHardCode : "+pathHardCode);
-		model.addAttribute("avatarpic",pathHardCode);
-		System.out.println("profile pic path : "+AvatarService.getProfileAvatar(email));
-		return "profile";
-	}*/
-
+	
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showDeafultProfilePage(Model model, ModelAndView modelAndView, HttpServletRequest request,
