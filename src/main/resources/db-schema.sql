@@ -1,15 +1,5 @@
-CREATE TABLE `friends` (
-  `userid` bigint(20) NOT NULL,
-  `friendid` bigint(20) NOT NULL,
-  UNIQUE KEY `unique_index` (`userid`,`friendid`),
-  KEY `friends_users_friendid_fk` (`friendid`),
-  CONSTRAINT `friends_users_friendid_fk` FOREIGN KEY (`friendid`) REFERENCES `users` (`id`),
-  CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
 CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
@@ -24,6 +14,17 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_uindex` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `friends` (
+  `userid` bigint(20) NOT NULL,
+  `friendid` bigint(20) NOT NULL,
+  UNIQUE KEY `unique_index` (`userid`,`friendid`),
+  KEY `friends_users_friendid_fk` (`friendid`),
+  CONSTRAINT `friends_users_friendid_fk` FOREIGN KEY (`friendid`) REFERENCES `users` (`id`),
+  CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 CREATE TABLE `post` (
