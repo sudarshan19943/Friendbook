@@ -56,7 +56,7 @@ public class ProfileController {
 		String email = (String) model.asMap().get("email");
 		String password = (String) model.asMap().get("password");
 		User userByEmail = userService.getUserByEmailPassword(email, password);
-		modelAndView.addObject("firstName", userByEmail.getFirstName());
+		modelAndView.addObject("fullName", userByEmail.getFirstName()+" "+userByEmail.getLastName());
 		System.out.println("First Name" +userByEmail.getFirstName());
 		modelAndView.addObject("lastName", userByEmail.getLastName());
 		System.out.println("Last Name:" +userByEmail.getLastName());
