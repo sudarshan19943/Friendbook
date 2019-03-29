@@ -5,13 +5,22 @@ public class User {
 	private int id;
 	private String email;
 	private String password;
-	private String first_name;
-	private String last_name;
+	private String firstName;
+	private String lastName;
 	private boolean enabled;
 	private String confirmation_token;
 	private String province;
 	private String country;
 	private String city;
+	private String passwordConfirm;
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 
 	public String getCity() {
 		return city;
@@ -47,19 +56,19 @@ public class User {
 	}
 
 	public String getFirstName() {
-		return first_name;
+		return firstName;
 	}
 
 	public void setFirstName(String firstname) {
-		this.first_name = firstname;
+		this.firstName = firstname;
 	}
 
 	public String getLastName() {
-		return last_name;
+		return lastName;
 	}
 
 	public void setLastName(String lastname) {
-		this.last_name = lastname;
+		this.lastName = lastname;
 	}
 
 	public String getEmail() {

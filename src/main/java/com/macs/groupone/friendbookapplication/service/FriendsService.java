@@ -10,7 +10,7 @@ import com.macs.groupone.friendbookapplication.dao.impl.FriendsDaoImpl;
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Service
-public class FriendsService{
+public class FriendsService implements IService{
 
 	
 	@Autowired
