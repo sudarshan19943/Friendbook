@@ -36,7 +36,13 @@
 
 	<div class="header">
 		<h2>Friend Book</h2>
-	</div>
+
+      
+  
+  </div>
+  
+ 
+      <!-- <button type="button"><i class="fa fa-search"></i></button> -->
 
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
@@ -46,6 +52,10 @@
 				href="profile_update" onClick=""> ${profile_update} </a> <br></br> <a
 				href="return_to_timeline" onClick=""> ${return_to_timeline} </a> <br></br>
 		</div>
+		
+		 <div class="search-box">
+		  <input  type="text" placeholder="Search.." >
+		  </div>
 		<div class="col-md-8">
 			<br></br>
 			<form role="form" action="/newpost" method="post" autocomplete="off">

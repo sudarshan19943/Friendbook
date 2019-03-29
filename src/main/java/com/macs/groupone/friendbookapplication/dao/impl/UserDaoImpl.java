@@ -54,9 +54,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 
 	@Override
-	public User getUserById(int id) {
-		final List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
-		return result.isEmpty() ? null : result.get(0);
+	public List<User> getUserById(int id) {
+		List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
+		return result;
 	}
 
 	@Override

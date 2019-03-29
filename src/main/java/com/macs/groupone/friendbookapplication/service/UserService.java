@@ -28,7 +28,7 @@ public class UserService {
 		return 0;
 	}
 
-	public User getUserById(int id) {
+	public Collection<User> getUserById(int id) {
 		return userDao.getUserById(id);
 	}
 

@@ -81,7 +81,7 @@ public class FriendsController {
 
 
 	// delete friend 
-	@RequestMapping(value = "/removeFriends", method = RequestMethod.POST)
+	@RequestMapping(value = "/removeFriends", method = RequestMethod.GET)
 	public String deleteFriend(Model model, ModelAndView modelAndView,@ModelAttribute("user") User user,
 			RedirectAttributes redirect) {
 		//get list of friends

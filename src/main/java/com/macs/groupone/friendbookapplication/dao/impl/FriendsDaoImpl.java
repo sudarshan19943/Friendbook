@@ -50,7 +50,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	@Override
 	public void removeFriend(User user) {
-		jdbcManager().update("{call removeFriend(?)}", user.getId());
+		jdbcManager().update("{call removeFriend(16)}");
 		
 	}
 
