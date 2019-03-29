@@ -22,7 +22,7 @@ public class AvatarService implements IService {
 
 	private static final Logger log = LoggerFactory.getLogger(AvatarService.class);
 	private static final String AVATAR_FOLDER = Config.getProperty("avatarImages");
-	private static final String AVATART_DEFAULT_IMAGE = "default.JPG";
+	private static final String AVATART_DEFAULT_IMAGE = "avatar.png";
 	private static final String AVATAR_IMAGE_EXTENSION = ".JPG";
 	private static final ClassLoader loader = AvatarService.class.getClassLoader();
 
@@ -48,60 +48,37 @@ public class AvatarService implements IService {
 		}
 	}
 	
-	public static URL getResource(String path){
-		 String directory = Config.getProperty("avatarImages");
-		 
-	    URL url = ResourceLoader.class.getResource(path);
-	    if (url==null){
-	        System.out.println(path);
-	    }
+	public static URL getResource(String email){
+		String directory = Config.getProperty("avatarImagesForResourse");
+	    String avatarImagesForResoursePath=directory+email+AVATAR_IMAGE_EXTENSION;
+	    URL url = ResourceLoader.class.getResource(avatarImagesForResoursePath);
 	    return url;
 	}
 
     public static String getProfileAvatar(String email) {
-    	
-    	//getResource();
-        String directory = Config.getProperty("avatarImages");
-        System.out.println("directory : "+directory);
-        String filepath = Paths.get(directory, email+AVATAR_IMAGE_EXTENSION).toString();
-        /*File f = new File(filepath);
-        final File folder = new File(loader.getResource(AVATAR_FOLDER).getFile());
-        File f1 = new File("../../avatarImages/smn.singh666@gmail.com.JPG");
-        if(f1.exists() && !f1.isDirectory()) { 
-            System.out.println("exists..");
+        if( getResource(email)!=null)
+        {
+        	 String directory = Config.getProperty("avatarImagesForUrl");
+             System.out.println("directory : "+directory);
+             String filepath = Paths.get(directory, email+AVATAR_IMAGE_EXTENSION).toString();
+             System.out.println("filepath : "+filepath);
+         	String pathToReturn=directory+email+AVATAR_IMAGE_EXTENSION;
+         	System.out.println("pathToReturn : "+pathToReturn);
+             return pathToReturn;
         }else
         {
-        	 System.out.println("does not exists..");
+        	 String directory = Config.getProperty("avatarImagesForUrl");
+             System.out.println("directory : "+directory);
+             String filepath = Paths.get(directory, AVATART_DEFAULT_IMAGE).toString();
+             System.out.println("filepath : "+filepath);
+         	String pathToReturn=directory+AVATART_DEFAULT_IMAGE;
+         	System.out.println("pathToReturn : "+pathToReturn);
+             return pathToReturn;
         }
-        
-        File f2 = new File("../../avatarImages/smn.singh666@gmail.com");
-        if(f2.exists() && !f2.isDirectory()) { 
-            System.out.println("exists..");
-        }else
-        {
-        	 System.out.println("does not exists..");
-        }
-        File f3 = new File("../../avatarImages/smn.singh666@gmail.com");
-        if(f.exists() && !f3.isDirectory()) { 
-            System.out.println("exists..");
-        }else
-        {
-        	 System.out.println("does not exists..");
-        }
-        URL fileUrl = loader.getResource("../../avatarImages/smn.singh666@gmail.com.JPG");
-        //File fileR= new File(fileUrl.getFile());
-        
-        URL fileUrl1 = loader.getResource("C:\\QA_25th\\Project_backup_before_security\\Group1\\src\\main\\webapp\\avatarImages\\smn.singh666@gmail.com.JPG");
-        //File fileR1= new File(fileUrl1.getFile());
-        
-        URL fileUrl2 = loader.getResource("C:/QA_25th/Project_backup_before_security/Group1/src/main/webapp/avatarImages/smn.singh666@gmail.com.JPG");
-        File fileR2= new File(fileUrl2.getFile());*/
-        
-        System.out.println("filepath : "+filepath);
-    	String pathToReturn=directory+"/"+email+AVATAR_IMAGE_EXTENSION;
-    	System.out.println("pathToReturn : "+pathToReturn);
-        return pathToReturn;
+       
+        	
     }
+
 
 
 }
