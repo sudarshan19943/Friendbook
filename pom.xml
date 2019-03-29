@@ -53,21 +53,12 @@
 			<artifactId>tomcat-embed-jasper</artifactId>
 			<scope>provided</scope>
 		</dependency>
-	<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency> -->
-		
-	    
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+		</dependency>
 
 		<!-- ########### SPRING-CONTEXT-SUPPORT ############ -->
 		<dependency>
@@ -119,10 +110,7 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
-        <!-- <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -139,11 +127,7 @@
 					<source>1.8</source>
 					<target>1.8</target>
 					<fork>true</fork>
-<<<<<<< HEAD
-					<executable>C:\Program Files\Java\jdk1.8.0_191\bin\javac</executable>
-=======
 					<executable>C:\Program Files\Java\jdk1.8.0_102\bin\javac</executable>
->>>>>>> dc3672108c40cee56e8314ee40fcd272868d1357
 				</configuration>
 			</plugin>
 			<plugin>

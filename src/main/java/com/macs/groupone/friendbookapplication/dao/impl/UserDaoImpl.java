@@ -59,6 +59,13 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
+	/*@Override
+	public User getUserByEmailPassword(String email, String password) {
+		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL_PASSWORD, USER_MAPPER, email, password);
+		return result.isEmpty() ? null : result.get(0);
+		
+		
+	}*/
 	
 	@Override
 	public User getUserByEmailPassword(String email, String password) {
@@ -80,16 +87,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public void updateUser(User user) {
-		jdbcManager().update("{call updateUser(?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled());
+		jdbcManager().update("{call updateUser(?, ?, ?, ?, ?, ?, ?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled(),
+				user.getFirstName(), user.getLastName(), user.getPassword(), user.getId(),user.getProvince(),user.getCountry());
 
 	}
-	
-	@Override
-	public void resetUserPassword(User user) {
-		jdbcManager().update("{call resetUserPassword(?, ?, ?, ?)}",user.getPassword(), user.getConfirmationToken(),user.getEmail(),user.getEnabled());
-
-	}
-	
 	
 	@Override
 	public User findUserByResetToken(String resetToken) {

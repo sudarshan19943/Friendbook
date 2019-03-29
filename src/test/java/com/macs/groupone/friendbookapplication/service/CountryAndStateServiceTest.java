@@ -10,11 +10,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AvatarServiceTest {
+public class CountryAndStateServiceTest {
+	
 	
 	@Autowired
-	AvatarService avatarService;
-	
+	CountryAndStateService countryAndStateService;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -26,19 +26,19 @@ public class AvatarServiceTest {
 
 	}
 	
-   @Test	
-   public void testgetProfileAvatar()
-   {
-	   
-   }
-   
-   
-   @Test	
-   public void testuploadAvatarAndSave()
-   {
-	   
-   }
 	
+   @Test	
+   public void testGetListOfCountries()
+   {
+	   
+   }
+   
+   
+   @Test	
+   public void testGetCities()
+   {
+	   
+   }
 	
 
 }
