@@ -17,13 +17,20 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.macs.groupone.friendbookapplication.common.Config;
+import com.macs.groupone.friendbookapplication.config.Config;
 import com.macs.groupone.friendbookapplication.controller.LoginController;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
 public class JdbcManagerImpl implements JdbcManager {
+	
+	public static final String URL = "spring.datasource.url";
+	public static final String USERNAME = "spring.datasource.username";
+	public static final String PASSWORD = "spring.datasource.password";
+
+	// Application FIle path
+	public static final String APPLICATION_PROPERTIES = "src/main/resources/application.properties";
 
 	private String url;
 	private String username;
@@ -32,9 +39,9 @@ public class JdbcManagerImpl implements JdbcManager {
 	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(JDBCConstants.URL);
-		this.username = Config.getProperty(JDBCConstants.USERNAME);
-		this.password = Config.getProperty(JDBCConstants.PASSWORD);
+		this.url = Config.getProperty(URL);
+		this.username = Config.getProperty(USERNAME);
+		this.password = Config.getProperty(PASSWORD);
 	}
 
 	protected final Connection getConnection() {
@@ -131,10 +138,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			throws DatabaseAccessException {
 		Connection connection = null;
 		CallableStatement statement = null;
-		 
-		//PreparedStatement statement = null;
 		ResultSet resultSet = null;
-
 		final List<T> result = new ArrayList<T>();
 		try {
 			connection = getConnection();
@@ -166,18 +170,15 @@ public class JdbcManagerImpl implements JdbcManager {
 			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			final int result = statement.executeUpdate();
-			Long id = null;
+			/*Long id = null;
 			if (0 != result) {
 				resultSet = statement.getGeneratedKeys();
 				if (resultSet.next()) {
 					id = resultSet.getLong(1);
 				}
-			}
-			if (null == id) {
-				throw new DatabaseOperationException("ID not found");
-			}
+			}*/
 			connection.commit();
-			return id;
+			return 1;
 		} catch (final DatabaseAccessException e) {
 			log.error("Database exception" + e);
 			rollback(connection);
@@ -196,7 +197,6 @@ public class JdbcManagerImpl implements JdbcManager {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		final ResultSet resultSet = null;
-
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);

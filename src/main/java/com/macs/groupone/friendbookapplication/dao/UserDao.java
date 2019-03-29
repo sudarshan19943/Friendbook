@@ -14,6 +14,9 @@ public interface UserDao{
 	Collection<User> getUserList();
 	int addUser(String email, String password, String first_name, String last_name); 																						
 	void updateUser(User user);
-    User findUserByResetToken(String resetToken);
+	void resetUserPassword(User user);
+	void removeUser(User user);
+	void changePassword(User user, String password);
+  User findUserByResetToken(String resetToken);
 
 }

@@ -9,16 +9,17 @@ public class User {
 	private String lastName;
 	private boolean enabled;
 	private String confirmation_token;
-	private String province;
-	private String country;
-	private String city;
+	private String stateId;
+	private String countryId;
+	private String cityId;
+	private String passwordConfirm;
 
-	public String getCity() {
-		return city;
+	public String getPasswordConfirm() {
+		return passwordConfirm;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
 	}
 
 	public String getConfirmationToken() {
@@ -77,20 +78,29 @@ public class User {
 		this.enabled = value;
 	}
 
-	public String getProvince() {
-		return province;
+	public String getStateId() {
+		return stateId;
 	}
 
-	public void setProvince(String province) {
-		this.province = province;
+	public void setStateId(String stateId) {
+		this.stateId = stateId;
+	}
+	
+	public String getCityId() {
+		return cityId;
 	}
 
-	public String getCountry() {
-		return country;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+	
+	
+	public String getCountryId() {
+		return countryId;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.macs.groupone.friendbookapplication.controller;
 
 
-import java.util.ArrayList;
 
 import javax.validation.Valid;
 
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
-import com.macs.groupone.friendbookapplication.service.CountryAndStateService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 import com.macs.groupone.friendbookapplication.service.UserService;
@@ -38,9 +36,6 @@ public class FriendsController {
 
 	@Autowired
 	FriendsService friendsService;
-
-	@Autowired
-	CountryAndStateService countryAndStateService;
 
 	@Autowired AvatarService avatarService;
 
