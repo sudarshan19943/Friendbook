@@ -14,7 +14,10 @@
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
+<<<<<<< HEAD
     <%@include file="js/avatar.js"%>
+=======
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>

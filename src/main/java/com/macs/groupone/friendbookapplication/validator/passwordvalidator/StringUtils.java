@@ -10,7 +10,10 @@ public class StringUtils {
 	        if (string == null) {
 	            return true;
 	        }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 	        for (int i = 0; i < string.length(); i++) {
 	            if (!Character.isWhitespace(string.charAt(i))) {
 	                return false;

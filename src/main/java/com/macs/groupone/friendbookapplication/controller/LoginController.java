@@ -45,8 +45,14 @@ public class LoginController {
 				User userByEmailAndPassword = userService.getUserByEmailPassword(loginForm.getEmail(),
 						loginForm.getPassword());
 				if (userByEmailAndPassword != null) {
+<<<<<<< HEAD
 					redirect.addFlashAttribute("userEmail", loginForm.getEmail());
 					log.debug("User email:" + loginForm.getEmail());
+=======
+					redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
+					redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
+					redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 					redirect.addFlashAttribute("password", loginForm.getPassword());
 					return "redirect:/profile";
 				} else {

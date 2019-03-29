@@ -18,6 +18,7 @@
 <script>
 /* Be sure that ur dom is loaded */    
 $(document).ready(function(){
+	alert("here..");
     $("div.form-group-lastname label.tbh:empty").parent().hide()
 });
 </script>
@@ -31,13 +32,10 @@ $(document).ready(function(){
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 
 <style>
-<<<<<<< HEAD
-=======
 
 
 
 
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 #upload-file-input{
 display:none;
 }
@@ -63,27 +61,16 @@ cursor:pointer;
     	    reader.onload = function(e) {
     	      $('#profilepic').attr('src', e.target.result);
     	    }
-<<<<<<< HEAD
 
     	    reader.readAsDataURL(input.files[0]);
     	  }
     	}
 
-=======
-
-    	    reader.readAsDataURL(input.files[0]);
-    	  }
-    	}
-
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
     	$("#upload-file-input").change(function() {
     	  readURL(this);
     	});
     });
-<<<<<<< HEAD
-=======
     
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
   </script>
 <body>
 
@@ -94,11 +81,6 @@ cursor:pointer;
 <div class="container" style="margin-top:40px">
     <div class="row centered-form">
         <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-<<<<<<< HEAD
-           
-            
-=======
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
           <!--   <img class="avatar" id="profilepic" src="../../icons/avatar.png"/>
 		    <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />			  -->
            
@@ -106,31 +88,14 @@ cursor:pointer;
                 <div class="panel-body">
                     <form role="form" action="/profile" enctype="multipart/form-data" method="post" autocomplete="off">
                     
-<<<<<<< HEAD
-                       <div class="form-group-profilepic">
-                             <img class="avatar" id="profilepic" src='${avatarpic}'/>
-                            <!-- <img class="avatar" id="profilepic" src="../../icons/1.jpg"/> -->
-                        </div>
-=======
                         <div class="form-group-profilepic" align="center">
                        <img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
                         </div> 
                         
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
                         </div>
                         <div class="form-group-firstname">
-<<<<<<< HEAD
-                            <label for="firstname">${firstName}</label>
-                        </div>
-                        <div class="form-group-lastname">
-                            <label for="firstname">${lastName}</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${param.city}'>
-                        </div>
-=======
                             <label for="fullName">${fullName}</label>
                         </div>
                         <div class="form-group-lastname">
@@ -139,7 +104,6 @@ cursor:pointer;
                        <%--  <div class="form-group">
                             <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${city}'>
                         </div> --%>
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 							<div class="form-group">
 								<select name="country" class="countries" id="countryId">
 									<option value="">Select Country</option>
@@ -148,12 +112,7 @@ cursor:pointer;
 								</select> <select name="city" class="cities" id="cityId">
 									<option value="">Select City</option>
 								</select>
-<<<<<<< HEAD
-								<script
-									src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-=======
 								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
->>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
 							</div>
 							<div class="button-group">

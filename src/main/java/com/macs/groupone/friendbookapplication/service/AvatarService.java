@@ -24,7 +24,10 @@ public class AvatarService implements IService {
 	private static final String AVATAR_FOLDER = Config.getProperty("avatarImages");
 	private static final String AVATART_DEFAULT_IMAGE = "default.JPG";
 	private static final String AVATAR_IMAGE_EXTENSION = ".JPG";
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 	private static final ClassLoader loader = AvatarService.class.getClassLoader();
 
 	

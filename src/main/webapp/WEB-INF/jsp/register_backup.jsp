@@ -11,7 +11,6 @@
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
-    <%@include file="js/avatar.js"%>
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>

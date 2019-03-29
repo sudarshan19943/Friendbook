@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,18 +33,39 @@ public class ProfileController {
 	@Autowired AvatarService avatarService;
 	 
 
+	/*@GetMapping("/profile")
+	public String showDeafultProfilePage(Model model, HttpServletRequest request,
+			RedirectAttributes redirect) {
+		String email = (String) model.asMap().get("email");
+		String firstName = (String) model.asMap().get("firstName");
+		String lastName = (String) model.asMap().get("lastName");
+		User user=userService.getUserByEmail(email);
+		model.addAttribute("fullName", firstName+" "+lastName);
+		model.addAttribute("city", user.getCityId());
+		String pathHardCode="../../avatarImages/smn.singh666@gmail.com.JPG";
+		System.out.println("pathHardCode : "+pathHardCode);
+		model.addAttribute("avatarpic",pathHardCode);
+		System.out.println("profile pic path : "+AvatarService.getProfileAvatar(email));
+		return "profile";
+	}*/
+
+
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public ModelAndView showDeafultProfilePage(Model model, ModelAndView modelAndView, HttpServletRequest request,
 			RedirectAttributes redirect) {
-		String email = (String) model.asMap().get("userEmail");
+		String email = (String) model.asMap().get("email");
 		String password = (String) model.asMap().get("password");
 		User userByEmail = userService.getUserByEmailPassword(email, password);
 		modelAndView.addObject("firstName", userByEmail.getFirstName());
 		System.out.println("First Name" +userByEmail.getFirstName());
 		modelAndView.addObject("lastName", userByEmail.getLastName());
 		System.out.println("Last Name:" +userByEmail.getLastName());
+<<<<<<< HEAD
 		modelAndView.addObject("city", userByEmail.getCity());
 		System.out.println("City:" +userByEmail.getCity());
+=======
+		modelAndView.addObject("city", userByEmail.getCityId());
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 		String pathHardCode="../../avatarImages/smn.singh666@gmail.com.JPG";
 		System.out.println("pathHardCode : "+pathHardCode);
 		modelAndView.addObject("avatarpic",pathHardCode);
@@ -52,7 +74,29 @@ public class ProfileController {
 		return modelAndView;
 	}
 
+	    // update Profile
+		@RequestMapping(value = "/profile", method = RequestMethod.POST)
+		public ModelAndView updateProfile(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult,
+				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic) {
+			
+			String updateProfile="updateProfile";
+			if(updateProfile.equals("updateProfile"))
+			{
+				userService.updateUser(user);
+				avatarService.uploadAvatarAndSave(profilepic,user.getEmail());
+			}
+			modelAndView.setViewName(Constants.TIMELINE_VIEW);
+			return modelAndView;
+		}
+		
+		
+}
+		
+		
+		
+		
 
+<<<<<<< HEAD
 	    // Process login
 		@RequestMapping(value = "/profile", method = RequestMethod.POST)
 		public ModelAndView processLogin(ModelAndView modelAndView, @Valid User user, BindingResult bindingResult,
@@ -67,5 +111,6 @@ public class ProfileController {
 		
 		
 		
+=======
+>>>>>>> 1dd588d12d2c778694225ecb646ed93fbdc2b10a
 
-}
