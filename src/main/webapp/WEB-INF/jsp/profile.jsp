@@ -32,6 +32,9 @@ $(document).ready(function(){
 
 <style>
 
+
+
+
 #upload-file-input{
 display:none;
 }
