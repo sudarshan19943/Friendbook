@@ -83,13 +83,10 @@ public class FriendsController {
 
 
 	// delete friend 
-	@RequestMapping(value = "/removeFriends", method = RequestMethod.GET)
+	@RequestMapping(value = "/removefriends", params= "removeFriends", method = RequestMethod.POST)
 	public String deleteFriend(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, HttpServletRequest request) {
+			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User user) {
 		//get list of friends
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
 		
 		friendsService.removeFriend(user);
 		modelAndView.addObject("user", user);

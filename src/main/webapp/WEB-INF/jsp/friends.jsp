@@ -1,21 +1,22 @@
-<%--@elvariable id="errorMessage" type="String"--%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<link rel="stylesheet" type="text/css"
-    href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 
 <style type="text/css">
+    <%@include file="css/chat.css"%>
     <%@include file="css/bootstrap.min.css"%>
     <%@include file="css/bootstrap-formhelpers.min.css"%>
-    <%@include file="css/friends_style.css"%>
+    <%@include file="css/style.css"%>
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </script>
 
 <html>
@@ -101,17 +102,26 @@
 
                 <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friends" items="${friends}" varStatus="status">
+                <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
                     <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
                     
-				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCity()}, ${friends.getProvince()}, ${friends.getCountry()} </p>
-		
-				 <div>
-                    <input type = "submit" class="btn btn-lg btn-primary btn-block" name="removeFriends" onclick="location.href='/removeFriends'" value="Remove friends"/>
+				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
+				<div>
+                    <input type = "submit" id ="removefriends ${friends.getId()}" class="btn btn-lg btn-primary btn-block" name="removeFriends" value="Remove friends"/>
                 </div>
+
              
                 <div class="confirm-friend">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" onclick="location.href='/confirmFriend'" value="Confirm Friend" name="confirmFriend">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend" name="confirmFriend">
                 </div>
+                                		<spring:bind path="email">
+								<div class="form-group ${status.error ? 'has-error' : ''}">
+									<form:input type="text" path="email" class="form-control"
+										placeholder="E-Mail" autofocus="true"></form:input>
+									<form:errors path="email"></form:errors>
+								</div>
+							</spring:bind>
+				</form:form>
 				</c:forEach>
 
 				    <div class="add-friends">
