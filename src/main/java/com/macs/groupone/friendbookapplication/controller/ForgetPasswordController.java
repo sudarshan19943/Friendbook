@@ -47,7 +47,7 @@ public class ForgetPasswordController {
     }
 
     @PostMapping("/forgotpassword")
-    public String registration(@ModelAttribute("forgotPasswordForm") User forgotPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
+    public String registration(Model mode,@ModelAttribute("forgotPasswordForm") User forgotPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
     	forgetPasswordValidator.validate(forgotPasswordForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "forgotpassword";
@@ -61,13 +61,15 @@ public class ForgetPasswordController {
 			String message = "To reset your password, click the link below:\n" + appUrl + "/resetpassword?token="
 					+ user.getConfirmationToken();
 			try {
-			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);}
+			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);
+			mode.addAttribute("successMessage", "Reset link has been mailed to your registered mail id.");
+			}
 			catch(Exception e )
 			{
 				e.printStackTrace();
 			}
 			logger.debug("Email sent");
-			return "redirect:/forgotpassword";
+			return "redirect:/login";
 		}
 
     }

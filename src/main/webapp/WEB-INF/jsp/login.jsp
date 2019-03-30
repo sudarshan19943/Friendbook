@@ -39,7 +39,7 @@
 	<div class="row">
         <div class="col-sm-7">
             <h3>Connect with your friends around the world</h3>
-            <img src="../../icons/promotional_image.jpg" alt="promotional image" border="2">
+            <img src="../../avatarImages/facebook.gif" alt="promotional image" border="2" height="200" width="200">
         </div>
 		<div class="col-sm-5">
 				<div class="panel panel-default">
@@ -89,7 +89,7 @@
 					<div class="panel-footer">
                      <strong>${new_user}</strong> 
                      <p>
-                     <a href="register" onClick="registration.jsp"> ${sign_up_here} </a> 
+                     <a href="registration" onClick="registration.jsp"> ${sign_up_here} </a> 
                 </div>
 				</div>
 			</div>

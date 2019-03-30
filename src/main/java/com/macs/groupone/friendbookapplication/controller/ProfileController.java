@@ -55,8 +55,7 @@ public class ProfileController {
 	}*/
 	
 	@GetMapping("/profile")
-	public String getProfile(Model model,HttpServletRequest request,
-			RedirectAttributes redirect) {
+	public String getProfile(Model model,HttpServletRequest request,RedirectAttributes redirect) {
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");

@@ -9,6 +9,8 @@ import org.springframework.validation.Validator;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.EmailValidator;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.PassWordValidator;
 
 @Component
 public class RegistrationValidator implements Validator {
@@ -25,23 +27,27 @@ public class RegistrationValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty");
-        if (user.getFirstName().length() > 6 /*|| user.getLastName().length() > 32*/) {
-            errors.rejectValue("firstName", "Size.registrationForm.firstName");
+
+         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
+         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty");
+         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
+         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
+         
+        if (!EmailValidator.isValidEmailAddress(user.getEmail())) {
+            errors.rejectValue("email",ValidationCode.EMIAL_NOT_VALID.getPropertyName() );
+            return;
         }
         
         if (userService.getUserByEmail(user.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate.registrationForm.email");
+            errors.rejectValue("email",ValidationCode.EMAIL_IN_USE.getPropertyName() );
+            return;
         }
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.registrationForm.password");
+        if (!user.getPassword().equals(user.getPasswordConfirm())){
+            errors.rejectValue("password",ValidationCode.PASSWORD_DOES_NOT_MATCH.getPropertyName() );
+            return ;
         }
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
-        if (!user.getPasswordConfirm().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.registrationForm.passwordConfirm");
+        if (PassWordValidator.validatePasswordPolicy(user.getPassword())!=null){
+            errors.rejectValue("password",ValidationCode.PASSWORD_POLICY_DOES_NOT_SATISFY.getPropertyName() );
         }
     }
 }

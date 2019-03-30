@@ -1,4 +1,4 @@
-package com.macs.groupone.friendbookapplication.validator.passwordvalidator;
+package com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator;
 
 public class StringUtils {
 	

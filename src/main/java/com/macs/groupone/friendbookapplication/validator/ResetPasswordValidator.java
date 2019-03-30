@@ -9,6 +9,8 @@ import org.springframework.validation.Validator;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.EmailValidator;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.PassWordValidator;
 
 @Component
 public class ResetPasswordValidator implements Validator {
@@ -26,13 +28,15 @@ public class ResetPasswordValidator implements Validator {
         User user = (User) o;
         
         //need to validate for password Policy
-
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.resetPasswordForm.password");
-        }
-        if (!user.getPasswordConfirm().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.resetPasswordForm.passwordConfirm");
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
+        
+       if (!user.getPassword().equals(user.getPasswordConfirm())){
+           errors.rejectValue("password",ValidationCode.PASSWORD_DOES_NOT_MATCH.getPropertyName() );
+           return ;
+       }
+       if (PassWordValidator.validatePasswordPolicy(user.getPassword())!=null){
+           errors.rejectValue("password",ValidationCode.PASSWORD_POLICY_DOES_NOT_SATISFY.getPropertyName() );
+       }
     }
 }
