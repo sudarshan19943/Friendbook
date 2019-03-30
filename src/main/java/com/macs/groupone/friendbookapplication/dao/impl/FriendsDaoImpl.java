@@ -35,9 +35,9 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 			friend.setId(resultSet.getInt("id"));
 			friend.setFirstName(resultSet.getString("first_name"));
 			friend.setLastName(resultSet.getString("last_name"));
-			friend.setCity(resultSet.getString("city"));
-			friend.setCountry(resultSet.getString("country"));
-			friend.setProvince(resultSet.getString("province"));
+			friend.setCityId(resultSet.getString("city"));
+			friend.setCountryId(resultSet.getString("country"));
+			friend.setStateId(resultSet.getString("province"));
 			return friend;
 		}
 	};
@@ -50,7 +50,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	@Override
 	public void removeFriend(User user) {
-		jdbcManager().update("{call removeFriend(16)}");
+		jdbcManager().update("{call removeFriend(?)}", user.getId());
 		
 	}
 
@@ -61,7 +61,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	public Collection<User> findFriends(User user) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call findFriends(6)}", FRIENDS_MAPPER)); 
+		results.addAll(jdbcManager().select("{call findFriends(?)}", FRIENDS_MAPPER, user.getId())); 
 		return results;
 	}
 

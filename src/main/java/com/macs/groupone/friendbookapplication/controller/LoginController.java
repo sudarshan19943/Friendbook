@@ -49,7 +49,7 @@ public class LoginController {
 					redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
 					redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
 					redirect.addFlashAttribute("password", loginForm.getPassword());
-					return "redirect:/profile";
+					return "redirect:/friends";
 				} else {
 					model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
 					return "login";

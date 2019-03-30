@@ -2,6 +2,8 @@ package com.macs.groupone.friendbookapplication.controller;
 
 
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -27,6 +29,9 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 public class FriendsController {
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
+	private static String email = "";
+	private static ArrayList<User>friendList;
+	private static ArrayList<User>userList;
 
 	@Autowired
 	UserService userService;
@@ -42,19 +47,24 @@ public class FriendsController {
 
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
-	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView, @Valid User user,
+	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect) {
+		email = (String) model.asMap().get("email");
+		model.addAttribute("email", email);
+		model.addAttribute("addfriendsForm", new User());
 		return modelAndView;
 	}
 	
 	//On clicking the find friends button, combined results of friends and users are shown
 	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
-	public ModelAndView findFriends(Model model, ModelAndView modelAndView,  @Valid User user,
-			RedirectAttributes redirect) {
-
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
+	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
+			RedirectAttributes redirect, @RequestParam("firstName") String firstName) {
+		
+		User user = userService.getUserByEmail(email);
+		System.out.println(user.getId());
+		friendList=(ArrayList<User>) friendsService.findFriends(user);
 		modelAndView.addObject("friends", friendList);
-		ArrayList<User>userList=(ArrayList<User>) userService.findUsers(user);
+		userList=(ArrayList<User>) userService.findUsers(user);
 		
 		//Removes all friends from the user list
 		for ( int userListIndex =0; userListIndex< userList.size(); userListIndex++)
@@ -97,8 +107,8 @@ public class FriendsController {
 	}
 
 	//add friend
-	@RequestMapping(value = "/addFriends", method = RequestMethod.GET)
-	public String addFriend(Model model, ModelAndView modelAndView,@Valid User user,
+	@RequestMapping(value = "/addfriends", params = "addFriends", method = RequestMethod.POST)
+	public String addFriend(Model model, ModelAndView modelAndView,@ModelAttribute("users") User user,
 			RedirectAttributes redirect) {
 		friendsService.addFriend(user);
 		log.debug("Friend added");

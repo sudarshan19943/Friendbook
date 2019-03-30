@@ -89,15 +89,15 @@
                 </div>
                 <h4 style="margin-top: 50px;">Results</h4>
                 <c:forEach var="users" items="${users}" varStatus="status">
+                <form role="form" modelAttribute="addfriendsForm" action="/addfriends" method="post">
                     <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
-                    
-				<p> ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCity()}, ${users.getProvince()}, ${users.getCountry()} </p>
+				<p> ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
 				 <div class="add-friends">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" onclick="location.href='/addFriends'" value="Add Friend" name="addFriends">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend" name="addFriends"/>
                     
                 </div>
+                </form>
 				</c:forEach>
-
 
                 <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friends" items="${friends}" varStatus="status">

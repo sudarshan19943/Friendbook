@@ -41,7 +41,7 @@ public class NewPostController {
 	private Date timestamp;
 
 	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
-	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
+	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user, Model model) {
 		modelAndView.setViewName(Constants.NEW_POST_VIEW);
 		return modelAndView; 
 	}

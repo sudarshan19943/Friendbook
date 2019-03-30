@@ -62,9 +62,6 @@ public class UserService  implements IService{
 	public Collection<User> findUsers(@Valid User user) {
 		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(user);
 		return users;
-  
-	public void removeUser(User user) {
-		userDao.removeUser(user);
 	}
 	
 	private String getEncryptedPassword(String password) {
