@@ -2,6 +2,8 @@ package com.macs.groupone.friendbookapplication.controller;
 
 
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
