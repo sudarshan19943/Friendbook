@@ -18,7 +18,6 @@
 <script>
 /* Be sure that ur dom is loaded */    
 $(document).ready(function(){
-	alert("here..");
     $("div.form-group-lastname label.tbh:empty").parent().hide()
 });
 </script>

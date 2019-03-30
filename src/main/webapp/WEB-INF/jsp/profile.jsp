@@ -1,4 +1,7 @@
-<%--@elvariable id="errorMessage" type="String"--%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -7,13 +10,21 @@
     <%@include file="css/chat.css"%>
     <%@include file="css/bootstrap.min.css"%>
     <%@include file="css/bootstrap-formhelpers.min.css"%>
-    <%@include file="css/profile_style.css"%>
+    <%@include file="css/style.css"%>
 </style>
 <script>
     <%@include file="js/jquery.min.js"%>
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
+
+<fmt:setBundle basename="locale" var="loc"/>
+<fmt:message bundle="${loc}" key="local.label.sign_in_continue" var="sign_in_continue"/>
+<fmt:message bundle="${loc}" key="local.button.sign_in" var="sign_in"/>
+<fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
+<fmt:message bundle="${loc}" key="local.label.new_user" var="new_user"/>
+<fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
+
 
 <script>
 /* Be sure that ur dom is loaded */    
@@ -85,47 +96,67 @@ cursor:pointer;
            
             <div class="panel panel-default" style="margin-top: 10px">
                 <div class="panel-body">
-                    <form role="form" action="/profile" enctype="multipart/form-data" method="post" autocomplete="off">
                     
+                    <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
+                         <!-- Images -->
                         <div class="form-group-profilepic" align="center">
                        <img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
                         </div> 
-                        
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
                         </div>
-                        <div class="form-group-firstname">
+                         <!--  full name  -->
+                        <div class="form-group-firstname" style="text-align:center">
                             <label for="fullName">${fullName}</label>
                         </div>
+                        
+                        <!-- City Name --> 
                         <div class="form-group-lastname">
                             <label for="city" class="tbh">${city}</label>
                         </div>
-                       <%--  <div class="form-group">
-                            <input type="text" name="city" id="city" class="form-control" placeholder="City" required maxlength="255" value='${city}'>
-                        </div> --%>
+                       <!-- Dropdown -->
 							<div class="form-group">
-								<select name="country" class="countries" id="countryId">
-									<option value="">Select Country</option>
-								</select> <select name="state" class="states" id="stateId">
-									<option value="">Select State</option>
-								</select> <select name="city" class="cities" id="cityId">
-									<option value="">Select City</option>
-								</select>
+							 <spring:bind path="countryId">
+								<form:select name="country" class="countries" id="countryId" path="countryId" >
+									<form:option value="" path="countryId">Select Country</form:option>
+								</form:select>
+								<form:errors path="email"></form:errors>
+								</spring:bind>
+								
+								 <spring:bind path="countryId">
+								 <form:select name="state" class="states" id="stateId" path="stateId">
+									<form:option value="" path="stateId">Select State</form:option>
+								</form:select> 
+								</spring:bind>
+								
+								<spring:bind path="cityId">
+								<form:select name="city" class="cities" id="cityId" path="cityId">
+									<form:option value="" path="cityId">Select City</form:option>
+								</form:select>
+								</spring:bind>
+								
 								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
 							</div>
-							<div class="button-group">
-                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Update Profile">
+							
+							<!-- update and Skip button -->
+							<div class="button-group" style="margin:auto;max-width:50%">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" style="margin-bottom:20px" value="Update Profile" name="Update">
                         </div>
-                        <div class="button-group">
-                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Skip">
+                        <div class="button-group" style="margin:auto;max-width:50%">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Skip" name="Skip">
                         </div>
-                    </form>
+                        
+                       <!--  end of form -->
+                  
+                    </form:form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<%-- <script src="${contextPath}/resources/js/bootstrap.min.js"></script> --%>
 </body>
 </html>

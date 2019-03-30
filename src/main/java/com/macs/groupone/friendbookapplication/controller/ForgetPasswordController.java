@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.EmailService;
@@ -90,7 +91,8 @@ public class ForgetPasswordController {
 	// Process reset password form
 	
 	@PostMapping("/resetpassword")
-    public String setNewPassword(Model model,@ModelAttribute("resetPasswordForm") User resetPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
+    public String setNewPassword(Model model,@ModelAttribute("resetPasswordForm") User resetPasswordForm, 
+    		BindingResult bindingResult,HttpServletRequest request, RedirectAttributes redirect) {
 		resetPasswordValidator.validate(resetPasswordForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "resetpassword";
@@ -103,8 +105,12 @@ public class ForgetPasswordController {
    			resetUser.setConfirmationToken(null);
    			resetUser.setEnabled(false);
    			userService.resetUserPassword(resetUser);
-   			model.addAttribute("successMessage", "You have successfully reset your password.  You may now login.");
-   			return "redirect:/login";
+   			redirect.addFlashAttribute("email", resetUser.getEmail());
+			redirect.addFlashAttribute("firstName", resetUser.getFirstName());
+			redirect.addFlashAttribute("lastName", resetUser.getLastName());
+			redirect.addFlashAttribute("password", resetUser.getPassword());
+   			//model.addAttribute("successMessage", "You have successfully reset your password.  You may now login.");
+   			return "redirect:/profile";
    		} else {
    			model.addAttribute("errorMessage", "Oops!  This is an invalid password reset link.");
    			return "redirect:/resetpassword";
