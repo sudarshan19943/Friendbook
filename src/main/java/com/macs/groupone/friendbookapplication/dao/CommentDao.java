@@ -11,6 +11,6 @@ import com.macs.groupone.friendbookapplication.model.User;
 public interface CommentDao {
 
 	Collection<Comment> getComment(Message message);
-	void addNewComment(User sender, User recipient, String comment, Comment comment2);
+	public void addNewComment(Comment comments, Message post);
 
 }

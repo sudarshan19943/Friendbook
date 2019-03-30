@@ -33,8 +33,8 @@ public class MessageService implements IService{
 		return null;
 	}
 
-	public void getMessage(User user) {
-		messageDaoImpl.getMessage(user);
+	public Collection<Message> getMessage(User user) {
+		return messageDaoImpl.getMessage(user);
 	}
 
 	

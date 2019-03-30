@@ -6,8 +6,8 @@ public class Message {
 
 	private long id;
 	private Timestamp time;
-	private User sender;
-	private User recipient;
+	private User sender = new User();
+	private User recipient = new User();
 	private String text;
 
 	public long getId() {
@@ -30,16 +30,16 @@ public class Message {
 		return sender;
 	}
 
-	public void setSender(int sender_id) {
-		sender.setId(sender_id);
+	public void setSender(int senderId) {
+		sender.setId(senderId);
 	}
 
 	public User getRecipient() {
 		return recipient;
 	}
 
-	public void setRecipient(int recipient_id) {
-		recipient.setId(recipient_id);
+	public void setRecipient(int recipientId) {
+		recipient.setId(recipientId);
 	}
 
 	public String getBody() {
@@ -50,17 +50,4 @@ public class Message {
 		this.text= text;
 	}
 
-
-
-	private static Message from(Message messageBean, User sender, User recipient) {
-
-		Message message = new Message();
-		message.id = messageBean.getId();
-		message.text = messageBean.getBody();
-		message.sender = sender;
-		message.recipient = recipient;
-
-		return message;
-
-	}
 }

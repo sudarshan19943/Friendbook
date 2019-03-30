@@ -54,22 +54,26 @@
 		</div>
 		<div class="col-md-8">
 			<br></br>
-			<%-- <div>Friends: ${friends.get(0).getFriendid()}</div>  --%>
-			<c:forEach var="friends" items="${friends}" varStatus="status">
-				<div>${friends.getFirstName()} ${friends.getLastName()} </div>
+			 <div>Friends: ${message.get(0).getSender().getId()}</div> 
+<%-- 			<c:forEach var="friends" items="${friends}" varStatus="status">
+				<div>${friends.getFirstName()} ${friends.getLastName()} </div> --%>
 				<c:forEach var="post" items="${message}" varStatus="status">
-					<div>Posted on ${post.getDate()}</div>
+					<div>Posted on<%-- ${post.getDate()} --%></div>
 					<div>${post.getBody()}</div>
-					<c:set var="sender_id" value="${post.getSenderId()}" />
-					<c:set var="recipient_id" value="${post.getRecipientId()}" />
+					<c:set var="sender_id" value="${post.getSender().getId()}" />
+					<c:set var="recipient_id" value="${post.getRecipient().getId()}" />
 					<c:if test="${sender_id != recipient_id}">
-						<form role="form" action="/timeline" method="post"
+						<form role="form" action="/timeline" method="post" modelAttribute = "commentForm"
 							autocomplete="off">
 							<div class="form-group-post-details">
 								<label for="post-details"></label>
 							</div>
 							<div class="form-group">
 								<input style="height: 50px" class="form-control" name="post"
+									value='${param.post}' type="hidden">
+							</div>
+							<div class="form-group">
+								<input style="height: 50px" class="form-control" name="comment"
 									value='${param.comment}' type="text">
 							</div>
 							<div class="button-group">
@@ -80,11 +84,12 @@
 						</form>
 					</c:if>
 				</c:forEach>
-			</c:forEach>
+			<%-- </c:forEach> --%>
 		</div>
+		<br></br>
 		<div class="col-md-8">
 			<br></br>
-			<form role="form" action="/timeline" method="post" autocomplete="off">
+<%-- 			<form role="form" action="/timeline" method="post" autocomplete="off">
 				<div class="form-group-post-details">
                             <label for="post-details"></label>
                  </div>
@@ -97,7 +102,7 @@
 						value="comment">
 				</div>
 				<br></br>
-			</form>
+			</form> --%>
 		</div>
 	</div>
 	</div>
