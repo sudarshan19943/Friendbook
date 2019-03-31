@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -41,14 +42,18 @@ public class NewPostController {
 	private Date timestamp;
 
 	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
-	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user) {
+	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user, Model model) {
 		modelAndView.setViewName(Constants.NEW_POST_VIEW);
 		return modelAndView; 
 	}
 
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	public ModelAndView processPost(ModelAndView modelAndView, @Valid User user, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) { 
+	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) 
+	{ 
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
 		messageService.addNewPost(user, user, post);
 		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
 		for (int friendListIndex = 0 ; friendListIndex < friendList.size(); friendListIndex++)

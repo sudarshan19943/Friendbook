@@ -108,19 +108,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		Collection<User> results = new ArrayList<>(); 
 		results.addAll(jdbcManager().select("{call getUserList()}", USER_MAPPER)); 
 		return results;
-	}
-
-	@Override
-	public void removeUser(User user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void changePassword(User user, String password) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+	}	
 
 }

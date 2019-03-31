@@ -16,8 +16,8 @@
     <%@include file="js/jquery.min.js"%>
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </script>
-
 
 <html>
 <head>
@@ -34,10 +34,10 @@
     <div class="header">
         <h2>Friend Book</h2>
     </div>
-            <div class="col-sm-4">
-                <a href="login.jsp"> <img class="avatar"
-                    src="../../icons/avatar.png" />
-                </a> <br></br> 
+
+    <div class="container" style="margin-top:40px">
+        <div class="row">
+            <div class="col-sm-4"><br></br> 
                 <a href="logout" onClick=""> ${logout} </a> <br></br> 
                 <a href="profile_update" onClick=""> ${profile_update} </a> <br></br> 
                 <a href="post_update" onClick="">Return to Timeline</a> <br></br>
@@ -47,45 +47,97 @@
                 <div class="panel panel-default" style="margin-top: 10px">
                     <div class="panel-body">
                     
-						<form:form method="POST" modelAttribute="friendsFrom" class="form-signin">
-						
-						<h2 class="form-signin-heading">Sign in</h2>
-							<spring:bind path="email">
-								<div class="form-group ${status.error ? 'has-error' : ''}">
-									<form:input type="text" path="firstName" class="form-control"
-										placeholder="First Name" autofocus="true"></form:input>
-									<form:errors path="firstName"></form:errors>
-								</div>
-							</spring:bind>
-							<spring:bind path="lastName">
-								<div class="form-group ${status.error ? 'has-error' : ''}">
-									<form:input type="text" path="lastName"
-										class="form-control" placeholder="Password"></form:input>
-									<form:errors path="lastName"></form:errors>
-								</div>
-							</spring:bind>
+						<form role="form" action="/friends" method="post"
+							autocomplete="off">
+							<div class="form-group">
+								<input type="text" name="firstName" id="firstName" class="form-control"
+									placeholder="First Name" maxlength="255"
+									value='${param.firstName}'>
+							</div>
+							<div class="form-group">
+								<input type="text" name="lastName" id="lastName" class="form-control"
+									placeholder="Last name" maxlength="255"
+									value='${param.lastName}'>
+							</div>
 							
+							<div class="form-group">
+								<input type="text" name="city" id="city" class="form-control"
+									placeholder="City" maxlength="255"
+									value='${param.city}'>
+							</div>
+							
+							<div class="form-group">
+								<select>
+									<option value="country">Country</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select>
+									<option value="state">State/Province</option>
+								</select>
+							</div>
 							<div class="col-sm-3">
 							<div class="button-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
 									value="Find Friends" name="findFriends">
 							</div>
 							</div>
-						</form:form>
+						</form>
 					</div>
                 </div>
+                <h4 style="margin-top: 50px;">Results</h4>
+                <c:forEach var="users" items="${users}" varStatus="status">
+                <form role="form" modelAttribute="addfriendsForm" action="/addfriends" method="post">
+                    <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
+				<p> ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
+				 <div class="add-friends">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend" name="addFriends"/>
+                    
                 </div>
-                
-                <form:form method="POST" modelAttribute="removefriendsForm" class="form-signin">
+                </form>
+				</c:forEach>
+
+                <h4 style="margin-top: 20px;">My Friends</h4>
+                <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
                 <c:forEach var="friends" items="${friends}" varStatus="status">
                     <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
+                    
 				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
 				<div>
-                    <input type = "submit" id ="${friends.getId()}" class="btn btn-lg btn-primary btn-block" name="removeFriends" value="Remove friends"/>
+				<input type = "hidden" value="${friends.getId()}" name = "removeFriends">
+                   <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Remove friends"/>
                 </div>
+
+             
+                <div class="confirm-friend">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend" name="confirmFriend">
+                </div>
+
 				</c:forEach>
 				</form:form>
-                
-                
+
+
+				    <div class="add-friends">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend">
+                </div>
+
+            <div class="col-sm-3">
+                <div class="button-group">
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value= "Find Friends">
+                </div>
+                <label></label>
+
+                <div class="add-friends">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend">
+                </div>
+
+                <div class="my-friends">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend">
+                </div>
+            </div>
+        </div>
+
+       </div>
+    </div>    
 </body>
 </html>

@@ -4,6 +4,8 @@ package com.macs.groupone.friendbookapplication.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -44,19 +46,22 @@ public class FriendsController {
 
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
-	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView, @Valid User user,
+	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect) {
+
 		return modelAndView;
 	}
 	
 	//On clicking the find friends button, combined results of friends and users are shown
 	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
-	public ModelAndView findFriends(Model model, ModelAndView modelAndView,  @Valid User user,
-			RedirectAttributes redirect) {
+	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
+			RedirectAttributes redirect, @RequestParam("firstName") String firstName, HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
 
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
-		modelAndView.addObject("friends", friendList);
-		ArrayList<User>userList=(ArrayList<User>) userService.findUsers(user);
+		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
+		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(user);
 		
 		//Removes all friends from the user list
 		for ( int userListIndex =0; userListIndex< userList.size(); userListIndex++)
@@ -69,7 +74,7 @@ public class FriendsController {
 				}
 			}
 		}
-		
+		modelAndView.addObject("friends", friendList);
 		modelAndView.addObject("users", userList);
 		modelAndView.setViewName("friends");
 		log.info("List of friends" + friendList);
@@ -78,10 +83,11 @@ public class FriendsController {
 
 
 	// delete friend 
-	@RequestMapping(value = "/removeFriends", method = RequestMethod.GET)
-	public String deleteFriend(Model model, ModelAndView modelAndView,@ModelAttribute("user") User user,
-			RedirectAttributes redirect) {
+	@RequestMapping(value = "/removefriends", params= "removeFriends", method = RequestMethod.POST)
+	public String deleteFriend(Model model, ModelAndView modelAndView,
+			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User user, @RequestParam("removeFriends") String post) {
 		//get list of friends
+		user.setId(Integer.parseInt(post));
 		friendsService.removeFriend(user);
 		modelAndView.addObject("user", user);
 		log.debug("Friend removed");
@@ -91,17 +97,23 @@ public class FriendsController {
 	
 	//confirm friend request
 	@RequestMapping(value = "/confirmFriend", method = RequestMethod.GET)
-	public String confirmFriend(Model model, ModelAndView modelAndView,@Valid User user,
-			RedirectAttributes redirect) {
+	public String confirmFriend(Model model, ModelAndView modelAndView,
+			RedirectAttributes redirect, HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
 		friendsService.confirmFriend(user);
 		log.debug("Friend added");
 		return "redirect:friends";
 	}
 
 	//add friend
-	@RequestMapping(value = "/addFriends", method = RequestMethod.GET)
-	public String addFriend(Model model, ModelAndView modelAndView,@Valid User user,
-			RedirectAttributes redirect) {
+	@RequestMapping(value = "/addfriends", params = "addFriends", method = RequestMethod.POST)
+	public String addFriend(Model model, ModelAndView modelAndView,
+			RedirectAttributes redirect, HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
 		friendsService.addFriend(user);
 		log.debug("Friend added");
 		//all the posts related to this person must be deleted from timeline

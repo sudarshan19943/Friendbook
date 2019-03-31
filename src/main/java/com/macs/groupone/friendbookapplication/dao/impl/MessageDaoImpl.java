@@ -54,7 +54,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 			@Override
 			public Collection<Message> getMessage(User user) {
 				Collection<Message> results = new ArrayList<>(); 
-				results.addAll(jdbcManager().select("{call getMessage(0)}",MESSAGE_MAPPER));
+				results.addAll(jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER, user.getId()));
 				return results;
 			}
 }

@@ -44,13 +44,13 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	@Override
 	public long addFriend(User user) {
-		final long id = jdbcManager().insertAndGetId("{call addFriend(7)}");
+		final long id = jdbcManager().insertAndGetId("{call addFriend(?)}", user.getId());
 		return (int) id;
 	}
 
 	@Override
 	public void removeFriend(User user) {
-		jdbcManager().update("{call removeFriend(16)}");
+		jdbcManager().update("{call removeFriend(?)}", user.getId());
 		
 	}
 
@@ -61,13 +61,13 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	public Collection<User> findFriends(User user) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call findFriends(6)}", FRIENDS_MAPPER)); 
+		results.addAll(jdbcManager().select("{call findFriends(?)}", FRIENDS_MAPPER, user.getId())); 
 		return results;
 	}
 
 	@Override
 	public void confirmFriend(User user) {
-		jdbcManager().update("{call confirmFriend(13)}");
+		jdbcManager().update("{call confirmFriend(?)}", user.getId());
 		
 	}
 

@@ -63,10 +63,6 @@ public class UserService  implements IService{
 		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(user);
 		return users;
 	}
-  
-	public void removeUser(User user) {
-		userDao.removeUser(user);
-	}
 	
 	private String getEncryptedPassword(String password) {
 		return PasswordEncryptionService.encrypt(password, SECRET);
