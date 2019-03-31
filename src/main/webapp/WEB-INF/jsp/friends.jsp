@@ -104,7 +104,8 @@
                     
 				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
 				<div>
-                    <input type = "submit" id ="removefriends ${friends.getId()}" class="btn btn-lg btn-primary btn-block" name="removeFriends" value="Remove friends"/>
+				<input type = "hidden" value="${friends.getId()}" name = "removeFriends">
+                   <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Remove friends"/>
                 </div>
 
              
