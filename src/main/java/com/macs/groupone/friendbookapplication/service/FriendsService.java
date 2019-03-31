@@ -38,13 +38,19 @@ public class FriendsService implements IService{
 	}
 
 
-	public void confirmFriend(@Valid User user) {
+	public void confirmFriend(User user) {
 		friendsDaoImpl.confirmFriend(user);
 	}
 
 
 	public void updateConfirmToken(User friend) {
 		friendsDaoImpl.updateConfirmToken(friend);
+		
+	}
+
+
+	public void updateFriendTokenInFriends(User friend) {
+		friendsDaoImpl.updateFriendTokenInFriends(friend);
 		
 	}
 	

@@ -82,4 +82,9 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		
 	}
 
+	public void updateFriendTokenInFriends(User friend) {
+		jdbcManager().update("{call updateFriendTokenInFriends(?)}", friend.getId());
+		
+	}
+
 }

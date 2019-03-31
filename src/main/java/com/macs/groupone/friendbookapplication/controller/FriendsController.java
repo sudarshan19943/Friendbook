@@ -31,6 +31,8 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 public class FriendsController {
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
+	private int FRIEND_TOKEN_VALUE = 0;
+	private int CONFIRM_FRIEND_TOKEN_VALUE = 0;
 
 	@Autowired
 	UserService userService;
@@ -96,16 +98,18 @@ public class FriendsController {
 	}
 	
 	//confirm friend request
-	@RequestMapping(value = "/confirmFriend", params = "confirmFriend", method = RequestMethod.GET)
+	@RequestMapping(value = "/confirmfriend", params = "confirmfriend", method = RequestMethod.GET)
 	public String confirmFriend(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, HttpServletRequest request, @RequestParam("confirmFriend") String confirmfriend, @ModelAttribute("confirmFriendsForm") User friend)
+			RedirectAttributes redirect, HttpServletRequest request, @RequestParam("confirmfriend") String confirmfriend, @ModelAttribute("confirmfriendForm") User friend)
 	{
 		friend.setId(Integer.parseInt(confirmfriend));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		friendsService.confirmFriend(user);
+		//friendsService.confirmFriend(user);
 		friendsService.updateConfirmToken(friend);
+		CONFIRM_FRIEND_TOKEN_VALUE = 1;
+		friend.setFriendToken(CONFIRM_FRIEND_TOKEN_VALUE);
 		log.debug("Friend added");
 		return "redirect:friends";
 	}
@@ -118,8 +122,11 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		friendsService.addFriend(friend, user);
 		friendsService.updateFriendToken(friend);
+		friendsService.updateFriendTokenInFriends(friend);
+		friendsService.addFriend(friend, user);
+		FRIEND_TOKEN_VALUE = 1;
+		friend.setFriendToken(FRIEND_TOKEN_VALUE);
 		log.debug("Friend added");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";

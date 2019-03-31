@@ -86,7 +86,7 @@
                 <h4 style="margin-top: 50px;">Results</h4>
                 <c:forEach var="users" items="${users}" varStatus="status">
                 <form:form role="form" action="/addfriends" method="post" modelAttribute = "addfriendsForm">
-				<p> ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
+				<p> Friend token: ${users.getFriendToken()} Confirm token: ${users.getConfirmFriendToken()} ..${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
 				 <div class="add-friends">
 				<input type = "hidden" value="${users.getId()}" name = "addFriends">
                    <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Add friend"/>
@@ -99,25 +99,28 @@
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
 
                    
-				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
+				<p>${friends.getId()} Friend token: ${friends.getFriendToken()} Confirm token: ${friends.getConfirmFriendToken()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
 				<div>
-				<c:choose>
-				<c:when test="${friends.getConfirmToken()} == 1">
+<%-- 				<c:choose> --%>
+<%-- 				<c:when test="${friends.getConfirmFriendToken()} == 1"> --%>
 				<input type = "hidden" value="${friends.getId()}" name = "removeFriends">
                    <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Remove friends"/>
-                </c:when>
-                <c:otherwise>
+<%--                  </c:when>
+                <c:otherwise> --%>
                 <h4 style="margin-top: 20px;">Friend Request Pending</h4>
-                </c:otherwise>
-                </c:choose>
+<%--                 </c:otherwise> --%>
+<%--                 </c:choose>  --%>
                 </div>
 				</form:form>
-				<form:form role="form" action="/confirmFriend" method="post" modelAttribute = "confirmFriendsForm">
+<%-- 				 <c:if test="${friends.getConfirmFriendToken()} == 0">  --%>
+				<form:form role="form" action="/confirmfriend" method="post" modelAttribute = "confirmfriendForm">
 				<div class="confirm-friend">
-                <input type = "hidden" value="${friends.getId()}" name = "confirmFriend">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend" name="confirmFriend">
+				
+                <input type = "hidden" value="${friends.getId()}" name = "confirmfriend">
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend"/>
                 </div>
                 </form:form>
+<%--                  </c:if> --%>
 				</c:forEach>
         </div>
 

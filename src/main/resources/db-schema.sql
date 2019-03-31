@@ -185,3 +185,26 @@ ATTRIBUTE_BYTES BLOB NOT NULL,
 CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
 CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES CSCI5308_1_DEVINT.SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
 );
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateFriendToken`(IN id INT(11))
+BEGIN
+UPDATE friends  SET friend_token = '1'  WHERE (friends.friendid = id);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateConfirmToken`(IN friendid INT(11))
+BEGIN
+UPDATE `friends` SET `confirm_token` = '1'  WHERE (friends.friendid = friendid);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `confirmFriend`(IN friendid BIGINT(20))
+BEGIN
+INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
+UPDATE friends SET confirm_token = 1 WHERE (friends.friendid = friendid) AND friend_token =1;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findFriends`(IN id INT(11))
+BEGIN
+SELECT * FROM users 
+inner join friends on friends.userid = users.id
+where id = friends.userid and friends.friend_token = 1; 
+END
