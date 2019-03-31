@@ -37,10 +37,7 @@
 
     <div class="container" style="margin-top:40px">
         <div class="row">
-            <div class="col-sm-4">
-                <a href="login.jsp"> <img class="avatar"
-                    src="../../icons/avatar.png" />
-                </a> <br></br> 
+            <div class="col-sm-4"><br></br> 
                 <a href="logout" onClick=""> ${logout} </a> <br></br> 
                 <a href="profile_update" onClick=""> ${profile_update} </a> <br></br> 
                 <a href="post_update" onClick="">Return to Timeline</a> <br></br>
@@ -101,8 +98,8 @@
 				</c:forEach>
 
                 <h4 style="margin-top: 20px;">My Friends</h4>
-                <c:forEach var="friends" items="${friends}" varStatus="status">
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
+                <c:forEach var="friends" items="${friends}" varStatus="status">
                     <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
                     
 				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
@@ -114,15 +111,10 @@
                 <div class="confirm-friend">
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend" name="confirmFriend">
                 </div>
-                                		<spring:bind path="email">
-								<div class="form-group ${status.error ? 'has-error' : ''}">
-									<form:input type="text" path="email" class="form-control"
-										placeholder="E-Mail" autofocus="true"></form:input>
-									<form:errors path="email"></form:errors>
-								</div>
-							</spring:bind>
-				</form:form>
+
 				</c:forEach>
+				</form:form>
+
 
 				    <div class="add-friends">
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend">
