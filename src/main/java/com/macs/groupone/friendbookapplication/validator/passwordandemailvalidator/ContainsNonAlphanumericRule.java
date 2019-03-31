@@ -5,10 +5,10 @@ public class ContainsNonAlphanumericRule implements PasswordRule {
     public boolean isCriteriaSatisfied(String password) {
         for(int i = 0; i < password.length(); i++) {
             if(!Character.isLetterOrDigit(password.charAt(i))) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }

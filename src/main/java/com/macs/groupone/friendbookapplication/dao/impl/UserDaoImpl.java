@@ -91,6 +91,12 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	}
 	
 	@Override
+	public void updateUserLocation(User user) {
+		jdbcManager().update("{call updateUserLocation(?, ?, ?,?)}", user.getCountryId(), user.getStateId(), user.getCityId(),user.getEmail());
+	}
+	
+	
+	@Override
 	public void resetUserPassword(User user) {
 		jdbcManager().update("{call resetUserPassword(?, ?, ?, ?)}",user.getPassword(), user.getConfirmationToken(),user.getEmail(),user.getEnabled());
 

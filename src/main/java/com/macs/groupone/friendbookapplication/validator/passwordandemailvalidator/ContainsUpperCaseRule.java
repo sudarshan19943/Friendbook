@@ -7,6 +7,7 @@ public class ContainsUpperCaseRule implements PasswordRule {
 
         for(int i = 0; i < password.length(); i++) {
             if(Character.isUpperCase(password.charAt(i))) {
+            	System.out.println("password criteria satisfied"+password.charAt(i));
                 return true;
             }
         }

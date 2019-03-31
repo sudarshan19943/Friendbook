@@ -40,9 +40,8 @@
 
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
-			<a href="login.jsp"> <img class="avatar"
-				src="../../icons/avatar.png" />
-			</a> <br></br> 
+		<img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+			 <br></br> 
 			<a href="logout" onClick=""> ${logout} </a> <br></br> 
 			<a href="profile_update" onClick=""> ${profile_update} </a> <br></br> 
 			<a href="post_update" onClick=""> Post Update</a> <br></br>
@@ -54,7 +53,7 @@
 		</div>
 		<div class="col-md-8">
 			<br></br>
-			 <div>Friends: ${message.get(0).getSender().getId()}</div> 
+			 <div>Friends: </div> 
 <%-- 			<c:forEach var="friends" items="${friends}" varStatus="status">
 				<div>${friends.getFirstName()} ${friends.getLastName()} </div> --%>
 				<c:forEach var="post" items="${message}" varStatus="status">
@@ -63,22 +62,24 @@
 					<c:set var="sender_id" value="${post.getSender().getId()}" />
 					<c:set var="recipient_id" value="${post.getRecipient().getId()}" />
 					<c:if test="${sender_id != recipient_id}">
-						<form role="form" action="/timeline" method="post" modelAttribute = "commentForm"
-							autocomplete="off">
+						<form role="form" action="/timeline" method="post" autocomplete="off">
 							<div class="form-group-post-details">
 								<label for="post-details"></label>
 							</div>
 							<div class="form-group">
-								<input style="height: 50px" class="form-control" name="post"
-									value='${param.post}' type="hidden">
+								<div class="form-group-lastname">
+		                            <label for="city" style="height: 50px"  class="tbh" >${post}</label>
+		                        </div>
+								<%-- <input style="height: 50px" class="form-control" name="post"
+									value='${param.post}' type="hidden"> --%>
 							</div>
 							<div class="form-group">
 								<input style="height: 50px" class="form-control" name="comment"
-									value='${param.comment}' type="text">
+									value='${comment}' type="text">
 							</div>
 							<div class="button-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
-									value="comment">
+									value="comment" name="comment">
 							</div>
 							<br></br>
 						</form>
