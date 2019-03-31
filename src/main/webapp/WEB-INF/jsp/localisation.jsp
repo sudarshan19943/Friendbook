@@ -3,7 +3,6 @@
     <form name="localisation" method="post">
         <input type="hidden" name="locale">
         <a href="#" onClick='newLocale("en")' class="label label-default">English</a>
-        <a href="#" onClick='newLocale("ru")' class="label label-default">Русский</a>
     </form>
 </div>
 <script type="text/javascript">

@@ -35,9 +35,9 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 			friend.setId(resultSet.getInt("id"));
 			friend.setFirstName(resultSet.getString("first_name"));
 			friend.setLastName(resultSet.getString("last_name"));
-			friend.setCity(resultSet.getString("city"));
-			friend.setCountry(resultSet.getString("country"));
-			friend.setProvince(resultSet.getString("province"));
+			friend.setCityId(resultSet.getString("city"));
+			friend.setCountryId(resultSet.getString("country"));
+			friend.setStateId(resultSet.getString("province"));
 			return friend;
 		}
 	};

@@ -44,7 +44,6 @@ public class RegistrationController {
 		model.addAttribute("registrationForm", new User());
 		return "registration";
 	}
-
 	
 	@PostMapping("/registration")
 	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm, BindingResult bindingResult,
@@ -60,8 +59,12 @@ public class RegistrationController {
 					return "registration"; 
 				} else {
 					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
-					model.addAttribute(Constants.SUCCESSMESSAGE, Constants.REGISTRATIONSUCCESS);
-					return "registration";
+					//model.addAttribute(Constants.SUCCESSMESSAGE, Constants.REGISTRATIONSUCCESS);
+					redirect.addFlashAttribute("email", registrationForm.getEmail());
+					redirect.addFlashAttribute("firstName", registrationForm.getFirstName());
+					redirect.addFlashAttribute("lastName", registrationForm.getLastName());
+					redirect.addFlashAttribute("password", registrationForm.getPassword());
+					return "redirect:/profile";
 				}
 			} catch (MessagingException e) {
 				e.printStackTrace();

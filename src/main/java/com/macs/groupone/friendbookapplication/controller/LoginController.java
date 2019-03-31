@@ -1,7 +1,11 @@
 package com.macs.groupone.friendbookapplication.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +34,7 @@ public class LoginController {
 	private LoginValidator loginValidator;
 
 	@GetMapping("/login")
-	public String registration(Model model) {
+	public String registration(Model model,HttpSession session) {
 		model.addAttribute("loginForm", new User());
 		return "login";
 	}
@@ -42,20 +46,23 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			return "login";
 		} else {
-				User userByEmailAndPassword = userService.getUserByEmailPassword(loginForm.getEmail(),
-						loginForm.getPassword());
-				if (userByEmailAndPassword != null) {
-					redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
-					redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
-					redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
-					redirect.addFlashAttribute("password", loginForm.getPassword());
-					return "redirect:/profile";
-				} else {
-					model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
-					return "login";
-				}
+			User userByEmailAndPassword = userService.getUserByEmailPassword(loginForm.getEmail(),
+					loginForm.getPassword());
+			if (userByEmailAndPassword != null) {
+				HttpSession session=request.getSession();
+				session.setAttribute("email", loginForm.getEmail());
+				session.setAttribute("password", loginForm.getPassword());
+				session.setAttribute("user", userByEmailAndPassword);
+				//redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
+				//redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
+				//redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
+				//redirect.addFlashAttribute("password", loginForm.getPassword());
+				return "redirect:/profile";
+			} else {
+				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
+				return "login";
 			}
-
 		}
-	}
 
+	}
+}
