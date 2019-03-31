@@ -38,14 +38,9 @@ public class LoginValidator implements Validator {
             errors.rejectValue("email",ValidationCode.EMIAL_NOT_VALID.getPropertyName() );
             return;
         }
-       
         if (userService.getUserByEmail(user.getEmail()) == null) {
             errors.rejectValue("email",ValidationCode.EMAIL_NOT_FOUND.getPropertyName() );
             return;
-        }
-        
-        if (null==userService.getUserByEmailPassword(user.getEmail(), user.getPassword())){
-            errors.rejectValue("password",ValidationCode.AUTHENTICATION_ERROR.getPropertyName() );
         }
         
     }

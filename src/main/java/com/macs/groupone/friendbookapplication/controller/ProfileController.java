@@ -58,19 +58,20 @@ public class ProfileController {
 	public String getProfile(Model model,HttpServletRequest request,RedirectAttributes redirect) {
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		String email = (String) model.asMap().get("email");
-		String password = (String) model.asMap().get("password");
+		String email=(String) session.getAttribute("email");
+		String password=(String) session.getAttribute("password");
+		User sessionUser=(User) session.getAttribute("user");
+		
 		User userByEmail = userService.getUserByEmailPassword(email, password);
-		model.addAttribute("fullName", userByEmail.getFirstName()+" "+userByEmail.getLastName());
-		System.out.println("First Name" +userByEmail.getFirstName());
-		model.addAttribute("lastName", userByEmail.getLastName());
-		System.out.println("Last Name:" +userByEmail.getLastName());
-		model.addAttribute("city", userByEmail.getCityId());
+		model.addAttribute("fullName", sessionUser.getFirstName()+" "+sessionUser.getLastName());
+		System.out.println("First Name" +sessionUser.getFirstName());
+		model.addAttribute("lastName", sessionUser.getLastName());
+		System.out.println("Last Name:" +sessionUser.getLastName());
+		model.addAttribute("city", sessionUser.getCityId());
 		String pathHardCode="../../avatarImages/smn.singh666@gmail.com.JPG";
 		System.out.println("pathHardCode : "+pathHardCode);
-		model.addAttribute("avatarpic",AvatarService.getProfileAvatar(userByEmail.getEmail()));
-		System.out.println("profile pic path : "+AvatarService.getProfileAvatar(userByEmail.getEmail()));
+		model.addAttribute("avatarpic",AvatarService.getProfileAvatar(sessionUser.getEmail()));
+		System.out.println("profile pic path : "+AvatarService.getProfileAvatar(sessionUser.getEmail()));
 		return "profile";
 	}
 
@@ -112,10 +113,14 @@ public class ProfileController {
 	
 	    // update Profile
 	   @PostMapping(params = "Update")
-		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, @Valid User user, BindingResult bindingResult,
+		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, BindingResult bindingResult,
 				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic) {
-				userService.updateUser(user);
-				avatarService.uploadAvatarAndSave(profilepic,user.getEmail());
+				User sessionUser=(User) request.getSession().getAttribute("user");
+				sessionUser.setCityId(profileForm.getCityId());
+				sessionUser.setCountryId(profileForm.getCountryId());
+				sessionUser.setStateId(profileForm.getStateId());
+				userService.updateUser(sessionUser);
+				avatarService.uploadAvatarAndSave(profilepic,sessionUser.getEmail());
 				log.info("User Profile has been successfully updated.");
 			return Constants.TIMELINE_VIEW;
 		}

@@ -39,7 +39,7 @@
 	<div class="row">
         <div class="col-sm-7">
             <h3>Connect with your friends around the world</h3>
-            <img src="../../avatarImages/facebook.gif" alt="promotional image" border="2" height="200" width="200">
+           <img src="../../avatarImages/avatar.png" alt="promotional image">
         </div>
 		<div class="col-sm-5">
 				<div class="panel panel-default">

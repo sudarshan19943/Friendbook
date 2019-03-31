@@ -48,13 +48,15 @@ public class LoginController {
 		} else {
 			User userByEmailAndPassword = userService.getUserByEmailPassword(loginForm.getEmail(),
 					loginForm.getPassword());
-			 HttpSession session=request.getSession();
-			 session.setAttribute("email", userByEmailAndPassword.getEmail());
 			if (userByEmailAndPassword != null) {
-				redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
-				redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
-				redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
-				redirect.addFlashAttribute("password", loginForm.getPassword());
+				HttpSession session=request.getSession();
+				session.setAttribute("email", loginForm.getEmail());
+				session.setAttribute("password", loginForm.getPassword());
+				session.setAttribute("user", userByEmailAndPassword);
+				//redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
+				//redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
+				//redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
+				//redirect.addFlashAttribute("password", loginForm.getPassword());
 				return "redirect:/profile";
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
