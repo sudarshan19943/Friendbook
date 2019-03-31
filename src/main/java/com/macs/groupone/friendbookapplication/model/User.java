@@ -1,6 +1,8 @@
 package com.macs.groupone.friendbookapplication.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private int id;
 	private String email;
@@ -103,4 +105,7 @@ public class User {
 		this.countryId = countryId;
 	}
 
+	
+	
+	
 }

@@ -44,7 +44,6 @@ public class RegistrationController {
 		model.addAttribute("registrationForm", new User());
 		return "registration";
 	}
-
 	
 	@PostMapping("/registration")
 	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm, BindingResult bindingResult,
