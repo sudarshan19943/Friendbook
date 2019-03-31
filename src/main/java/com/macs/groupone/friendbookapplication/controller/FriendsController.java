@@ -55,13 +55,14 @@ public class FriendsController {
 	//On clicking the find friends button, combined results of friends and users are shown
 	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, @RequestParam("firstName") String firstName, HttpServletRequest request) {
+			RedirectAttributes redirect, @RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName, @RequestParam("cityId") String city, HttpServletRequest request) {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
-		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(user);
+		
+		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);
 		
 		//Removes all friends from the user list
 		for ( int userListIndex =0; userListIndex< userList.size(); userListIndex++)
@@ -86,7 +87,6 @@ public class FriendsController {
 	@RequestMapping(value = "/removefriends", params= "removeFriends", method = RequestMethod.POST)
 	public String deleteFriend(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User user, @RequestParam("removeFriends") String post) {
-		//get list of friends
 		user.setId(Integer.parseInt(post));
 		friendsService.removeFriend(user);
 		modelAndView.addObject("user", user);
@@ -96,25 +96,30 @@ public class FriendsController {
 	}
 	
 	//confirm friend request
-	@RequestMapping(value = "/confirmFriend", method = RequestMethod.GET)
+	@RequestMapping(value = "/confirmFriend", params = "confirmFriend", method = RequestMethod.GET)
 	public String confirmFriend(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, HttpServletRequest request) {
+			RedirectAttributes redirect, HttpServletRequest request, @RequestParam("confirmFriend") String confirmfriend, @ModelAttribute("confirmFriendsForm") User friend)
+	{
+		friend.setId(Integer.parseInt(confirmfriend));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		friendsService.confirmFriend(user);
+		friendsService.updateConfirmToken(friend);
 		log.debug("Friend added");
 		return "redirect:friends";
 	}
 
 	//add friend
 	@RequestMapping(value = "/addfriends", params = "addFriends", method = RequestMethod.POST)
-	public String addFriend(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, HttpServletRequest request) {
+	public String addFriend(Model model, ModelAndView modelAndView, RedirectAttributes redirect, HttpServletRequest request, @RequestParam("addFriends") String addfriends, @ModelAttribute("addfriendsForm") User friend) 
+	{
+		friend.setId(Integer.parseInt(addfriends));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		friendsService.addFriend(user);
+		friendsService.addFriend(friend, user);
+		friendsService.updateFriendToken(friend);
 		log.debug("Friend added");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";

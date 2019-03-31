@@ -18,8 +18,8 @@ public class FriendsService implements IService{
 	@Autowired
 	FriendsDaoImpl friendsDaoImpl;
 	
-	public void addFriend(User user) {
-		friendsDaoImpl.addFriend(user);
+	public void addFriend(User friend, User user) {
+		friendsDaoImpl.addFriend(friend, user);
 	}
 
 	
@@ -27,6 +27,10 @@ public class FriendsService implements IService{
 		friendsDaoImpl.removeFriend(user);
 	}
 
+	public void updateFriendToken(User user) {
+		friendsDaoImpl.updateFriendToken(user);
+		
+	}
 	
 	public Collection<User> findFriends(User user) {
 		Collection<User> friends=(Collection<User>) friendsDaoImpl.findFriends(user);
@@ -36,6 +40,12 @@ public class FriendsService implements IService{
 
 	public void confirmFriend(@Valid User user) {
 		friendsDaoImpl.confirmFriend(user);
+	}
+
+
+	public void updateConfirmToken(User friend) {
+		friendsDaoImpl.updateConfirmToken(friend);
+		
 	}
 	
 }

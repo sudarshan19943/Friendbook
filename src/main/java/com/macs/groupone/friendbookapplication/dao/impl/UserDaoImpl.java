@@ -104,9 +104,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	public Collection<User> findUsers(@Valid User user) {
+	public Collection<User> findUsers(String firstName, String lastName, String city) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call getUserList()}", USER_MAPPER)); 
+		results.addAll(jdbcManager().select("{call getUserList(?,?,?)}", USER_MAPPER, firstName, lastName, city)); 
 		return results;
 	}	
 

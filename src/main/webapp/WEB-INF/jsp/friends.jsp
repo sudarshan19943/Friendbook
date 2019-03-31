@@ -61,9 +61,9 @@
 							</div>
 							
 							<div class="form-group">
-								<input type="text" name="city" id="city" class="form-control"
+								<input type="text" name="cityId" id="cityId" class="form-control"
 									placeholder="City" maxlength="255"
-									value='${param.city}'>
+									value='${param.cityId}'>
 							</div>
 							
 							<div class="form-group">
@@ -76,65 +76,49 @@
 									<option value="state">State/Province</option>
 								</select>
 							</div>
-							<div class="col-sm-3">
-							<div class="button-group">
+							<div class="form-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
 									value="Find Friends" name="findFriends">
-							</div>
 							</div>
 						</form>
 					</div>
                 </div>
                 <h4 style="margin-top: 50px;">Results</h4>
                 <c:forEach var="users" items="${users}" varStatus="status">
-                <form role="form" modelAttribute="addfriendsForm" action="/addfriends" method="post">
-                    <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
+                <form:form role="form" action="/addfriends" method="post" modelAttribute = "addfriendsForm">
 				<p> ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
 				 <div class="add-friends">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend" name="addFriends"/>
-                    
+				<input type = "hidden" value="${users.getId()}" name = "addFriends">
+                   <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Add friend"/>
                 </div>
-                </form>
+		
+				</form:form>
 				</c:forEach>
-
                 <h4 style="margin-top: 20px;">My Friends</h4>
-                <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
                 <c:forEach var="friends" items="${friends}" varStatus="status">
-                    <a href="login.jsp"> <img class="avatar" src="../../icons/avatar.png" /></a>
-                    
+                <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
+
+                   
 				<p>${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
 				<div>
+				<c:choose>
+				<c:when test="${friends.getConfirmToken()} == 1">
 				<input type = "hidden" value="${friends.getId()}" name = "removeFriends">
                    <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Remove friends"/>
+                </c:when>
+                <c:otherwise>
+                <h4 style="margin-top: 20px;">Friend Request Pending</h4>
+                </c:otherwise>
+                </c:choose>
                 </div>
-
-             
-                <div class="confirm-friend">
+				</form:form>
+				<form:form role="form" action="/confirmFriend" method="post" modelAttribute = "confirmFriendsForm">
+				<div class="confirm-friend">
+                <input type = "hidden" value="${friends.getId()}" name = "confirmFriend">
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend" name="confirmFriend">
                 </div>
-
+                </form:form>
 				</c:forEach>
-				</form:form>
-
-
-				    <div class="add-friends">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend">
-                </div>
-
-            <div class="col-sm-3">
-                <div class="button-group">
-                        <input type="submit" class="btn btn-lg btn-primary btn-block" value= "Find Friends">
-                </div>
-                <label></label>
-
-                <div class="add-friends">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add Friend">
-                </div>
-
-                <div class="my-friends">
-                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend">
-                </div>
-            </div>
         </div>
 
        </div>
