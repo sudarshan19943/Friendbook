@@ -64,8 +64,8 @@ public class UserService  implements IService{
 		userDao.resetUserPassword(user);
 	}
 
-	public Collection<User> findUsers(@Valid User user) {
-		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(user);
+	public Collection<User> findUsers(String firstName, String lastName, String city) {
+		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(firstName, lastName, city);
 		return users;
 	}
 	
@@ -73,6 +73,5 @@ public class UserService  implements IService{
 		return PasswordEncryptionService.encrypt(password, SECRET);
 
 	}
-
 
 }

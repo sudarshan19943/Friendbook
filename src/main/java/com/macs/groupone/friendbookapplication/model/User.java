@@ -16,10 +16,10 @@ public class User implements Serializable{
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
+  private int friend_token;
+	private int friend_confirm_token;
 	private ArrayList<Post> posts;
-
-	
-
+  
 	public ArrayList<Post> getPosts() {
 		return posts;
 	}
@@ -116,8 +116,25 @@ public class User implements Serializable{
 	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
-
 	
+	public int getFriendToken()
+	{
+		return friend_token;
+	}
 	
+	public void setFriendToken(int token)
+	{
+		this.friend_token = token;
+	}
+	
+	public int getFriendConfirmationToken()
+	{
+		return friend_confirm_token;
+	}
+	
+	public void setFriendConfirmationToken(int token)
+	{
+		this.friend_confirm_token = token;
+	}
 	
 }
