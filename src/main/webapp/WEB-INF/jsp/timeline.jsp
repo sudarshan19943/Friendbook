@@ -71,15 +71,12 @@ window.history.pushState(null, "", window.location.href);
 				</select> --%>
 				
 				
-				<c:forEach var="entry" items="${message}">
-					   key is ${message.key}
-					   <c:forEach var="info" items="${message.value}">
-					        info is ${info}
-					   </c:forEach>
-					</c:forEach>
+				<c:forEach var="type" items="${types}">
+				   Key is ${type.key}<br></br>
+				   Value is ${type.value}<br></br>
+				</c:forEach>
 				
-				
-				<c:forEach var="post" items="${message}" varStatus="status">
+				<%-- <c:forEach var="post" items="${message}" varStatus="status">
 					<div>Posted on ${message.key}</div>
 					<div>${message.value.getBody()}</div>
 					<c:set var="sender_id" value="${message.value.getSender()}" />
@@ -92,8 +89,8 @@ window.history.pushState(null, "", window.location.href);
 								<div class="form-group-lastname">
 		                            <label for="post" style="height: 50px"  class="tbh" >${message.value.getBody()}</label>
 		                        </div>
-								<%-- <input style="height: 50px" class="form-control" name="post"
-									value='${param.post}' type="hidden"> --%>
+								<input style="height: 50px" class="form-control" name="post"
+									value='${param.post}' type="hidden">
 							</div>
 							<div class="form-group">
 								<input style="height: 50px" class="form-control" name="comment"
@@ -106,7 +103,7 @@ window.history.pushState(null, "", window.location.href);
 							<br></br>
 						</form>
 					</c:if>
-				</c:forEach>
+				</c:forEach> --%>
 			<%-- </c:forEach> --%>
 		</div>
 		<br></br>

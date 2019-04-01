@@ -34,13 +34,15 @@ public class CommentDaoImpl extends AbstractDao implements CommentDao {
 		@Override public Comment map(final ResultSet resultSet) throws SQLException {
 			final Comment commentbean = new Comment();
 			commentbean.setCommentId(resultSet.getInt("comment_id"));
+			commentbean.setRecipient(resultSet.getInt("receiver_id"));
+			commentbean.setSender(resultSet.getInt("sender_id"));
 			commentbean.setBody(resultSet.getString("comment"));
+			commentbean.setTimestamp(resultSet.getTimestamp("comment_time"));
 			return commentbean; } };
 
 			@Override
 			public void addNewComment(int commentSenderId,int commentRecieverId,String commentBody, int postId) {
 				jdbcManager().insertAndGetId("{call addNewComment(?, ?,?,?)}",commentSenderId, commentRecieverId,commentBody,postId);
-
 			}
 
 			@Override
