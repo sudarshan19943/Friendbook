@@ -3,7 +3,7 @@ package com.macs.groupone.friendbookapplication.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable,Cloneable{
+public class User implements Serializable{
 
 	private int id;
 	private String email;
@@ -11,7 +11,7 @@ public class User implements Serializable,Cloneable{
 	private String firstName;
 	private String lastName;
 	private boolean enabled;
-	private String confirmation_token;
+	private String confirmationToken;
 	private String stateId;
 	private String countryId;
 	private String cityId;
@@ -37,11 +37,11 @@ public class User implements Serializable,Cloneable{
 	}
 
 	public String getConfirmationToken() {
-		return confirmation_token;
+		return confirmationToken;
 	}
 
 	public void setConfirmationToken(String confirmationToken) {
-		this.confirmation_token = confirmationToken;
+		this.confirmationToken = confirmationToken;
 	}
 
 	public int getId() {

@@ -4,8 +4,13 @@ import java.util.Date;
 
 public class Comment {
 
-	private long commentId;
+	private int commentId;
 	private Date timestamp;
+	private int recipient;
+	private String comment;
+	private int sender;
+
+	
 	public Date getTimestamp() {
 		return timestamp;
 	}
@@ -13,10 +18,6 @@ public class Comment {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	private int recipient;
-	private String comment;
-	private int sender;
 
 	
 	public int getSender() {
@@ -56,7 +57,7 @@ public class Comment {
 		return commentId;
 	}
 
-	public void setCommentId(long commentId) {
+	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
 
