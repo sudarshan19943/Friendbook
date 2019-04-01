@@ -54,7 +54,7 @@ CREATE TABLE `comment` (
   `comment` varchar(255) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
   `receiver_id` int(11) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT NULL,
+  `comment_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `post_id_fk` int(11) DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `post_id_fk_idx` (`post_id_fk`),

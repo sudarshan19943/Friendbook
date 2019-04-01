@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.macs.groupone.friendbookapplication.model.Message;
+import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
@@ -49,40 +49,18 @@ public class NewPostController {
 
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) 
+	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Post message) 
 	{ 
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		messageService.addNewPost(user, user, post);
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
-		for (int friendListIndex = 0 ; friendListIndex < friendList.size(); friendListIndex++)
-		{
-			messageService.addNewPost(user, friendList.get(friendListIndex), post);
-		}
-		
+		messageService.addNewPost(user, post);
+		//now check where to redirect
+		modelAndView.addObject("postVal",post);
+		modelAndView.addObject("successMessage","Message has been posted successfully");
 		return modelAndView; 
 	}
 	
-	//Search functionality
-	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.GET)
-	public ModelAndView findFriends(Model model, ModelAndView modelAndView,  @Valid User user,
-			RedirectAttributes redirect) {
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
-		//write a stored procedure to extract first name, last name based on a given id
-		for (int friendListIndex = 0 ; friendListIndex < friendList.size(); friendListIndex++)
-		{
-			ArrayList<User>userFriendList=(ArrayList<User>) userService.getUserById(friendList.get(friendListIndex).getId());
-			String firstName = userFriendList.get(friendListIndex).getFirstName();
-			String lastName = userFriendList.get(friendListIndex).getLastName();
-			modelAndView.addObject(firstName);
-			modelAndView.addObject(lastName);
-		}
-		modelAndView.addObject("friends", friendList);
-		modelAndView.setViewName("friends");
-		log.info("List of friends" + friendList);
-		return modelAndView;
-	}
 
 
 }

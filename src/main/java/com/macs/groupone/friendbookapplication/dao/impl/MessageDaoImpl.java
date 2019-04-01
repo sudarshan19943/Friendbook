@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
 import com.macs.groupone.friendbookapplication.dao.MessageDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
-import com.macs.groupone.friendbookapplication.model.Message;
+import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Service
@@ -25,14 +25,14 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 	}
 
-	private static final RowMapper<Message> MESSAGE_MAPPER = new
-			RowMapper<Message>() {
+	private static final RowMapper<Post> MESSAGE_MAPPER = new
+			RowMapper<Post>() {
 
-		@Override public Message map(final ResultSet resultSet) throws SQLException {
-			final Message messagebean = new Message();
+		@Override public Post map(final ResultSet resultSet) throws SQLException {
+			final Post messagebean = new Post();
 			messagebean.setId(resultSet.getInt("post_id"));
-			messagebean.setDate(resultSet.getTimestamp("post_time"));
-			messagebean.setRecipient(resultSet.getInt("recipient_id"));
+			messagebean.setTimeStamp(resultSet.getTimestamp("post_time"));
+			//messagebean.setRecipient(resultSet.getInt("recipient_id"));
 			messagebean.setSender(resultSet.getInt("sender_id"));
 			messagebean.setBody(resultSet.getString("post"));
 
@@ -40,21 +40,29 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 
 
 			@Override
-			public void addNewPost(User sender, User recipient, String post) {
-				jdbcManager().update("{call addNewPost(?, ?, ?)}", sender.getId(), recipient.getId(), post);
+			public void addNewPost(User sender, String post) {
+				jdbcManager().update("{call addNewPost(?, ?)}", sender.getId(), post);
 
 			}
 
 			@Override
-			public void removePost(Message message) {
+			public void removePost(Post message) {
 				jdbcManager().update("{call removePost(?)}", message.getId());
 
 			}
-
+			
 			@Override
-			public Collection<Message> getMessage(User user) {
-				Collection<Message> results = new ArrayList<>(); 
-				results.addAll(jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER, user.getId()));
+			public ArrayList<Post> getMessage(User user) {
+				ArrayList<Post> results = new ArrayList<>(); 
+				results.addAll(jdbcManager().select("{call getMessageSuman(?)}",MESSAGE_MAPPER, user.getId()));
 				return results;
 			}
+
+			//previously written
+			/*@Override
+			public ArrayList<Post> getMessage(User user) {
+				ArrayList<Post> results = new ArrayList<>(); 
+				results.addAll(jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER, user.getId()));
+				return results;
+			}*/
 }

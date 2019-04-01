@@ -60,14 +60,27 @@
 			<form role="form" action="/newpost" method="post" autocomplete="off">
 				<div class="form-group">
 					<input class="form-control" name="post" value='${param.post}'
-						type="text">
+						type="text" required>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-lg btn-primary btn-block"
 						value="${post}">
 				</div>
-				<br></br>
 			</form>
+			<c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger">
+                                    <strong>
+                                        ${errorMessage}
+                                    </strong>
+                                </div>
+                                </c:if>
+                                <c:if test="${not empty successMessage}">
+                                <div class="alert alert-success">
+                                    <strong>
+                                        ${successMessage}
+                                    </strong>
+                                </div>
+                                </c:if>                
 		</div>
 	</div>
 	</div>

@@ -1,8 +1,9 @@
 package com.macs.groupone.friendbookapplication.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class User implements Serializable{
+public class User implements Serializable,Cloneable{
 
 	private int id;
 	private String email;
@@ -15,6 +16,17 @@ public class User implements Serializable{
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
+	private ArrayList<Post> posts;
+
+	
+
+	public ArrayList<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(ArrayList<Post> posts) {
+		this.posts = posts;
+	}
 
 	public String getPasswordConfirm() {
 		return passwordConfirm;

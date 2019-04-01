@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" type="text/css"
 	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 
@@ -16,6 +16,13 @@
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
+
+<script>
+window.history.pushState(null, "", window.location.href);        
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+        };
+</script>        
 
 <html>
 <head>
@@ -56,19 +63,34 @@
 			 <div>Friends: </div> 
 <%-- 			<c:forEach var="friends" items="${friends}" varStatus="status">
 				<div>${friends.getFirstName()} ${friends.getLastName()} </div> --%>
+				
+				<%-- <select name="country">
+				    <c:forEach items="${message}" var="country">
+				        <option value="${message.key}">${message.value}</option>
+				    </c:forEach>
+				</select> --%>
+				
+				
+				<c:forEach var="entry" items="${message}">
+					   key is ${message.key}
+					   <c:forEach var="info" items="${message.value}">
+					        info is ${info}
+					   </c:forEach>
+					</c:forEach>
+				
+				
 				<c:forEach var="post" items="${message}" varStatus="status">
-					<div>Posted on<%-- ${post.getDate()} --%></div>
-					<div>${post.getBody()}</div>
-					<c:set var="sender_id" value="${post.getSender().getId()}" />
-					<c:set var="recipient_id" value="${post.getRecipient().getId()}" />
-					<c:if test="${sender_id != recipient_id}">
+					<div>Posted on ${message.key}</div>
+					<div>${message.value.getBody()}</div>
+					<c:set var="sender_id" value="${message.value.getSender()}" />
+					<c:if test="${sender_id != 9}">
 						<form role="form" action="/timeline" method="post" autocomplete="off">
 							<div class="form-group-post-details">
 								<label for="post-details"></label>
 							</div>
 							<div class="form-group">
 								<div class="form-group-lastname">
-		                            <label for="city" style="height: 50px"  class="tbh" >${post}</label>
+		                            <label for="post" style="height: 50px"  class="tbh" >${message.value.getBody()}</label>
 		                        </div>
 								<%-- <input style="height: 50px" class="form-control" name="post"
 									value='${param.post}' type="hidden"> --%>

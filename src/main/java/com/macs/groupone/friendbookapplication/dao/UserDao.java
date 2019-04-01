@@ -8,7 +8,7 @@ import com.macs.groupone.friendbookapplication.model.User;
 @Component
 public interface UserDao{
 
-	Collection<User> getUserById(int id);
+	User getUserById(int id);
 	User getUserByEmail(String email);
 	User getUserByEmailPassword(String email, String password);
 	Collection<User> getUserList();

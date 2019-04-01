@@ -28,7 +28,7 @@ public class UserService  implements IService{
 		return 0;
 	}
 
-	public Collection<User> getUserById(int id) {
+	public User getUserById(int id) {
 		return userDao.getUserById(id);
 	}
 

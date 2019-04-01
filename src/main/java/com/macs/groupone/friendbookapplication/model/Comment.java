@@ -4,18 +4,27 @@ import java.util.Date;
 
 public class Comment {
 
-	private long comment_id;
+	private long commentId;
 	private Date timestamp;
-	private User sender;
-	private User recipient;
-	private String comment;
-
-	public long getId() {
-		return comment_id;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
-	public void setId(long id) {
-		this.comment_id = id;
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	private int recipient;
+	private String comment;
+	private int sender;
+
+	
+	public int getSender() {
+		return sender;
+	}
+
+	public void setSender(int sender) {
+		this.sender = sender;
 	}
 
 	public Date getDate() {
@@ -26,20 +35,13 @@ public class Comment {
 		this.timestamp = date;
 	}
 
-	public User getSender() {
-		return sender;
-	}
-
-	public void setSender(int sender_id) {
-		sender.setId(sender_id);
-	}
 
 	public int getRecipient() {
-		return recipient.getId();
+		return recipient;
 	}
 
-	public void setRecipient(int recipient_id) {
-		recipient.setId(recipient_id);
+	public void setRecipient(int recipient) {
+		this.recipient=recipient;
 	}
 
 	public String getBody() {
@@ -49,5 +51,14 @@ public class Comment {
 	public void setBody(String text) {
 		this.comment= text;
 	}
+	
+	public long getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(long commentId) {
+		this.commentId = commentId;
+	}
+
 }
 

@@ -1,6 +1,9 @@
 package com.macs.groupone.friendbookapplication.controller;
 
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.Comment;
+import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.CommentService;
@@ -35,23 +39,38 @@ class TimelineController {
 	@Autowired
 	UserService userService;
 	
+   LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted;
+	
 	@GetMapping(value = "/timeline") 
 	public ModelAndView showTimelinePage(ModelAndView modelAndView, HttpServletRequest request) {
 		HttpSession session=request.getSession();
 		User userfromsession=(User) session.getAttribute("user");
-		modelAndView.addObject("friends", friendsService.findFriends(userfromsession));
-		modelAndView.addObject("message", messageService.getMessage(userfromsession));
+		//get all the posts which are mine and shared by friends...
+		// so when i post- add this post to all my friends 
+		//when any of my friend post- add to all his friends
+		//when i open my timeline i see all mine m=posts
+		Collection<User> listOfFriends=(Collection) friendsService.findFriends(userfromsession);
+		//get all the posts from list of friends...
+		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(userfromsession,listOfFriends);
+		modelAndView.addObject("message", listOfPostsFromAllMyFriendsSorted);
 		modelAndView.setViewName("timeline");
-		System.out.println(" Profile Pic path..."+AvatarService.getProfileAvatar(userfromsession.getEmail()));
-		modelAndView.addObject("avatarpic",AvatarService.getProfileAvatar(userfromsession.getEmail()));
 		return modelAndView; 
 	}
 
 
-	@PostMapping(value = "/timeline", params="post") 
+	@PostMapping(value = "/comment") 
 	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
-			@RequestParam("comment") String comment,@RequestParam("post") String post) { 
-		//commentService.addNewComment(comment, post);
+			@RequestParam("comment") String commentVal,@RequestParam("post") String post) { 
+		User commentCreator=(User)request.getSession().getAttribute("user");
+		int postId=1;
+		Comment comment=new Comment();
+		comment.setSender(commentCreator.getId());
+		//set it to who has recieed comment that is postID , sender id from post table
+		comment.setRecipient(7);//whose post is
+		comment.setBody("nice pic");
+		commentService.addNewComment(comment,postId)
+		;
+		
 		return modelAndView; 
 	}
 
