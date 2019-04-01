@@ -48,6 +48,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setCityId(resultSet.getString("city"));
 			user.setStateId(resultSet.getString("province"));
 			user.setCountryId(resultSet.getString("country"));
+			user.setFriendToken(resultSet.getInt("friend_token"));
+			user.setFriendConfirmationToken(resultSet.getInt("friend_confirm_token"));
 			return user;
 		}
 	};
@@ -104,9 +106,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	public Collection<User> findUsers(@Valid User user) {
+	public Collection<User> findUsers(String firstName, String lastName, String city) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call getUserList()}", USER_MAPPER)); 
+		results.addAll(jdbcManager().select("{call getUserList(?,?,?)}", USER_MAPPER, firstName, lastName, city)); 
 		return results;
 	}	
 

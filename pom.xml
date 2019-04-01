@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Friendbook</name>
 	<description>Friendbook QA group work</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -140,15 +140,20 @@
 
 	<build>
 		<plugins>
-			<plugin>
+<!-- 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.8.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 					<fork>true</fork>
 					<executable>/Library/Java/Home/bin/javac</executable>
 				</configuration>
+			</plugin> -->
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>2.0.7</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -163,8 +168,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainclass>com.macs.groupone.frinedbookapplication</mainclass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-</project>
+	</project>
