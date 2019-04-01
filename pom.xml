@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Friendbook</name>
 	<description>Friendbook QA group work</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -168,6 +168,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainclass>com.macs.groupone.frinedbookapplication</mainclass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
