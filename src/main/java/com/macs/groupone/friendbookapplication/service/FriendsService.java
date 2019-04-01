@@ -59,8 +59,13 @@ public class FriendsService implements IService{
 	}
 
 
-	public void clearTokens(User user) {
-		friendsDaoImpl.clearTokens(user);
+	public void clearFriendConfirmToken(User user) {
+		friendsDaoImpl.clearFriendConfirmToken(user);
+		
+	}
+	
+	public void clearFriendToken(User user) {
+		friendsDaoImpl.clearFriendToken(user);
 		
 	}
 	

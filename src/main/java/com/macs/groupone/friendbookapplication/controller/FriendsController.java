@@ -96,22 +96,22 @@ public class FriendsController {
 		System.out.println(user.getId());
 		System.out.println(user.getFriendToken());
 		System.out.println(user.getFriendConfirmationToken());
-		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
-		{
-			enableConfirmButton = true;
-		}
-		else if(user.getFriendConfirmationToken() == 1)
-		{
-			enableConfirmButton = false;
-			enableRemoveButton = true;
-			user.setFriendConfirmationToken(0);
-			user.setFriendToken(0);
-		}
-		
 		System.out.println("---------------------------");
 		modelAndView.addObject("friends", friendList);
 		modelAndView.addObject("users", userList);
 		modelAndView.setViewName("friends");
+		
+		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
+		{
+			enableConfirmButton = true;
+			enableRemoveButton = false;
+		}
+		else if(user.getFriendConfirmationToken() == 1 && user.getFriendToken() == 1)
+		{
+			enableConfirmButton = false;
+			enableRemoveButton = true;
+		}
+		
 		log.info("List of friends" + friendList);
 		}
 		catch(NullPointerException e)
@@ -133,6 +133,15 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
+
+		friend.setFriendConfirmationToken(0);
+		friend.setFriendToken(0);
+		user.setFriendConfirmationToken(0);
+		user.setFriendToken(0);
+		friendsService.clearFriendConfirmToken(friend);
+		friendsService.clearFriendToken(user);
+		friendsService.clearFriendConfirmToken(user);
+		friendsService.clearFriendToken(friend);
 		
 		System.out.println("Inside remove friends");
 		System.out.println("Friend: "+friend.getId());
@@ -141,14 +150,9 @@ public class FriendsController {
 		System.out.println("User: "+user.getId());
 		System.out.println("User's friend token"+user.getFriendToken());
 		System.out.println("User's confirmation token "+user.getFriendConfirmationToken());
-		friend.setFriendConfirmationToken(0);
-		friend.setFriendToken(0);
-		user.setFriendConfirmationToken(0);
-		user.setFriendToken(0);
-		friendsService.clearTokens(friend);
-		friendsService.clearTokens(user);
 		friendsService.removeFriend(friend);
 		friendsService.removeFriendUser(friend);
+		
 		
 		modelAndView.addObject("user", friend);
 		log.debug("Friend removed");
@@ -167,9 +171,20 @@ public class FriendsController {
 		User user=userService.getUserByEmail(emailfromsession);
 		//friendsService.confirmFriend(user);
 		friendsService.updateConfirmToken(user);
+		friendsService.updateFriendToken(friend);
+		friendsService.updateConfirmToken(friend);
 		friendsService.addFriend(friend, user);
 		CONFIRM_FRIEND_TOKEN_VALUE = 1;
 		friend.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		user.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		friend.setFriendToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		System.out.println("Inside confirm friends");
+		System.out.println("Friend: "+friend.getId());
+		System.out.println(friend.getId()+" friend token"+friend.getFriendToken());
+		System.out.println(friend.getId() + " confirmation token" +friend.getFriendConfirmationToken());
+		System.out.println("User: "+user.getId());
+		System.out.println(user.getId()+" friend token"+user.getFriendToken());
+		System.out.println(user.getId()+" confirmation token "+user.getFriendConfirmationToken());
 		log.debug("Friend added");
 		return "redirect:friends";
 	}
@@ -178,15 +193,22 @@ public class FriendsController {
 	@RequestMapping(value = "/addfriends", params = "addFriends", method = RequestMethod.POST)
 	public String addFriend(Model model, ModelAndView modelAndView, RedirectAttributes redirect, HttpServletRequest request, @RequestParam("addFriends") String addfriends, @ModelAttribute("addfriendsForm") User friend) 
 	{
+		
 		friend.setId(Integer.parseInt(addfriends));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		friendsService.updateFriendToken(friend);
-		friendsService.updateFriendTokenInFriends(friend);
 		friendsService.addFriend(friend, user);
 		FRIEND_TOKEN_VALUE = 1;
 		friend.setFriendToken(FRIEND_TOKEN_VALUE);
+		System.out.println("Inside add friends");
+		System.out.println("Friend: "+friend.getId());
+		System.out.println(friend.getId()+ " friend token"+friend.getFriendToken());
+		System.out.println(friend.getId()+" confirmation token" +friend.getFriendConfirmationToken());
+		System.out.println("User: "+user.getId());
+		System.out.println(user.getId() +" friend token"+user.getFriendToken());
+		System.out.println(user.getId() +" confirmation token "+user.getFriendConfirmationToken());
 		log.debug("Friend added");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";

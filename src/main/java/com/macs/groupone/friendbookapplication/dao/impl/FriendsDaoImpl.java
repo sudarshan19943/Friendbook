@@ -94,8 +94,13 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		
 	}
 
-	public void clearTokens(User user) {
-		jdbcManager().update("{call clear_tokens(?)}", user.getId());
+	public void clearFriendConfirmToken(User user) {
+		jdbcManager().update("{call clearFriendConfirmToken(?)}", user.getId());
+		
+	}
+	
+	public void clearFriendToken(User user) {
+		jdbcManager().update("{call clearFriendToken(?)}", user.getId());
 		
 	}
 
