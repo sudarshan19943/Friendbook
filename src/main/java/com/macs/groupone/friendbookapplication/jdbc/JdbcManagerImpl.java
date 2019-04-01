@@ -39,9 +39,9 @@ public class JdbcManagerImpl implements JdbcManager {
 	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(URL);
-		this.username = Config.getProperty(USERNAME);
-		this.password = Config.getProperty(PASSWORD);
+		this.url = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
+		this.username = "CSCI5308_1_DEVINT_USER";
+		this.password = "CSCI5308_1_DEVINT_1161";
 	}
 
 	protected final Connection getConnection() {
