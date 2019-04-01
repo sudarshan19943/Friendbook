@@ -94,9 +94,9 @@
 		
 				</form:form>
 				</c:forEach>
-				<div>${enableConfirmButton}</div>
+<%-- 				<div>${enableConfirmButton}</div>
 				<div>${enableRemoveButton}</div>
-				<p>${friends.get(0).getFirstName()} ${friends.get(0).getLastName()}</p>
+				<p>${friends.get(0).getFirstName()} ${friends.get(0).getLastName()}</p> --%>
                 <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friends" items="${friends}" varStatus="status">
                  <c:choose>
