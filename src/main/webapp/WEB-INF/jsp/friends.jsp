@@ -94,12 +94,13 @@
 		
 				</form:form>
 				</c:forEach>
+				<div>${enableConfirmButton}</div>
 				<div>${enableRemoveButton}</div>
 				<p>${friends.get(0).getFirstName()} ${friends.get(0).getLastName()}</p>
                 <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friends" items="${friends}" varStatus="status">
-                <%-- <c:choose> --%>
-                <%--  <c:when test="${enableRemoveButton == true}"> --%>
+                 <c:choose>
+                <c:when test="${enableRemoveButton == true}">
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
 				<p>${friends.getFriendToken()} ${friends.getFriendConfirmationToken()} ${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
 				<div>
@@ -110,8 +111,8 @@
                 <h4 style="margin-top: 20px;">Friend Request Pending</h4>
                 </div>
 				</form:form>
-				<%-- </c:when> --%>
-				<%-- <c:otherwise> --%>
+				</c:when>
+				<c:otherwise>
  				 <c:if test="${enableConfirmButton == true}">
 				<form:form role="form" action="/confirmfriend" method="post" modelAttribute = "confirmfriendForm">
 				<div class="confirm-friend">
@@ -121,8 +122,8 @@
                 </div>
                 </form:form>
                   </c:if> 
-<%--                   </c:otherwise>
-                  </c:choose> --%>
+                  </c:otherwise>
+                  </c:choose>
 				</c:forEach>
         </div>
 

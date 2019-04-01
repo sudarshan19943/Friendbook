@@ -68,7 +68,16 @@ public class FriendsController {
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
 		
+		for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
+		{
+			if(friendList.get(friendListIndex).getId() == user.getId())
+			{
+				friendList.remove(friendListIndex);
+			}
+		}
+		
 		model.addAttribute("enableConfirmButton", enableConfirmButton);
+		model.addAttribute("enableRemoveButton", enableRemoveButton);
 		
 		//List<Integer> combineFriendWithUser = (List<Integer>) friendsService.findFriends(user);
 		
@@ -84,14 +93,16 @@ public class FriendsController {
 			}
 		}
 		System.out.println("Inside find friends");
+		System.out.println(user.getId());
 		System.out.println(user.getFriendToken());
 		System.out.println(user.getFriendConfirmationToken());
-		if(user.getFriendToken() == 1)
+		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{
 			enableConfirmButton = true;
 		}
 		else if(user.getFriendConfirmationToken() == 1)
 		{
+			enableConfirmButton = false;
 			enableRemoveButton = true;
 			user.setFriendConfirmationToken(0);
 			user.setFriendToken(0);
@@ -116,18 +127,30 @@ public class FriendsController {
 	// delete friend 
 	@RequestMapping(value = "/removefriends", params= "removeFriends", method = RequestMethod.POST)
 	public String deleteFriend(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User user, @RequestParam("removeFriends") String post) {
-		user.setId(Integer.parseInt(post));
+			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User friend, @RequestParam("removeFriends") String post) {
+		friend.setId(Integer.parseInt(post));
+		
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
 		
 		System.out.println("Inside remove friends");
-		System.out.println(user.getFriendToken());
-		System.out.println(user.getFriendConfirmationToken());
-		friendsService.removeFriend(user);
-		friendsService.removeFriendUser(user);
+		System.out.println("Friend: "+friend.getId());
+		System.out.println("Friend's friend token"+friend.getFriendToken());
+		System.out.println("Friend's confirmation token" +friend.getFriendConfirmationToken());
+		System.out.println("User: "+user.getId());
+		System.out.println("User's friend token"+user.getFriendToken());
+		System.out.println("User's confirmation token "+user.getFriendConfirmationToken());
+		friend.setFriendConfirmationToken(0);
+		friend.setFriendToken(0);
 		user.setFriendConfirmationToken(0);
 		user.setFriendToken(0);
+		friendsService.clearTokens(friend);
+		friendsService.clearTokens(user);
+		friendsService.removeFriend(friend);
+		friendsService.removeFriendUser(friend);
 		
-		modelAndView.addObject("user", user);
+		modelAndView.addObject("user", friend);
 		log.debug("Friend removed");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";
