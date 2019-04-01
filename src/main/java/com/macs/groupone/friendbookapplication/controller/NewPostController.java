@@ -39,26 +39,28 @@ public class NewPostController {
 	@Autowired
 	MessageService messageService;
 
-	private Date timestamp;
 
 	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
-	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user, Model model) {
-		modelAndView.setViewName(Constants.NEW_POST_VIEW);
-		return modelAndView; 
+	public String showNewpostPage(Model model, User user, HttpServletRequest request ) {
+		if(request.getSession().getAttribute("user")==null)
+			 return "redirect:login";
+		return "newpost"; 
 	}
 
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Post message) 
+	public String processPost(Model model, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Post message) 
 	{ 
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
+		        if(emailfromsession==null)
+		        	return "redirect:login";
 		User user=userService.getUserByEmail(emailfromsession);
 		messageService.addNewPost(user, post);
 		//now check where to redirect
-		modelAndView.addObject("postVal",post);
-		modelAndView.addObject("successMessage","Message has been posted successfully");
-		return modelAndView; 
+		model.addAttribute("postVal",post);
+		model.addAttribute("successMessage","Message has been posted successfully");
+		return "newpost"; 
 	}
 	
 

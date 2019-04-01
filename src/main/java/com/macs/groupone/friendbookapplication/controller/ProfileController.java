@@ -43,6 +43,8 @@ public class ProfileController {
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
 		User sessionUser=(User) session.getAttribute("user");
+		     if(sessionUser==null)
+		    	 return "redirect:login";
 		model.addAttribute("fullName", sessionUser.getFirstName()+" "+sessionUser.getLastName());
 		model.addAttribute("city", sessionUser.getCityId());
 		model.addAttribute("avatarpic",AvatarService.getProfileAvatar(sessionUser.getEmail()));
