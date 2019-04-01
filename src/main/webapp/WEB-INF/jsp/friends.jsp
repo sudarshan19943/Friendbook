@@ -39,8 +39,8 @@
         <div class="row">
             <div class="col-sm-4"><br></br> 
                 <a href="logout" onClick=""> ${logout} </a> <br></br> 
-                <a href="profile_update" onClick=""> ${profile_update} </a> <br></br> 
-                <a href="post_update" onClick="">Return to Timeline</a> <br></br>
+                <a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
+                <a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
             </div>
         
             <div class="col-sm-3">

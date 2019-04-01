@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.macs.groupone.friendbookapplication.model.Message;
+import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
@@ -39,50 +39,30 @@ public class NewPostController {
 	@Autowired
 	MessageService messageService;
 
-	private Date timestamp;
 
 	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
-	public ModelAndView showNewpostPage(ModelAndView modelAndView, User user, Model model) {
-		modelAndView.setViewName(Constants.NEW_POST_VIEW);
-		return modelAndView; 
+	public String showNewpostPage(Model model, User user, HttpServletRequest request ) {
+		if(request.getSession().getAttribute("user")==null)
+			 return "redirect:login";
+		return "newpost"; 
 	}
 
 
 	@RequestMapping(value = "/newpost", params="post", method = RequestMethod.POST) 
-	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Message message) 
+	public String processPost(Model model, HttpServletRequest request, RedirectAttributes redir, @RequestParam("post") String post, @Valid Post message) 
 	{ 
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
+		        if(emailfromsession==null)
+		        	return "redirect:login";
 		User user=userService.getUserByEmail(emailfromsession);
-		messageService.addNewPost(user, user, post);
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
-		for (int friendListIndex = 0 ; friendListIndex < friendList.size(); friendListIndex++)
-		{
-			messageService.addNewPost(user, friendList.get(friendListIndex), post);
-		}
-		
-		return modelAndView; 
+		messageService.addNewPost(user, post);
+		//now check where to redirect
+		model.addAttribute("postVal",post);
+		model.addAttribute("successMessage","Message has been posted successfully");
+		return "newpost"; 
 	}
 	
-	//Search functionality
-	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.GET)
-	public ModelAndView findFriends(Model model, ModelAndView modelAndView,  @Valid User user,
-			RedirectAttributes redirect) {
-		ArrayList<User>friendList=(ArrayList<User>) friendsService.findFriends(user);
-		//write a stored procedure to extract first name, last name based on a given id
-		for (int friendListIndex = 0 ; friendListIndex < friendList.size(); friendListIndex++)
-		{
-			ArrayList<User>userFriendList=(ArrayList<User>) userService.getUserById(friendList.get(friendListIndex).getId());
-			String firstName = userFriendList.get(friendListIndex).getFirstName();
-			String lastName = userFriendList.get(friendListIndex).getLastName();
-			modelAndView.addObject(firstName);
-			modelAndView.addObject(lastName);
-		}
-		modelAndView.addObject("friends", friendList);
-		modelAndView.setViewName("friends");
-		log.info("List of friends" + friendList);
-		return modelAndView;
-	}
 
 
 }

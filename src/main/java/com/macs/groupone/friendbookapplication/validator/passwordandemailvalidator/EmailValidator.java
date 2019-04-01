@@ -23,13 +23,24 @@ public class EmailValidator {
 		return result;
 	}
 
-	public static boolean textHasContent(String aText) {
+	private static boolean textHasContent(String aText) {
 		return (aText != null) && (aText.trim().length() > 0);
+	}
+	
+	private static boolean textHasContentAndPersiodSymbol(String aText) {
+		if((aText != null) && aText.trim().contains(".") && (aText.trim().length() > 0))
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+		
 	}
 
 	private static boolean hasNameAndDomain(String aEmailAddress) {
 		String[] tokens = aEmailAddress.split("@");
-		return tokens.length == 2 && textHasContent(tokens[0]) && textHasContent(tokens[1]);
+		return tokens.length == 2 && textHasContent(tokens[0]) && textHasContentAndPersiodSymbol(tokens[1]);
 
 	}
 }

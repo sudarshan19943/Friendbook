@@ -33,20 +33,28 @@ public class AvatarService implements IService {
 	
 
 	public static void uploadAvatarAndSave(MultipartFile uploadfile,String emailID) {
-		try {
-			String uniqueFileName=emailID+AVATAR_IMAGE_EXTENSION;
-			String filepath = Paths.get(AVATAR_FOLDER, uniqueFileName).toString();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-			stream.write(uploadfile.getBytes());
-			stream.close();
-		} catch (FileNotFoundException e) {
+	    try {
+	      // Get the filename and build the local file path
+	      String filename = uploadfile.getOriginalFilename();
+	      filename=emailID+AVATAR_IMAGE_EXTENSION;
+	      String directory = Config.getProperty("image.upload.uploadedFiles");
+	      String filepath = Paths.get(directory, filename).toString();
+	      // Save the file locally
+	      BufferedOutputStream stream =
+	          new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+	      stream.write(uploadfile.getBytes());
+	      stream.close();
+	    }
+	    catch (FileNotFoundException e) {
 			log.error(e.getMessage());
 
 		} catch (IOException e) {
 			log.error(e.getMessage());
 
 		}
-	}
+	    
+	  } // method uploadFile
+
 	
 	public static URL getResource(String email){
 		String directory = Config.getProperty("avatarImagesForResourse");

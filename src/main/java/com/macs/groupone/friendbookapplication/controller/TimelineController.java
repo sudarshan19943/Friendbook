@@ -1,27 +1,27 @@
 package com.macs.groupone.friendbookapplication.controller;
 
+
 import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.macs.groupone.friendbookapplication.dao.impl.FriendsDaoImpl;
-import com.macs.groupone.friendbookapplication.dao.impl.MessageDaoImpl;
 import com.macs.groupone.friendbookapplication.model.Comment;
-import com.macs.groupone.friendbookapplication.model.Message;
+import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.CommentService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
@@ -42,29 +42,47 @@ class TimelineController {
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping(value = "/timeline", method = RequestMethod.GET) 
-	public ModelAndView showTimelinePage(ModelAndView modelAndView, HttpServletRequest request) {
+    LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted;
+	
+	@GetMapping(value = "/timeline") 
+	public String showTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
-		
-		modelAndView.setViewName(Constants.TIMELINE_VIEW);
-		modelAndView.addObject("friends", friendsService.findFriends(user));
-		modelAndView.addObject("message", messageService.getMessage(user));
-		modelAndView.setViewName("timeline");
-		return modelAndView; 
+		User currentUser=(User) session.getAttribute("user");
+		if(currentUser==null)
+			return "redirect:login";
+		//get all the posts which are mine and shared by friends...
+		// so when i post- add this post to all my friends 
+		//when any of my friend post- add to all his friends
+		//when i open my timeline i see all mine m=posts
+		Collection<User> listOfFriends=(Collection) friendsService.findFriends(currentUser);
+		//get all the posts from list of friends...
+		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
+		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
+		return "timeline"; 
 	}
 
 
-	@RequestMapping(value = "/timeline", params="post", method = RequestMethod.POST) 
-	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, @ModelAttribute ("commentForm") Comment comment, @ModelAttribute ("commentForm") Message post ) { 
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
-		
-		commentService.addNewComment(comment, post);
-		
+	@PostMapping(value = "/comment") 
+	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
+			@RequestParam("comment") String commentVal,@RequestParam("post") String post) { 
+		User commentCreator=(User)request.getSession().getAttribute("user");
+		int postId=1;
+		Comment comment=new Comment();
+		comment.setSender(commentCreator.getId());
+		//set it to who has recieed comment that is postID , sender id from post table
+		comment.setRecipient(7);//whose post is
+		comment.setBody("nice pic");
+		commentService.addNewComment(comment,postId)
+		;
 		return modelAndView; 
 	}
+	
+	// Going to reset page without a token redirects to login page
+			@ExceptionHandler(MissingServletRequestParameterException.class)
+			public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
+				return new ModelAndView("redirect:login");
+			}
+			
+	
 
 }

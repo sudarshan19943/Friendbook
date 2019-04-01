@@ -1,6 +1,7 @@
 package com.macs.groupone.friendbookapplication.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable{
 
@@ -10,14 +11,23 @@ public class User implements Serializable{
 	private String firstName;
 	private String lastName;
 	private boolean enabled;
-	private String confirmation_token;
+	private String confirmationToken;
 	private String stateId;
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
-	private int friend_token;
+  private int friend_token;
 	private int friend_confirm_token;
-	
+	private ArrayList<Post> posts;
+  
+	public ArrayList<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(ArrayList<Post> posts) {
+		this.posts = posts;
+	}
+
 	public String getPasswordConfirm() {
 		return passwordConfirm;
 	}
@@ -27,11 +37,11 @@ public class User implements Serializable{
 	}
 
 	public String getConfirmationToken() {
-		return confirmation_token;
+		return confirmationToken;
 	}
 
 	public void setConfirmationToken(String confirmationToken) {
-		this.confirmation_token = confirmationToken;
+		this.confirmationToken = confirmationToken;
 	}
 
 	public int getId() {

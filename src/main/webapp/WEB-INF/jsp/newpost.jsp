@@ -51,8 +51,8 @@
 			<a href="login.jsp"> <img class="avatar"
 				src="../../icons/avatar.png" />
 			</a> <br></br> <a href="logout" onClick=""> ${logout} </a> <br></br> <a
-				href="profile_update" onClick=""> ${profile_update} </a> <br></br> <a
-				href="return_to_timeline" onClick=""> ${return_to_timeline} </a> <br></br>
+				href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> <a
+				href="timeline" onClick="timeline.jsp"> ${return_to_timeline} </a> <br></br>
 		</div>
 
 		<div class="col-md-8">
@@ -60,14 +60,27 @@
 			<form role="form" action="/newpost" method="post" autocomplete="off">
 				<div class="form-group">
 					<input class="form-control" name="post" value='${param.post}'
-						type="text">
+						type="text" required>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-lg btn-primary btn-block"
 						value="${post}">
 				</div>
-				<br></br>
 			</form>
+			<c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger">
+                                    <strong>
+                                        ${errorMessage}
+                                    </strong>
+                                </div>
+                                </c:if>
+                                <c:if test="${not empty successMessage}">
+                                <div class="alert alert-success">
+                                    <strong>
+                                        ${successMessage}
+                                    </strong>
+                                </div>
+                                </c:if>                
 		</div>
 	</div>
 	</div>

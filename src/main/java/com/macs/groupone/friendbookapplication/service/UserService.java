@@ -28,7 +28,7 @@ public class UserService  implements IService{
 		return 0;
 	}
 
-	public Collection<User> getUserById(int id) {
+	public User getUserById(int id) {
 		return userDao.getUserById(id);
 	}
 
@@ -53,6 +53,11 @@ public class UserService  implements IService{
 	public void updateUser(User user) {
 		userDao.updateUser(user);
 	}
+	
+	public void updateUserLocation(User user) {
+		userDao.updateUserLocation(user);
+	}
+	
 
 	public void resetUserPassword(User user) {
 		user.setPassword(getEncryptedPassword(user.getPassword()));

@@ -54,11 +54,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		}
 	};
 
-
 	@Override
-	public List<User> getUserById(int id) {
-		List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
-		return result;
+	public User getUserById(int id) {
+		final List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
+		return result.isEmpty() ? null : result.get(0);
 	}
 
 	@Override
@@ -91,6 +90,12 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		jdbcManager().update("{call updateUser(?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled());
 
 	}
+	
+	@Override
+	public void updateUserLocation(User user) {
+		jdbcManager().update("{call updateUserLocation(?, ?, ?,?)}", user.getCountryId(), user.getStateId(), user.getCityId(),user.getEmail());
+	}
+	
 	
 	@Override
 	public void resetUserPassword(User user) {

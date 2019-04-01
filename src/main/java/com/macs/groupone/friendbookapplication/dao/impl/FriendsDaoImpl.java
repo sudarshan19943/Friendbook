@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,21 +31,29 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		friendToken = 0;
 	}
 
-	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
-
+	private static final RowMapper<Friend> FRIENDS_MAPPER = new RowMapper<Friend>() {
 		@Override
-		public User map(final ResultSet resultSet) throws SQLException {
-			final User friend = new User();
-			friend.setId(resultSet.getInt("id"));
-			friend.setFirstName(resultSet.getString("first_name"));
-			friend.setLastName(resultSet.getString("last_name"));
-			friend.setCityId(resultSet.getString("city"));
-			friend.setCountryId(resultSet.getString("country"));
-			friend.setStateId(resultSet.getString("province"));
+		public Friend map(final ResultSet resultSet) throws SQLException {
+			final Friend friend = new Friend();
+			friend.setUserid(resultSet.getInt("userid"));
+			friend.setFriendid(resultSet.getInt("friendid"));
 			return friend;
 		}
 	};
-	
+  
+	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
+	@Override
+	public User map(final ResultSet resultSet) throws SQLException {
+		final User friend = new User();
+		friend.setId(resultSet.getInt("id"));
+		friend.setFirstName(resultSet.getString("first_name"));
+		friend.setLastName(resultSet.getString("last_name"));
+		friend.setCityId(resultSet.getString("city"));
+		friend.setCountryId(resultSet.getString("country"));
+		friend.setStateId(resultSet.getString("province"));
+		return friend;
+	}
+};
 
 	@Override
 	public long addFriend(User friend, User user) {
@@ -66,11 +77,40 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	public long getNumberOfFriends(User user, String searchText) {
 		return 0;
 	}
-
+	
 	public Collection<User> findFriends(User user) {
 		Collection<User> results = new ArrayList<>(); 
 		results.addAll(jdbcManager().select("{call findFriends(?)}", USER_MAPPER, user.getId())); 
 		return results;
+	}
+
+	public Collection<User> findFriendsSuman(User user) {
+		Collection<Friend> results = new ArrayList<>(); 
+		results=jdbcManager().select("{call findFriendsSuman(?)}", FRIENDS_MAPPER, user.getId()); 
+		Set<Integer> friendSet= new HashSet<Integer>(); 
+		
+		//get all users who are my friends
+		friendSet.add(user.getId());//first add yourself-as you are always your friend
+		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+			Friend friend = (Friend) iterator.next();
+			if(user.getId()==friend.getUserid())
+			{
+				friendSet.add(friend.getFriendid());
+			}else if(friend.getFriendid()==user.getId())
+			{
+				friendSet.add(friend.getUserid());
+			}
+		}
+		//now make the user Friend list
+		UserDaoImpl userDaoImpl=new UserDaoImpl();
+		final ArrayList<User> friendListOfUser= new ArrayList<User>(); 
+	    for (Iterator iterator = friendSet.iterator(); iterator.hasNext();) {
+			int friendId = (Integer) iterator.next();
+			//create User object from friend object
+		    User userbyID=(User) userDaoImpl.getUserById(friendId);
+		    friendListOfUser.add(userbyID);
+		}
+		return friendListOfUser;
 	}
 
 	@Override

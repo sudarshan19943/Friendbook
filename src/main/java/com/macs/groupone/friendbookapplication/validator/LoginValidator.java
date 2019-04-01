@@ -25,11 +25,10 @@ public class LoginValidator implements Validator {
     public boolean supports(Class<?> aClass) {
         return User.class.equals(aClass);
     }
-
+    
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-        
         
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");

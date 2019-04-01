@@ -39,7 +39,8 @@
 	<div class="row">
         <div class="col-sm-7">
             <h3>Connect with your friends around the world</h3>
-           <img src="../../avatarImages/avatar.png" alt="promotional image">
+          <img src="../../avatarImages/promo.jpg" alt="promotional image"> -->
+           <!-- <img src="../../icons/promotional_image.jpg" alt="promotional image" border="2"> -->
         </div>
 		<div class="col-sm-5">
 				<div class="panel panel-default">

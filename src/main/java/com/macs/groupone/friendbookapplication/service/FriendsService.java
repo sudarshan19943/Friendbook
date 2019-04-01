@@ -32,6 +32,13 @@ public class FriendsService implements IService{
 		
 	}
 	
+	//previously written -fixing it
+	/*public Collection<User> findFriends(User user) {
+		Collection<User> friends=(Collection<User>) friendsDaoImpl.findFriends(user);
+		return friends;
+	}*/
+	
+	
 	public Collection<User> findFriends(User user) {
 		Collection<User> friends=(Collection<User>) friendsDaoImpl.findFriends(user);
 		return friends;

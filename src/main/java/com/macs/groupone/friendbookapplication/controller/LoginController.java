@@ -13,9 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
@@ -53,10 +58,6 @@ public class LoginController {
 				session.setAttribute("email", loginForm.getEmail());
 				session.setAttribute("password", loginForm.getPassword());
 				session.setAttribute("user", userByEmailAndPassword);
-				//redirect.addFlashAttribute("email", userByEmailAndPassword.getEmail());
-				//redirect.addFlashAttribute("firstName", userByEmailAndPassword.getFirstName());
-				//redirect.addFlashAttribute("lastName", userByEmailAndPassword.getLastName());
-				//redirect.addFlashAttribute("password", loginForm.getPassword());
 				return "redirect:/profile";
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
@@ -64,5 +65,24 @@ public class LoginController {
 			}
 		}
 
+	}
+	
+	@RequestMapping(value="/logout",method = RequestMethod.GET) 
+    public String signOut(HttpServletRequest request){
+           HttpSession session=request.getSession(); 
+           System.out.println("session id before invalidating it:"+session.getId());
+         // UserDTO userDTO=(UserDTO)session.getAttribute("UserDTO");
+         // System.out.println("userDTO obje"+userDTO.getFirst_name());
+          session.removeAttribute("user");   
+          session.invalidate(); 
+         System.out.println("session id after invalidating session is:"+session.getId()); 
+         //System.out.println("session id after invalidating session is:"+session.getAttribute("user")); 
+         return "redirect:/login";
+}
+	
+	// Going to reset page without a token redirects to login page
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
+		return new ModelAndView("redirect:login");
 	}
 }
