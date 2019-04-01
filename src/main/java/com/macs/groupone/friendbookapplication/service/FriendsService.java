@@ -53,5 +53,9 @@ public class FriendsService implements IService{
 		friendsDaoImpl.updateFriendTokenInFriends(friend);
 		
 	}
+
+	public void removeFriendUser(User user) {
+		friendsDaoImpl.removeFriendUser(user);
+	}
 	
 }

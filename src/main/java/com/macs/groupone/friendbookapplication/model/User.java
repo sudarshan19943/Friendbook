@@ -16,7 +16,7 @@ public class User implements Serializable{
 	private String cityId;
 	private String passwordConfirm;
 	private int friend_token;
-	private int confirm_token;
+	private int friend_confirm_token;
 	
 	public String getPasswordConfirm() {
 		return passwordConfirm;
@@ -106,20 +106,25 @@ public class User implements Serializable{
 	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
-
-	public int getFriendToken() {
+	
+	public int getFriendToken()
+	{
 		return friend_token;
 	}
-	public void setFriendToken(int friend_token) {
-		this.friend_token = friend_token;
-	}
-	public int getConfirmFriendToken() {
-		return confirm_token;
-	}
-	public void setConfirmFriendToken(int confirm_token) {
-		this.confirm_token = confirm_token;
+	
+	public void setFriendToken(int token)
+	{
+		this.friend_token = token;
 	}
 	
+	public int getFriendConfirmationToken()
+	{
+		return friend_confirm_token;
+	}
 	
+	public void setFriendConfirmationToken(int token)
+	{
+		this.friend_confirm_token = token;
+	}
 	
 }

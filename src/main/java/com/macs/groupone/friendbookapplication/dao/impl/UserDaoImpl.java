@@ -49,7 +49,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setStateId(resultSet.getString("province"));
 			user.setCountryId(resultSet.getString("country"));
 			user.setFriendToken(resultSet.getInt("friend_token"));
-			user.setConfirmFriendToken(resultSet.getInt("friend_confirm_token"));
+			user.setFriendConfirmationToken(resultSet.getInt("friend_confirm_token"));
 			return user;
 		}
 	};

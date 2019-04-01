@@ -3,6 +3,7 @@ package com.macs.groupone.friendbookapplication.controller;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,8 @@ public class FriendsController {
 	private static final Logger log = Logger.getLogger(FriendsController.class);
 	private int FRIEND_TOKEN_VALUE = 0;
 	private int CONFIRM_FRIEND_TOKEN_VALUE = 0;
-
+	private boolean enableConfirmButton = false;
+	private boolean enableRemoveButton = false;
 	@Autowired
 	UserService userService;
 
@@ -61,10 +63,14 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-
+		try {
+			
+		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
 		
-		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);
+		model.addAttribute("enableConfirmButton", enableConfirmButton);
+		
+		//List<Integer> combineFriendWithUser = (List<Integer>) friendsService.findFriends(user);
 		
 		//Removes all friends from the user list
 		for ( int userListIndex =0; userListIndex< userList.size(); userListIndex++)
@@ -77,11 +83,33 @@ public class FriendsController {
 				}
 			}
 		}
+		System.out.println("Inside find friends");
+		System.out.println(user.getFriendToken());
+		System.out.println(user.getFriendConfirmationToken());
+		if(user.getFriendToken() == 1)
+		{
+			enableConfirmButton = true;
+		}
+		else if(user.getFriendConfirmationToken() == 1)
+		{
+			enableRemoveButton = true;
+			user.setFriendConfirmationToken(0);
+			user.setFriendToken(0);
+		}
+		
+		System.out.println("---------------------------");
 		modelAndView.addObject("friends", friendList);
 		modelAndView.addObject("users", userList);
 		modelAndView.setViewName("friends");
 		log.info("List of friends" + friendList);
+		}
+		catch(NullPointerException e)
+		{
+			log.error(e);
+			e.printStackTrace();
+		}
 		return modelAndView;
+	
 	}
 
 
@@ -90,7 +118,15 @@ public class FriendsController {
 	public String deleteFriend(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request, @ModelAttribute("removefriendsForm") User user, @RequestParam("removeFriends") String post) {
 		user.setId(Integer.parseInt(post));
+		
+		System.out.println("Inside remove friends");
+		System.out.println(user.getFriendToken());
+		System.out.println(user.getFriendConfirmationToken());
 		friendsService.removeFriend(user);
+		friendsService.removeFriendUser(user);
+		user.setFriendConfirmationToken(0);
+		user.setFriendToken(0);
+		
 		modelAndView.addObject("user", user);
 		log.debug("Friend removed");
 		//all the posts related to this person must be deleted from timeline
@@ -98,7 +134,7 @@ public class FriendsController {
 	}
 	
 	//confirm friend request
-	@RequestMapping(value = "/confirmfriend", params = "confirmfriend", method = RequestMethod.GET)
+	@RequestMapping(value = "/confirmfriend", params = "confirmfriend", method = RequestMethod.POST)
 	public String confirmFriend(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request, @RequestParam("confirmfriend") String confirmfriend, @ModelAttribute("confirmfriendForm") User friend)
 	{
@@ -107,9 +143,10 @@ public class FriendsController {
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		//friendsService.confirmFriend(user);
-		friendsService.updateConfirmToken(friend);
+		friendsService.updateConfirmToken(user);
+		friendsService.addFriend(friend, user);
 		CONFIRM_FRIEND_TOKEN_VALUE = 1;
-		friend.setFriendToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		friend.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
 		log.debug("Friend added");
 		return "redirect:friends";
 	}
