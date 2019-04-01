@@ -63,6 +63,8 @@ public class ProfileController {
 		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, BindingResult bindingResult,
 				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic) {
 				User sessionUser=(User) request.getSession().getAttribute("user");
+				if(sessionUser==null)
+					return "redirect:login";
 				sessionUser.setCityId(profileForm.getCityId());
 				sessionUser.setCountryId(profileForm.getCountryId());
 				sessionUser.setStateId(profileForm.getStateId());
@@ -70,7 +72,7 @@ public class ProfileController {
 				avatarService.uploadAvatarAndSave(profilepic,sessionUser.getEmail());
 				request.getSession().setAttribute("user", sessionUser);
 				log.info("User Profile has been successfully updated.");
-			return Constants.TIMELINE_VIEW;
+			return "redirect:timeline";
 		}
 		
 		

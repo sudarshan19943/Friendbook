@@ -9,6 +9,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,9 +45,11 @@ class TimelineController {
     LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted;
 	
 	@GetMapping(value = "/timeline") 
-	public ModelAndView showTimelinePage(ModelAndView modelAndView, HttpServletRequest request) {
+	public String showTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session=request.getSession();
 		User currentUser=(User) session.getAttribute("user");
+		if(currentUser==null)
+			return "redirect:login";
 		//get all the posts which are mine and shared by friends...
 		// so when i post- add this post to all my friends 
 		//when any of my friend post- add to all his friends
@@ -52,9 +57,8 @@ class TimelineController {
 		Collection<User> listOfFriends=(Collection) friendsService.findFriends(currentUser);
 		//get all the posts from list of friends...
 		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
-		modelAndView.addObject("types", listOfPostsFromAllMyFriendsSorted);
-		modelAndView.setViewName("timeline");
-		return modelAndView; 
+		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
+		return "timeline"; 
 	}
 
 
@@ -70,21 +74,15 @@ class TimelineController {
 		comment.setBody("nice pic");
 		commentService.addNewComment(comment,postId)
 		;
-		
 		return modelAndView; 
 	}
 	
+	// Going to reset page without a token redirects to login page
+			@ExceptionHandler(MissingServletRequestParameterException.class)
+			public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
+				return new ModelAndView("redirect:login");
+			}
+			
 	
-	@RequestMapping(value="/logout",method = RequestMethod.GET) 
-    public String signOut(HttpServletRequest request){
-           HttpSession session=request.getSession(); 
-           System.out.println("session id before invalidating it:"+session.getId());
-         // UserDTO userDTO=(UserDTO)session.getAttribute("UserDTO");
-         // System.out.println("userDTO obje"+userDTO.getFirst_name());
-          session.removeAttribute("user");   
-          session.invalidate(); 
-         System.out.println("session id after invalidating session is:"+session.getId()); 
-         return "redirect:/login";
-}
 
 }

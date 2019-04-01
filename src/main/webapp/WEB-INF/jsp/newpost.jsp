@@ -51,8 +51,8 @@
 			<a href="login.jsp"> <img class="avatar"
 				src="../../icons/avatar.png" />
 			</a> <br></br> <a href="logout" onClick=""> ${logout} </a> <br></br> <a
-				href="profile_update" onClick=""> ${profile_update} </a> <br></br> <a
-				href="return_to_timeline" onClick=""> ${return_to_timeline} </a> <br></br>
+				href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> <a
+				href="timeline" onClick="timeline.jsp"> ${return_to_timeline} </a> <br></br>
 		</div>
 
 		<div class="col-md-8">

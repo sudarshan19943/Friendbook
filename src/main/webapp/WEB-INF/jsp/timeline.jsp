@@ -49,10 +49,10 @@ window.history.pushState(null, "", window.location.href);
 		<div class="col-md-4 text-center">
 		<img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
 			 <br></br> 
-			<a href="logout" onClick=""> ${logout} </a> <br></br> 
-			<a href="profile_update" onClick=""> ${profile_update} </a> <br></br> 
-			<a href="post_update" onClick=""> Post Update</a> <br></br>
-			<a href="manage_friends" onClick="">Find / Manage Friends</a> <br></br>
+			<a href="logout" onClick="login.jsp"> ${logout} </a> <br></br> 
+			<a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
+			<a href="newpost" onClick="newpost.jsp"> Post Update</a> <br></br>
+			<a href="friends" onClick="friends.jsp">Find / Manage Friends</a> <br></br>
 		</div>
 
 		<div class="search-box">
