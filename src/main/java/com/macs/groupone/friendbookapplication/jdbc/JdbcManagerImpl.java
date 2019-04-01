@@ -25,9 +25,9 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationExcep
 
 public class JdbcManagerImpl implements JdbcManager {
 	
-	public static final String URL = "spring.datasource.url";
-	public static final String USERNAME = "spring.datasource.username";
-	public static final String PASSWORD = "spring.datasource.password";
+	public static final String URL = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
+	public static final String USERNAME = "CSCI5308_1_DEVINT_USER";
+	public static final String PASSWORD = "CSCI5308_1_DEVINT_1161";
 
 	// Application FIle path
 	public static final String APPLICATION_PROPERTIES = "src/main/resources/application.properties";
