@@ -38,13 +38,13 @@ public class LoginController {
 	@Autowired
 	private LoginValidator loginValidator;
 
-	@GetMapping("/")
+	@GetMapping("/login")
 	public String registration(Model model,HttpSession session) {
 		model.addAttribute("loginForm", new User());
 		return "login";
 	}
 
-	@PostMapping("/")
+	@PostMapping("/login")
 	public String registration(Model model, @ModelAttribute("loginForm") User loginForm, BindingResult bindingResult,
 			HttpServletRequest request, RedirectAttributes redirect) {
 		loginValidator.validate(loginForm, bindingResult);
@@ -77,7 +77,7 @@ public class LoginController {
           session.invalidate(); 
          System.out.println("session id after invalidating session is:"+session.getId()); 
          //System.out.println("session id after invalidating session is:"+session.getAttribute("user")); 
-         return "redirect:/";
+         return "redirect:/login";
 }
 	
 	// Going to reset page without a token redirects to login page
