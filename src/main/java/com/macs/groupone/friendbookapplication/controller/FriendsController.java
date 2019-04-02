@@ -51,7 +51,24 @@ public class FriendsController {
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect) {
+			RedirectAttributes redirect, HttpServletRequest request) {
+
+		HttpSession session=request.getSession();
+		String emailfromsession=(String) session.getAttribute("email");
+		User user=userService.getUserByEmail(emailfromsession);
+		
+		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
+		{
+			enableConfirmButton = true;
+			enableRemoveButton = false;
+		}
+		else if(user.getFriendConfirmationToken() == 1 && user.getFriendToken() == 0)
+		{
+			enableConfirmButton = false;
+			enableRemoveButton = true;
+		}
+		model.addAttribute("enableConfirmButton", enableConfirmButton);
+		model.addAttribute("enableRemoveButton", enableRemoveButton);
 
 		return modelAndView;
 	}
@@ -68,6 +85,7 @@ public class FriendsController {
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
 		
+		//remove if it is myself
 		for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
 		{
 			if(friendList.get(friendListIndex).getId() == user.getId())
@@ -76,8 +94,7 @@ public class FriendsController {
 			}
 		}
 		
-		model.addAttribute("enableConfirmButton", enableConfirmButton);
-		model.addAttribute("enableRemoveButton", enableRemoveButton);
+
 		
 		//List<Integer> combineFriendWithUser = (List<Integer>) friendsService.findFriends(user);
 		
@@ -92,6 +109,23 @@ public class FriendsController {
 				}
 			}
 		}
+		//if friend token is i frien request sent
+
+		
+		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
+		{
+			enableConfirmButton = true;
+			enableRemoveButton = false;
+		}
+		else if(user.getFriendConfirmationToken() == 1 && user.getFriendToken() == 0)
+		{
+			enableConfirmButton = false;
+			enableRemoveButton = true;
+		}
+		model.addAttribute("enableConfirmButton", enableConfirmButton);
+		model.addAttribute("enableRemoveButton", enableRemoveButton);
+		
+
 		System.out.println("Inside find friends");
 		System.out.println(user.getId());
 		System.out.println(user.getFriendToken());
@@ -101,16 +135,7 @@ public class FriendsController {
 		modelAndView.addObject("users", userList);
 		modelAndView.setViewName("friends");
 		
-		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
-		{
-			enableConfirmButton = true;
-			enableRemoveButton = false;
-		}
-		else if(user.getFriendConfirmationToken() == 1 && user.getFriendToken() == 1)
-		{
-			enableConfirmButton = false;
-			enableRemoveButton = true;
-		}
+
 		
 		log.info("List of friends" + friendList);
 		}
@@ -133,6 +158,9 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
+		
+		enableConfirmButton = false;
+		enableRemoveButton = false;
 
 		friend.setFriendConfirmationToken(0);
 		friend.setFriendToken(0);
@@ -165,19 +193,21 @@ public class FriendsController {
 	public String confirmFriend(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request, @RequestParam("confirmfriend") String confirmfriend, @ModelAttribute("confirmfriendForm") User friend)
 	{
+		CONFIRM_FRIEND_TOKEN_VALUE = 1;
 		friend.setId(Integer.parseInt(confirmfriend));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		//friendsService.confirmFriend(user);
-		friendsService.updateConfirmToken(user);
-		friendsService.updateFriendToken(friend);
-		friendsService.updateConfirmToken(friend);
-		friendsService.addFriend(friend, user);
-		CONFIRM_FRIEND_TOKEN_VALUE = 1;
+		friendsService.updateConfirmToken(user); //Confirm request - now we are friends - backend storing
+		user.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE); //setting in the user object
+		friendsService.clearFriendToken(user); //Clearing the friend request - backend
+		user.setFriendToken(0);
+		friendsService.updateConfirmToken(friend); //Making the user who sent the friend request as friend
 		friend.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
-		user.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
-		friend.setFriendToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		
+		friendsService.addFriend(friend, user);
+		
 		System.out.println("Inside confirm friends");
 		System.out.println("Friend: "+friend.getId());
 		System.out.println(friend.getId()+" friend token"+friend.getFriendToken());
@@ -193,14 +223,13 @@ public class FriendsController {
 	@RequestMapping(value = "/addfriends", params = "addFriends", method = RequestMethod.POST)
 	public String addFriend(Model model, ModelAndView modelAndView, RedirectAttributes redirect, HttpServletRequest request, @RequestParam("addFriends") String addfriends, @ModelAttribute("addfriendsForm") User friend) 
 	{
-		
+		FRIEND_TOKEN_VALUE = 1;
 		friend.setId(Integer.parseInt(addfriends));
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		friendsService.updateFriendToken(friend);
+		friendsService.updateFriendToken(friend); //Set friend's friend token to 1 - Friend request sent
 		friendsService.addFriend(friend, user);
-		FRIEND_TOKEN_VALUE = 1;
 		friend.setFriendToken(FRIEND_TOKEN_VALUE);
 		System.out.println("Inside add friends");
 		System.out.println("Friend: "+friend.getId());
