@@ -34,14 +34,14 @@
     <div class="header">
         <h2>Friend Book</h2>
     </div>
-
-    <div class="container" style="margin-top:40px">
-        <div class="row">
-            <div class="col-sm-4"><br></br> 
-                <a href="logout" onClick=""> ${logout} </a> <br></br> 
-                <a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
-                <a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
-            </div>
+	<div class="container-fluid" style="margin-top: 50px">
+		<div class="col-md-4 text-center">
+		<img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+		<br></br>
+			<a href="logout" onClick="login.jsp"> ${logout} </a><br></br>
+			<a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
+			<a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
+        </div>
         
             <div class="col-sm-3">
                 <div class="panel panel-default" style="margin-top: 10px">
@@ -93,41 +93,38 @@
                 </div>
 		
 				</form:form>
-				</c:forEach>
-<%-- 				<div>${enableConfirmButton}</div>
+				</c:forEach> 				
+				<div>${enableConfirmButton}</div>
 				<div>${enableRemoveButton}</div>
-				<p>${friends.get(0).getFirstName()} ${friends.get(0).getLastName()}</p> --%>
+				<div>${friends}</div>
                 <h4 style="margin-top: 20px;">My Friends</h4>
-                <c:forEach var="friends" items="${friends}" varStatus="status">
-                 <c:choose>
-                <c:when test="${enableRemoveButton == true}">
+                <c:forEach var="friend" items="${friends}" varStatus="status">
+                <p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
+                <div>${enableRemoveButton}</div>
+                <c:if test="${enableRemoveButton == true}">
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
-				<p>${friends.getFriendToken()} ${friends.getFriendConfirmationToken()} ${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
+				<p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
 				<div>
 
-				<input type = "hidden" value="${friends.getId()}" name = "removeFriends">
+				<input type = "hidden" value="${friend.getId()}" name = "removeFriends">
                    <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Remove friends"/>
-
-                <h4 style="margin-top: 20px;">Friend Request Pending</h4>
                 </div>
 				</form:form>
-				</c:when>
-				<c:otherwise>
+				</c:if>
+				<div>${enableConfirmButton}</div>
  				 <c:if test="${enableConfirmButton == true}">
 				<form:form role="form" action="/confirmfriend" method="post" modelAttribute = "confirmfriendForm">
 				<div class="confirm-friend">
-				<p>${friends.getFriendToken()} ${friends.getFriendConfirmationToken()} ${friends.getId()} ${friends.getFirstName()} ${friends.getLastName()}, ${friends.getCityId()}, ${friends.getStateId()}, ${friends.getCountryId()} </p>
-                <input type = "hidden" value="${friends.getId()}" name = "confirmfriend">
+				<p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
+                <input type = "hidden" value="${friend.getId()}" name = "confirmfriend">
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend"/>
                 </div>
                 </form:form>
                   </c:if> 
-                  </c:otherwise>
-                  </c:choose>
+                  
 				</c:forEach>
         </div>
 
-       </div>
-    </div>    
+       </div>   
 </body>
 </html>
