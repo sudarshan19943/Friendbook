@@ -58,7 +58,7 @@ public class LoginController {
 				session.setAttribute("email", loginForm.getEmail());
 				session.setAttribute("password", loginForm.getPassword());
 				session.setAttribute("user", userByEmailAndPassword);
-				return "redirect:/profile";
+				return "redirect:/timeline";
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
 				return "login";

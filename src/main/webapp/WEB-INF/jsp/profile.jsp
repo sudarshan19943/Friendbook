@@ -103,15 +103,14 @@ cursor:pointer;
                     
                     <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
                          <!-- Images -->
+                         
                         <div class="form-group-profilepic" align="center">
-                        <!-- src="data:image/jpeg;base64,[the value of your base64DataString]" -->
-                       <%--  <img src="data:image/jpeg;base64,${avatarpic}" />  --%>
                         <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
-                        <%-- <img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">   --%>
                         </div> 
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
                         </div>
+                       
                          <!--  full name  -->
                         <div class="form-group-firstname" style="text-align:center">
                             <label for="fullName">${fullName}</label>
@@ -121,6 +120,9 @@ cursor:pointer;
                         <div class="form-group-lastname">
                             <label for="city" class="tbh">${city}</label>
                         </div>
+                        
+                     
+                        
                        <!-- Dropdown -->
 							<div class="form-group">
 							 <spring:bind path="countryId">
@@ -145,7 +147,6 @@ cursor:pointer;
 								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
 							</div>
-							
 							<!-- update and Skip button -->
 							<div class="button-group" style="margin:auto;max-width:50%">
                             <input type="submit" class="btn btn-lg btn-primary btn-block" style="margin-bottom:20px" value="Update Profile" name="Update">
@@ -153,6 +154,20 @@ cursor:pointer;
                         <div class="button-group" style="margin:auto;max-width:50%">
                             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Skip" name="Skip">
                         </div>
+                        <c:if test="${not empty errorMessage}">
+                                <div class="alert alert-danger">
+                                    <strong>
+                                        ${errorMessage}
+                                    </strong>
+                                </div>
+                                </c:if>
+                                <c:if test="${not empty successMessage}">
+                                <div class="alert alert-success">
+                                    <strong>
+                                        ${successMessage}
+                                    </strong>
+                                </div>
+                                </c:if>
                         
                        <!--  end of form -->
                   

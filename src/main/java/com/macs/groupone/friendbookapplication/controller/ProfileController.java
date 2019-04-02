@@ -45,6 +45,7 @@ public class ProfileController {
 
 	@GetMapping("/profile")
 	public String getProfile(Model model,HttpServletRequest request,RedirectAttributes redirect) {
+		
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
 		User sessionUser=(User) session.getAttribute("user");
@@ -78,16 +79,10 @@ public class ProfileController {
 	    // update Profile
 	   @PostMapping(params = "Update")
 		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, BindingResult bindingResult,
-				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic) {
+				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic,RedirectAttributes redirect) {
 				User sessionUser=(User) request.getSession().getAttribute("user");
 				if(sessionUser==null)
 					return "redirect:login";
-				
-				profileValidator.validate(profileForm, bindingResult);
-				if (bindingResult.hasErrors()) {
-					return "profile";
-				}
-				
 				if(!StringUtils.isNullOrEmpty(profileForm.getCityId()))
 				{
 					sessionUser.setCityId(profileForm.getCityId());
@@ -102,7 +97,18 @@ public class ProfileController {
 				}
 				if(null!=profilepic && !StringUtils.isNullOrEmpty(profilepic.getOriginalFilename()))
 				{
-					avatarService.uploadAvatarAndSaveBLOB(profilepic,sessionUser.getEmail());
+					 System.out.println("Profile Pic Size"+profilepic.getSize());
+					//if image size exceed
+					 if(profilepic.getSize()>1048576)
+					 {
+					   model.addAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
+					 //redirect.addFlashAttribute("errorMessage","Image Size exceeded.");
+					   return "profile";
+					 }else
+					 {
+						 avatarService.uploadAvatarAndSaveBLOB(profilepic,sessionUser.getEmail());
+					 }
+					//check for image size
 				}
 				userService.updateUserLocation(sessionUser);
 				request.getSession().setAttribute("user", sessionUser);

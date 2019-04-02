@@ -38,6 +38,7 @@
     <div class="container" style="margin-top:40px">
         <div class="row">
             <div class="col-sm-4"><br></br> 
+            <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
                 <a href="logout" onClick=""> ${logout} </a> <br></br> 
                 <a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
                 <a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
