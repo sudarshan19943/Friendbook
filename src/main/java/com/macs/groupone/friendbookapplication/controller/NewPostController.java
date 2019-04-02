@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 import com.macs.groupone.friendbookapplication.service.UserService;
@@ -44,6 +45,17 @@ public class NewPostController {
 	public String showNewpostPage(Model model, User user, HttpServletRequest request ) {
 		if(request.getSession().getAttribute("user")==null)
 			 return "redirect:login";
+		
+		String emailfromsession=(String) request.getSession().getAttribute("email");
+		User userFromSession=userService.getUserByEmail(emailfromsession);
+		if(userFromSession.getUserImage()==null)
+		{//show default image
+			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			System.out.println("image found in new post :"+userFromSession.getUserImage());
+			model.addAttribute("avatarpic",userFromSession.getUserImage());
+		}
 		return "newpost"; 
 	}
 

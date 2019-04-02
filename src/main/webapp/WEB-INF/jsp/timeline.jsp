@@ -3,6 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page session="true" %>
 <link rel="stylesheet" type="text/css"
 	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 
@@ -41,19 +44,22 @@ window.history.pushState(null, "", window.location.href);
 
 <body>
 
+
+
 	<div class="header">
 		<h2>Friend Book</h2>
 	</div>
 
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
-		<img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+		<img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
 			 <br></br> 
 			<a href="logout" onClick="login.jsp"> ${logout} </a> <br></br> 
 			<a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
 			<a href="newpost" onClick="newpost.jsp"> Post Update</a> <br></br>
 			<a href="friends" onClick="friends.jsp">Find / Manage Friends</a> <br></br>
 		</div>
+		
 
 		<div class="search-box">
 		<input type="text" placeholder="Find Friends...">
@@ -71,30 +77,34 @@ window.history.pushState(null, "", window.location.href);
 				</select> --%>
 				
 				
-				<c:forEach var="type" items="${types}">
-				   Key is ${type.key}<br></br>
-				   Value is ${type.value}<br></br>
+				<%-- <c:forEach var="post" items="${types}">
+				   ${post.key}<br></br>
+				   <div class="postValue"> ${post.value.getBody()}</div>
+				    Comment is ${post.value.getComments()} <br></br>.get(0).getBody()}<br></br>
+				   <c:forEach var="comment" items="${post.value.getComments()}">
+				   Comments: ${comment.getBody()} <br></br>
 				</c:forEach>
-				
-				<%-- <c:forEach var="post" items="${message}" varStatus="status">
-					<div>Posted on ${message.key}</div>
+				</c:forEach>
+				 --%>
+				 
+				 <%--  <c:forEach items="${types}" var="data">
+				    <c:if test="${not fn:containsIgnoreCase(message.value.getBody(), 'You posted')}">
+				        <p>Doesn't contain 'apple'</p>
+				    </c:if>
+				</c:forEach> --%>
+				 
+				 
+				<c:forEach var="message" items="${types}" varStatus="status">
+					<div>${message.key}</div>
 					<div>${message.value.getBody()}</div>
-					<c:set var="sender_id" value="${message.value.getSender()}" />
-					<c:if test="${sender_id != 9}">
+					<c:set var="sender_id" value="${message.key}" />
+					 <c:if test="${not fn:containsIgnoreCase(sender_id, 'You posted')}">
+				        <p>contains you poated</p>
+					<%-- <c:if test="${sender_id == 9}"> --%>
 						<form role="form" action="/timeline" method="post" autocomplete="off">
-							<div class="form-group-post-details">
-								<label for="post-details"></label>
-							</div>
-							<div class="form-group">
-								<div class="form-group-lastname">
-		                            <label for="post" style="height: 50px"  class="tbh" >${message.value.getBody()}</label>
-		                        </div>
-								<input style="height: 50px" class="form-control" name="post"
-									value='${param.post}' type="hidden">
-							</div>
-							<div class="form-group">
-								<input style="height: 50px" class="form-control" name="comment"
-									value='${comment}' type="text">
+									<div class="form-group">
+								<input style="height:50px" class="form-control" name="post" value='${param.post}'
+									type="text">
 							</div>
 							<div class="button-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
@@ -102,9 +112,9 @@ window.history.pushState(null, "", window.location.href);
 							</div>
 							<br></br>
 						</form>
-					</c:if>
-				</c:forEach> --%>
-			<%-- </c:forEach> --%>
+				<%-- 	</c:if> --%>
+				 </c:if>
+				</c:forEach> 
 		</div>
 		<br></br>
 		<div class="col-md-8">
@@ -124,7 +134,6 @@ window.history.pushState(null, "", window.location.href);
 				<br></br>
 			</form> --%>
 		</div>
-	</div>
 	</div>
 </body>
 </html>

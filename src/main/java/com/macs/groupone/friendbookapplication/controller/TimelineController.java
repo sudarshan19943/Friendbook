@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.macs.groupone.friendbookapplication.model.Comment;
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.CommentService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
@@ -50,14 +51,19 @@ class TimelineController {
 		User currentUser=(User) session.getAttribute("user");
 		if(currentUser==null)
 			return "redirect:login";
-		//get all the posts which are mine and shared by friends...
-		// so when i post- add this post to all my friends 
-		//when any of my friend post- add to all his friends
-		//when i open my timeline i see all mine m=posts
 		Collection<User> listOfFriends=(Collection) friendsService.findFriends(currentUser);
-		//get all the posts from list of friends...
 		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
+		String emailfromsession=(String) request.getSession().getAttribute("email");
+		User userFromSession=userService.getUserByEmail(emailfromsession);
+		if(userFromSession.getUserImage()==null)
+		{//show default image
+			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			System.out.println("image found in new post :"+userFromSession.getUserImage());
+			model.addAttribute("avatarpic",userFromSession.getUserImage());
+		}
 		return "timeline"; 
 	}
 

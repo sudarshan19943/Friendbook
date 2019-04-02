@@ -4,6 +4,7 @@
 package com.macs.groupone.friendbookapplication.jdbc;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -124,6 +125,8 @@ public class JdbcManagerImpl implements JdbcManager {
 				statement.setDate(parameterIndex, new java.sql.Date(((Calendar) parameter).getTimeInMillis()));
 			} else if (parameter instanceof BigDecimal) {
 				statement.setBigDecimal(parameterIndex, (BigDecimal) parameter);
+			}else if (parameter instanceof Blob) {
+				statement.setBlob(parameterIndex, (Blob) parameter);
 			} else {
 				throw new IllegalArgumentException(
 						String.format("parameter is found. [param: %s, paramIndex: %s]", parameter,

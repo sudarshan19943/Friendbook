@@ -26,6 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.LoginValidator;
+import com.macs.groupone.friendbookapplication.validator.ProfileValidator;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
 @Controller
 public class ProfileController {
@@ -36,7 +39,9 @@ public class ProfileController {
 	UserService userService;
 
 	@Autowired AvatarService avatarService;
-	 
+	
+	@Autowired
+	private ProfileValidator profileValidator;
 
 	@GetMapping("/profile")
 	public String getProfile(Model model,HttpServletRequest request,RedirectAttributes redirect) {
@@ -45,9 +50,19 @@ public class ProfileController {
 		User sessionUser=(User) session.getAttribute("user");
 		     if(sessionUser==null)
 		    	 return "redirect:login";
-		model.addAttribute("fullName", sessionUser.getFirstName()+" "+sessionUser.getLastName());
-		model.addAttribute("city", sessionUser.getCityId());
-		model.addAttribute("avatarpic",AvatarService.getProfileAvatar(sessionUser.getEmail()));
+		     
+		User user=userService.getUserByEmail(sessionUser.getEmail()) ;   
+		model.addAttribute("fullName", user.getFirstName()+" "+user.getLastName());
+		model.addAttribute("city", user.getCityId());
+		if(user.getUserImage()==null)
+		{//show default image
+			//model.addAttribute("avatarpic","../../avatarImages/avatar.png");
+			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}
+		System.out.println(user.getUserImage());
 		return "profile";
 	}
 
@@ -67,11 +82,29 @@ public class ProfileController {
 				User sessionUser=(User) request.getSession().getAttribute("user");
 				if(sessionUser==null)
 					return "redirect:login";
-				sessionUser.setCityId(profileForm.getCityId());
-				sessionUser.setCountryId(profileForm.getCountryId());
-				sessionUser.setStateId(profileForm.getStateId());
+				
+				profileValidator.validate(profileForm, bindingResult);
+				if (bindingResult.hasErrors()) {
+					return "profile";
+				}
+				
+				if(!StringUtils.isNullOrEmpty(profileForm.getCityId()))
+				{
+					sessionUser.setCityId(profileForm.getCityId());
+				}
+				if(!StringUtils.isNullOrEmpty(profileForm.getStateId()))
+				{
+					sessionUser.setCountryId(profileForm.getStateId());
+				}
+				if(!StringUtils.isNullOrEmpty(profileForm.getCountryId()))
+				{
+					sessionUser.setStateId(profileForm.getCountryId());
+				}
+				if(null!=profilepic && !StringUtils.isNullOrEmpty(profilepic.getOriginalFilename()))
+				{
+					avatarService.uploadAvatarAndSaveBLOB(profilepic,sessionUser.getEmail());
+				}
 				userService.updateUserLocation(sessionUser);
-				avatarService.uploadAvatarAndSave(profilepic,sessionUser.getEmail());
 				request.getSession().setAttribute("user", sessionUser);
 				log.info("User Profile has been successfully updated.");
 			return "redirect:timeline";

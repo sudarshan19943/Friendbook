@@ -104,7 +104,10 @@ cursor:pointer;
                     <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
                          <!-- Images -->
                         <div class="form-group-profilepic" align="center">
-                       <img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+                        <!-- src="data:image/jpeg;base64,[the value of your base64DataString]" -->
+                       <%--  <img src="data:image/jpeg;base64,${avatarpic}" />  --%>
+                        <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+                        <%-- <img style="width: 200px; height: 200px" src='${avatarpic}' class="img-thumbnail" alt="Cinque Terre" id="profilepic">   --%>
                         </div> 
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
