@@ -143,7 +143,7 @@ public class MessageService implements IService {
 		//now you have Date AndTime and user of that post-sort this Hasmap by date and Time
 		List<String> sortedKeys = new ArrayList<String>(friendsAndThierPostsWithTime.size());
 		sortedKeys.addAll(friendsAndThierPostsWithTime.keySet());
-		Collections.sort(sortedKeys);
+		Collections.sort(sortedKeys, Collections.reverseOrder());
 		
 		//now you have sorted Date 
 		//fetch corresponding user from map and save in linked hasmap in order of keys date
@@ -166,7 +166,7 @@ public class MessageService implements IService {
 					clonedUser.setLastName(orderedUser.getLastName());
 					clonedUser.setPosts(posts);
 					//orderedPost.put(timeStampSorted, post);
-					messageToreturn.put("message was posted by "+orderedUser.getFirstName()+" "+orderedUser.getLastName() +" on "+timeStampSorted, post);
+					messageToreturn.put(orderedUser.getFirstName()+" "+orderedUser.getLastName() +" Posted on "+timeStampSorted, post);
 					userPostOrderByDate.put(timeStampSorted, clonedUser);  // if user has multiple posts each post should eb sorted by timestamp
 					break;
 				}
