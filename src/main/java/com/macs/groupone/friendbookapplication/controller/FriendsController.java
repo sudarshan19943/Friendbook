@@ -53,12 +53,13 @@ public class FriendsController {
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect,HttpServletRequest request) {
 		String email=(String) request.getSession().getAttribute("email");
-		User user=userService.getUserByEmail(email);
 		if(email==null)
 		{
 			modelAndView.setViewName("redirect:login");
 			return modelAndView;
 		}
+		
+		User user=userService.getUserByEmail(email);
 		//add Pic
 				if(user.getUserImage()==null)
 				{//show default image

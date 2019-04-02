@@ -16,8 +16,8 @@
     <%@include file="js/jquery.min.js"%>
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </script>
+
 
 <html>
 <head>
@@ -43,8 +43,8 @@
                 <a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
                 <a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
             </div> --%>
-        <div class="container-fluid" style="margin-top: 50px">
-		<div class="col-md-4 text-center">
+        <div class="container-fluid" style="margin-top: 50px;">
+		<div class="col-md-4 text-center" style="margin-right:200px;">
 		<img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
 			 <br></br> 
 			<a href="logout" onClick="login.jsp">Logout</a> <br></br> 
@@ -53,7 +53,7 @@
 		</div>
             <div class="col-sm-3">
                 <div class="panel panel-default" style="margin-top: 10px">
-                    <div class="panel-body">
+                    <div class="panel-body" style="width:300px;">
                     
 						<form role="form" action="/friends" method="post"
 							autocomplete="off">
@@ -74,15 +74,22 @@
 									value='${param.cityId}'>
 							</div>
 							
+							 <!-- Dropdown -->
 							<div class="form-group">
-								<select>
-									<option value="country">Country</option>
+								<select name="country" class="countries" id="countryId">
+									<option value="" >Select Country</option>
 								</select>
-							</div>
-							<div class="form-group">
-								<select>
-									<option value="state">State/Province</option>
+								
+								 <select name="state" class="states" id="stateId" >
+									<option value="" >Select State</option>
+								</select> 
+								
+								<select name="city" class="cities" id="cityId">
+									<option value="" >Select City</option>
 								</select>
+								
+								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
 							</div>
 							<div class="form-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"

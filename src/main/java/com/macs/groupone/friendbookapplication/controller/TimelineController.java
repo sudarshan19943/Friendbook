@@ -70,21 +70,21 @@ class TimelineController {
 	}
 
 
-	@PostMapping(value = "/comment") 
-	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
-			@RequestParam("comment") String commentVal,@RequestParam("post") String postId) { 
-		User commentCreator=(User)request.getSession().getAttribute("user");
-		//int postId=1;
+	@RequestMapping(value = "/comment", params = "comment", method = RequestMethod.POST)
+	public String processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
+			@RequestParam("comment") String commentVal,@RequestParam("postId") String postId) { 
+		
+		String email=(String) request.getSession().getAttribute("email");
+		User userByEmailAndPassword = userService.getUserByEmail(email);
 		Comment comment=new Comment();
-		comment.setSender(commentCreator.getId());
-		//set it to who has recieed comment that is postID , sender id from post table
-		comment.setRecipient(Integer.parseInt(postId));//whose post is
-		comment.setBody("nice pic");
-		commentService.addNewComment(comment,Integer.parseInt(postId));
-		return modelAndView; 
+		comment.setSender(userByEmailAndPassword.getId());
+		comment.setRecipient(7);//whose post is
+		comment.setBody("Still in progrtess..");
+		commentService.addNewComment(comment,9);
+		return "redirect:timeline"; 
 	}
 	
-	// Going to reset page without a token redirects to login page
+	     // Going to reset page without a token redirects to login page
 			@ExceptionHandler(MissingServletRequestParameterException.class)
 			public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
 				return new ModelAndView("redirect:login");
