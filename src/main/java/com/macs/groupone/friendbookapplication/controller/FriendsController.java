@@ -51,7 +51,25 @@ public class FriendsController {
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect) {
+			RedirectAttributes redirect,HttpServletRequest request) {
+		User currentUser=(User) request.getSession().getAttribute("user");
+		User user=userService.getUserByEmail(currentUser.getEmail());
+		if(currentUser==null)
+		{
+			modelAndView.setViewName("redirect:login");
+			return modelAndView;
+		}
+		//add Pic
+				if(user.getUserImage()==null)
+				{//show default image
+					model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+				}else
+				{
+					System.out.println("image found in new post :"+user.getUserImage());
+					model.addAttribute("avatarpic",user.getUserImage());
+				}
+				
+			
 
 		return modelAndView;
 	}
@@ -61,6 +79,7 @@ public class FriendsController {
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, @RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName, @RequestParam("cityId") String city, HttpServletRequest request) {
 		HttpSession session=request.getSession();
+		
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		try {
@@ -97,6 +116,8 @@ public class FriendsController {
 		System.out.println(user.getFriendToken());
 		System.out.println(user.getFriendConfirmationToken());
 		System.out.println("---------------------------");
+		
+		
 		modelAndView.addObject("friends", friendList);
 		modelAndView.addObject("users", userList);
 		modelAndView.setViewName("friends");

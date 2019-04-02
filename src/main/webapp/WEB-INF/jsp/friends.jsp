@@ -36,14 +36,21 @@
     </div>
 
     <div class="container" style="margin-top:40px">
-        <div class="row">
+    <%--     <div class="row">
             <div class="col-sm-4"><br></br> 
             <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
                 <a href="logout" onClick=""> ${logout} </a> <br></br> 
                 <a href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> 
                 <a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
-            </div>
-        
+            </div> --%>
+        <div class="container-fluid" style="margin-top: 50px">
+		<div class="col-md-4 text-center">
+		<img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+			 <br></br> 
+			<a href="logout" onClick="login.jsp">Logout</a> <br></br> 
+			<a href="profile" onClick="profile.jsp">Update Profile </a> <br></br> 
+			<a href="timeline" onClick="timeline.jsp">Return to Timeline</a> <br></br>
+		</div>
             <div class="col-sm-3">
                 <div class="panel panel-default" style="margin-top: 10px">
                     <div class="panel-body">
