@@ -42,6 +42,7 @@ class TimelineController {
 	CommentService commentService;
 	
 	@Autowired
+  
 	UserService userService;
 	
     LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted;
