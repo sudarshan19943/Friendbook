@@ -44,7 +44,7 @@ public class NewPostController {
 
 	@RequestMapping(value = "/newpost", method = RequestMethod.GET) 
 	public String showNewpostPage(Model model, User user, HttpServletRequest request ) {
-		if(request.getSession().getAttribute("user")==null)
+		if(request.getSession().getAttribute("email")==null)
 			 return "redirect:login";
 		
 		/* Map md = model.asMap();
@@ -83,6 +83,8 @@ public class NewPostController {
 		return "redirect:/newpost"; 
 	}
 	
+	
+
 
 
 }

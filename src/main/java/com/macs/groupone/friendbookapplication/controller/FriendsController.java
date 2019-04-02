@@ -52,9 +52,9 @@ public class FriendsController {
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect,HttpServletRequest request) {
-		User currentUser=(User) request.getSession().getAttribute("user");
-		User user=userService.getUserByEmail(currentUser.getEmail());
-		if(currentUser==null)
+		String email=(String) request.getSession().getAttribute("email");
+		User user=userService.getUserByEmail(email);
+		if(email==null)
 		{
 			modelAndView.setViewName("redirect:login");
 			return modelAndView;

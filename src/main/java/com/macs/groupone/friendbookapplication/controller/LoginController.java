@@ -57,7 +57,7 @@ public class LoginController {
 				HttpSession session=request.getSession();
 				session.setAttribute("email", loginForm.getEmail());
 				session.setAttribute("password", loginForm.getPassword());
-				session.setAttribute("user", userByEmailAndPassword);
+				//session.setAttribute("user", userByEmailAndPassword);
 				return "redirect:/timeline";
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
@@ -73,7 +73,7 @@ public class LoginController {
            System.out.println("session id before invalidating it:"+session.getId());
          // UserDTO userDTO=(UserDTO)session.getAttribute("UserDTO");
          // System.out.println("userDTO obje"+userDTO.getFirst_name());
-          session.removeAttribute("user");   
+          session.removeAttribute("email");   
           session.invalidate(); 
          System.out.println("session id after invalidating session is:"+session.getId()); 
          //System.out.println("session id after invalidating session is:"+session.getAttribute("user")); 

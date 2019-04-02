@@ -60,7 +60,8 @@ public class RegistrationController {
 				} else {
 					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
 					//model.addAttribute(Constants.SUCCESSMESSAGE, Constants.REGISTRATIONSUCCESS);
-					redirect.addFlashAttribute("email", registrationForm.getEmail());
+					request.getSession().setAttribute("email", registrationForm.getEmail());
+					//redirect.addFlashAttribute("email", registrationForm.getEmail());
 					redirect.addFlashAttribute("firstName", registrationForm.getFirstName());
 					redirect.addFlashAttribute("lastName", registrationForm.getLastName());
 					redirect.addFlashAttribute("password", registrationForm.getPassword());

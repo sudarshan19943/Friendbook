@@ -48,11 +48,13 @@ class TimelineController {
 	@GetMapping(value = "/timeline") 
 	public String showTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		User currentUser=(User) session.getAttribute("user");
-		if(currentUser==null)
+		String currentUseremail=(String) session.getAttribute("email");
+		if(currentUseremail==null)
 			return "redirect:login";
-		Collection<User> listOfFriends=(Collection) friendsService.findFriends(currentUser);
-		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
+		
+		User findUserFromEmail=userService.getUserByEmail(currentUseremail) ; 
+		Collection<User> listOfFriends=(Collection) friendsService.findFriends(findUserFromEmail);
+		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(findUserFromEmail,listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
 		String emailfromsession=(String) request.getSession().getAttribute("email");
 		User userFromSession=userService.getUserByEmail(emailfromsession);
@@ -70,16 +72,15 @@ class TimelineController {
 
 	@PostMapping(value = "/comment") 
 	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
-			@RequestParam("comment") String commentVal,@RequestParam("post") String post) { 
+			@RequestParam("comment") String commentVal,@RequestParam("post") String postId) { 
 		User commentCreator=(User)request.getSession().getAttribute("user");
-		int postId=1;
+		//int postId=1;
 		Comment comment=new Comment();
 		comment.setSender(commentCreator.getId());
 		//set it to who has recieed comment that is postID , sender id from post table
-		comment.setRecipient(7);//whose post is
+		comment.setRecipient(Integer.parseInt(postId));//whose post is
 		comment.setBody("nice pic");
-		commentService.addNewComment(comment,postId)
-		;
+		commentService.addNewComment(comment,Integer.parseInt(postId));
 		return modelAndView; 
 	}
 	

@@ -48,11 +48,11 @@ public class ProfileController {
 		
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
-		User sessionUser=(User) session.getAttribute("user");
-		     if(sessionUser==null)
+		String emailFromSession=(String) session.getAttribute("email");
+		     if(emailFromSession==null)
 		    	 return "redirect:login";
 		     
-		User user=userService.getUserByEmail(sessionUser.getEmail()) ;   
+		User user=userService.getUserByEmail(emailFromSession) ;   
 		model.addAttribute("fullName", user.getFirstName()+" "+user.getLastName());
 		model.addAttribute("city", user.getCityId());
 		if(user.getUserImage()==null)
@@ -80,20 +80,22 @@ public class ProfileController {
 	   @PostMapping(params = "Update")
 		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, BindingResult bindingResult,
 				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic,RedirectAttributes redirect) {
-				User sessionUser=(User) request.getSession().getAttribute("user");
-				if(sessionUser==null)
+				String emailFromSession=(String) request.getSession().getAttribute("email");
+				if(emailFromSession==null)
 					return "redirect:login";
+				
+				User findUserFromEmail=userService.getUserByEmail(emailFromSession) ; 
 				if(!StringUtils.isNullOrEmpty(profileForm.getCityId()))
 				{
-					sessionUser.setCityId(profileForm.getCityId());
+					findUserFromEmail.setCityId(profileForm.getCityId());
 				}
 				if(!StringUtils.isNullOrEmpty(profileForm.getStateId()))
 				{
-					sessionUser.setCountryId(profileForm.getStateId());
+					findUserFromEmail.setCountryId(profileForm.getStateId());
 				}
 				if(!StringUtils.isNullOrEmpty(profileForm.getCountryId()))
 				{
-					sessionUser.setStateId(profileForm.getCountryId());
+					findUserFromEmail.setStateId(profileForm.getCountryId());
 				}
 				if(null!=profilepic && !StringUtils.isNullOrEmpty(profilepic.getOriginalFilename()))
 				{
@@ -107,12 +109,12 @@ public class ProfileController {
 					   return "redirect:/profile";
 					 }else
 					 {
-						 avatarService.uploadAvatarAndSaveBLOB(profilepic,sessionUser.getEmail());
+						 avatarService.uploadAvatarAndSaveBLOB(profilepic,findUserFromEmail.getEmail());
 					 }
 					//check for image size
 				}
-				userService.updateUserLocation(sessionUser);
-				request.getSession().setAttribute("user", sessionUser);
+				userService.updateUserLocation(findUserFromEmail);
+				//request.getSession().setAttribute("user", findUserFromEmail);
 				log.info("User Profile has been successfully updated.");
 			return "redirect:timeline";
 		}
