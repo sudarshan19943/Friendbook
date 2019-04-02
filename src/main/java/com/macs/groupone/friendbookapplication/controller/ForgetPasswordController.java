@@ -42,7 +42,6 @@ public class ForgetPasswordController {
     @GetMapping("/forgotpassword")
     public String registration(Model model) {
         model.addAttribute("forgotPasswordForm", new User());
-
         return "forgotpassword";
     }
 
@@ -61,7 +60,7 @@ public class ForgetPasswordController {
 			String message = "To reset your password, click the link below:\n" + appUrl + "/resetpassword?token="
 					+ user.getConfirmationToken();
 			try {
-			emailService.sendEmail(user.getEmail(), Constants.EMAIL_TITLE, message);
+			emailService.sendEmail(user.getEmail(), "Friend Book Registration Confirmation", message);
 			mode.addAttribute("successMessage", "Reset link has been mailed to your registered mail id.");
 			}
 			catch(Exception e )

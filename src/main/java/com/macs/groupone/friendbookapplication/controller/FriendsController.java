@@ -78,6 +78,7 @@ public class FriendsController {
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, @RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName, @RequestParam("cityId") String city, HttpServletRequest request) {
 		HttpSession session=request.getSession();
+		
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		try {
@@ -109,8 +110,16 @@ public class FriendsController {
 				}
 			}
 		}
-		//if friend token is i frien request sent
-
+		System.out.println("Inside find friends");
+		System.out.println(user.getId());
+		System.out.println(user.getFriendToken());
+		System.out.println(user.getFriendConfirmationToken());
+		System.out.println("---------------------------");
+		
+		
+		modelAndView.addObject("friends", friendList);
+		modelAndView.addObject("users", userList);
+		modelAndView.setViewName("friends");
 		
 		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{

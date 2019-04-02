@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.macs.groupone.friendbookapplication.model.Comment;
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.CommentService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;

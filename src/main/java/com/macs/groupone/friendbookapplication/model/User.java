@@ -1,6 +1,7 @@
 package com.macs.groupone.friendbookapplication.model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 import java.util.ArrayList;
 
 public class User implements Serializable{
@@ -16,10 +17,19 @@ public class User implements Serializable{
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
-  private int friend_token;
+    private int friend_token;
 	private int friend_confirm_token;
 	private ArrayList<Post> posts;
+	private String userImage;
   
+	public String getUserImage() {
+		return userImage;
+	}
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
+	}
+
 	public ArrayList<Post> getPosts() {
 		return posts;
 	}

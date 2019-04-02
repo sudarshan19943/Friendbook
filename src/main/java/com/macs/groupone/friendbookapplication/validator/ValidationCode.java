@@ -12,7 +12,10 @@ public enum ValidationCode {
         DUPLICATE_EMAIL("Duplicate.registrationForm.email"),
         PASSWORD_DOES_NOT_MATCH("Diff.registrationForm.passwordConfirm"),
         PASSWORD_POLICY_DOES_NOT_SATISFY("PasswordPolicy.registrationForm.passwordConfirm"),
-        PASSWORD_SIZE_POLICY("Size.registrationForm.password");
+        PASSWORD_SIZE_POLICY("Size.registrationForm.password"),
+	
+	    //Profile Image Size
+	     PROFILE_MAX__SIZE("MaxSize.profileForm.userImage");
 
         private final String propertyName;
 

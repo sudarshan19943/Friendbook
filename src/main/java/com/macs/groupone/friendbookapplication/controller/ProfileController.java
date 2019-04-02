@@ -26,6 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.LoginValidator;
+import com.macs.groupone.friendbookapplication.validator.ProfileValidator;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
 @Controller
 public class ProfileController {
@@ -36,18 +39,31 @@ public class ProfileController {
 	UserService userService;
 
 	@Autowired AvatarService avatarService;
-	 
+	
+	@Autowired
+	private ProfileValidator profileValidator;
 
 	@GetMapping("/profile")
 	public String getProfile(Model model,HttpServletRequest request,RedirectAttributes redirect) {
+		
 		model.addAttribute("profileForm", new User());
 		HttpSession session=request.getSession();
-		User sessionUser=(User) session.getAttribute("user");
-		     if(sessionUser==null)
+		String emailFromSession=(String) session.getAttribute("email");
+		     if(emailFromSession==null)
 		    	 return "redirect:login";
-		model.addAttribute("fullName", sessionUser.getFirstName()+" "+sessionUser.getLastName());
-		model.addAttribute("city", sessionUser.getCityId());
-		model.addAttribute("avatarpic",AvatarService.getProfileAvatar(sessionUser.getEmail()));
+		     
+		User user=userService.getUserByEmail(emailFromSession) ;   
+		model.addAttribute("fullName", user.getFirstName()+" "+user.getLastName());
+		model.addAttribute("city", user.getCityId());
+		if(user.getUserImage()==null)
+		{//show default image
+			//model.addAttribute("avatarpic","../../avatarImages/avatar.png");
+			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}
+		System.out.println(user.getUserImage());
 		return "profile";
 	}
 
@@ -63,16 +79,42 @@ public class ProfileController {
 	    // update Profile
 	   @PostMapping(params = "Update")
 		public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm, BindingResult bindingResult,
-				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic) {
-				User sessionUser=(User) request.getSession().getAttribute("user");
-				if(sessionUser==null)
+				HttpServletRequest request,@RequestParam("profilepic") MultipartFile profilepic,RedirectAttributes redirect) {
+				String emailFromSession=(String) request.getSession().getAttribute("email");
+				if(emailFromSession==null)
 					return "redirect:login";
-				sessionUser.setCityId(profileForm.getCityId());
-				sessionUser.setCountryId(profileForm.getCountryId());
-				sessionUser.setStateId(profileForm.getStateId());
-				userService.updateUserLocation(sessionUser);
-				avatarService.uploadAvatarAndSave(profilepic,sessionUser.getEmail());
-				request.getSession().setAttribute("user", sessionUser);
+				
+				User findUserFromEmail=userService.getUserByEmail(emailFromSession) ; 
+				if(!StringUtils.isNullOrEmpty(profileForm.getCityId()))
+				{
+					findUserFromEmail.setCityId(profileForm.getCityId());
+				}
+				if(!StringUtils.isNullOrEmpty(profileForm.getStateId()))
+				{
+					findUserFromEmail.setCountryId(profileForm.getStateId());
+				}
+				if(!StringUtils.isNullOrEmpty(profileForm.getCountryId()))
+				{
+					findUserFromEmail.setStateId(profileForm.getCountryId());
+				}
+				if(null!=profilepic && !StringUtils.isNullOrEmpty(profilepic.getOriginalFilename()))
+				{
+					 System.out.println("Profile Pic Size"+profilepic.getSize());
+					//if image size exceed
+					 if(profilepic.getSize()>1048576)
+					 {
+					   redirect.addFlashAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
+					   //model.addAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
+					 //redirect.addFlashAttribute("errorMessage","Image Size exceeded.");
+					   return "redirect:/profile";
+					 }else
+					 {
+						 avatarService.uploadAvatarAndSaveBLOB(profilepic,findUserFromEmail.getEmail());
+					 }
+					//check for image size
+				}
+				userService.updateUserLocation(findUserFromEmail);
+				//request.getSession().setAttribute("user", findUserFromEmail);
 				log.info("User Profile has been successfully updated.");
 			return "redirect:timeline";
 		}

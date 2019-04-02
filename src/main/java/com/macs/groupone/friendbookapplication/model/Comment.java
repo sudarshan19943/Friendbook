@@ -9,6 +9,7 @@ public class Comment {
 	private int recipient;
 	private String comment;
 	private int sender;
+	
 
 	
 	public Date getTimestamp() {

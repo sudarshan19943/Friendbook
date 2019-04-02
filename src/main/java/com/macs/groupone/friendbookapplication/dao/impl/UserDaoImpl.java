@@ -1,5 +1,6 @@
 package com.macs.groupone.friendbookapplication.dao.impl;
 
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+//import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,9 +53,23 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setCountryId(resultSet.getString("country"));
 			user.setFriendToken(resultSet.getInt("friend_token"));
 			user.setFriendConfirmationToken(resultSet.getInt("friend_confirm_token"));
+			Blob imageBlob = resultSet.getBlob("user_image");
+			if(imageBlob!=null)
+			{
+				byte[] imageBytes = imageBlob.getBytes(1,(int) imageBlob.length());
+				System.out.println("base 64 bit..."+Base64.encodeBase64String(imageBytes));
+				user.setUserImage(Base64.encodeBase64String(imageBytes));
+			}
+			
 			return user;
 		}
 	};
+	
+	
+	public void uploadAvatarAndSaveBLOB(Blob userImage,String userEmail)
+	{
+		jdbcManager().update("{call updateUserImage(?, ?)}",userImage, userEmail);
+	}
 
 	@Override
 	public User getUserById(int id) {

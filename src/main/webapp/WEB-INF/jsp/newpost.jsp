@@ -48,8 +48,9 @@
 
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
-			<a href="login.jsp"> <img class="avatar"
-				src="../../icons/avatar.png" />
+			<a href="login.jsp"> <!-- <img class="avatar"
+				src="../../icons/avatar.png" /> -->
+				 <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
 			</a> <br></br> <a href="logout" onClick=""> ${logout} </a> <br></br> <a
 				href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> <a
 				href="timeline" onClick="timeline.jsp"> ${return_to_timeline} </a> <br></br>
