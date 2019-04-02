@@ -54,7 +54,7 @@ class TimelineController {
 		// so when i post- add this post to all my friends 
 		//when any of my friend post- add to all his friends
 		//when i open my timeline i see all mine m=posts
-		Collection<User> listOfFriends=(Collection) friendsService.findFriends(currentUser);
+		Collection<User> listOfFriends=(Collection<User>) friendsService.findFriends(currentUser);
 		//get all the posts from list of friends...
 		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);

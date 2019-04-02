@@ -38,7 +38,7 @@ public class LoginController {
 	@Autowired
 	private LoginValidator loginValidator;
 
-	@GetMapping("/login")
+	@GetMapping("/")
 	public String registration(Model model,HttpSession session) {
 		model.addAttribute("loginForm", new User());
 		return "login";

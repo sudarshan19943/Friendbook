@@ -71,31 +71,23 @@ window.history.pushState(null, "", window.location.href);
 				</select> --%>
 				
 				
-				<c:forEach var="type" items="${types}">
-				   Key is ${type.key}<br></br>
-				   Value is ${type.value}<br></br>
+				<c:forEach var="post" items="${types}">
+				   ${post.key}<br></br>
+				   <div class="postValue"> ${post.value.getBody()}</div>
+				    Comment is ${post.value.getComments()} <br></br><%--.get(0).getBody()}<br></br> --%>
+				   <c:forEach var="comment" items="${post.value.getComments()}">
+				   Comments: ${comment.getBody()} <br></br>
+				</c:forEach>
 				</c:forEach>
 				
-				<%-- <c:forEach var="post" items="${message}" varStatus="status">
+				<c:forEach var="post" items="${message}" varStatus="status">
 					<div>Posted on ${message.key}</div>
 					<div>${message.value.getBody()}</div>
 					<c:set var="sender_id" value="${message.value.getSender()}" />
 					<c:if test="${sender_id != 9}">
 						<form role="form" action="/timeline" method="post" autocomplete="off">
-							<div class="form-group-post-details">
-								<label for="post-details"></label>
-							</div>
-							<div class="form-group">
-								<div class="form-group-lastname">
-		                            <label for="post" style="height: 50px"  class="tbh" >${message.value.getBody()}</label>
-		                        </div>
-								<input style="height: 50px" class="form-control" name="post"
-									value='${param.post}' type="hidden">
-							</div>
-							<div class="form-group">
-								<input style="height: 50px" class="form-control" name="comment"
-									value='${comment}' type="text">
-							</div>
+
+							
 							<div class="button-group">
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
 									value="comment" name="comment">
@@ -103,8 +95,7 @@ window.history.pushState(null, "", window.location.href);
 							<br></br>
 						</form>
 					</c:if>
-				</c:forEach> --%>
-			<%-- </c:forEach> --%>
+				</c:forEach> 
 		</div>
 		<br></br>
 		<div class="col-md-8">
@@ -124,7 +115,6 @@ window.history.pushState(null, "", window.location.href);
 				<br></br>
 			</form> --%>
 		</div>
-	</div>
 	</div>
 </body>
 </html>

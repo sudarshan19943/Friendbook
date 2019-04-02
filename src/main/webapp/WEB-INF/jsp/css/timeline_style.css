@@ -23,6 +23,11 @@
 	
 }
 
+.postValue{
+	border:1px solid #000000;
+	line-height: 100px;
+}
+
 .search-box{
 	float: right;
 	padding: 5px;
