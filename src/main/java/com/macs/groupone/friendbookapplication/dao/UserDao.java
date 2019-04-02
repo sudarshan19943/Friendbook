@@ -8,15 +8,15 @@ import com.macs.groupone.friendbookapplication.model.User;
 @Component
 public interface UserDao{
 
-	int getNumberOfUsers();
 	User getUserById(int id);
 	User getUserByEmail(String email);
 	User getUserByEmailPassword(String email, String password);
 	Collection<User> getUserList();
 	int addUser(String email, String password, String first_name, String last_name); 																						
 	void updateUser(User user);
-	void removeUser(User user);
-	void changePassword(User user, String password);
-    User findUserByResetToken(String resetToken);
-	
+	void resetUserPassword(User user);
+  void updateUserLocation(User user);
+  User findUserByResetToken(String resetToken);
+  public Collection<User> findUsers(String firstName, String lastName, String city);
+
 }

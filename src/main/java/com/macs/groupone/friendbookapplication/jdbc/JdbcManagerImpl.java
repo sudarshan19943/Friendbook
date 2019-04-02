@@ -4,6 +4,7 @@
 package com.macs.groupone.friendbookapplication.jdbc;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,13 +18,20 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.macs.groupone.friendbookapplication.common.Config;
+import com.macs.groupone.friendbookapplication.config.Config;
 import com.macs.groupone.friendbookapplication.controller.LoginController;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
 public class JdbcManagerImpl implements JdbcManager {
+	
+	public static final String URL = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
+	public static final String USERNAME = "CSCI5308_1_DEVINT_USER";
+	public static final String PASSWORD = "CSCI5308_1_DEVINT_1161";
+
+	// Application FIle path
+	public static final String APPLICATION_PROPERTIES = "src/main/resources/application.properties";
 
 	private String url;
 	private String username;
@@ -32,9 +40,9 @@ public class JdbcManagerImpl implements JdbcManager {
 	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(JDBCConstants.URL);
-		this.username = Config.getProperty(JDBCConstants.USERNAME);
-		this.password = Config.getProperty(JDBCConstants.PASSWORD);
+		this.url = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
+		this.username = "CSCI5308_1_DEVINT_USER";
+		this.password = "CSCI5308_1_DEVINT_1161";
 	}
 
 	protected final Connection getConnection() {
@@ -117,6 +125,8 @@ public class JdbcManagerImpl implements JdbcManager {
 				statement.setDate(parameterIndex, new java.sql.Date(((Calendar) parameter).getTimeInMillis()));
 			} else if (parameter instanceof BigDecimal) {
 				statement.setBigDecimal(parameterIndex, (BigDecimal) parameter);
+			}else if (parameter instanceof Blob) {
+				statement.setBlob(parameterIndex, (Blob) parameter);
 			} else {
 				throw new IllegalArgumentException(
 						String.format("parameter is found. [param: %s, paramIndex: %s]", parameter,
@@ -124,16 +134,14 @@ public class JdbcManagerImpl implements JdbcManager {
 			}
 		}
 	}
+	
 
 	@Override
 	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
 			throws DatabaseAccessException {
 		Connection connection = null;
 		CallableStatement statement = null;
-		 
-		//PreparedStatement statement = null;
 		ResultSet resultSet = null;
-
 		final List<T> result = new ArrayList<T>();
 		try {
 			connection = getConnection();
@@ -165,18 +173,15 @@ public class JdbcManagerImpl implements JdbcManager {
 			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			final int result = statement.executeUpdate();
-			Long id = null;
+			/*Long id = null;
 			if (0 != result) {
 				resultSet = statement.getGeneratedKeys();
 				if (resultSet.next()) {
 					id = resultSet.getLong(1);
 				}
-			}
-			if (null == id) {
-				throw new DatabaseOperationException("ID not found");
-			}
+			}*/
 			connection.commit();
-			return id;
+			return 1;
 		} catch (final DatabaseAccessException e) {
 			log.error("Database exception" + e);
 			rollback(connection);
@@ -195,7 +200,6 @@ public class JdbcManagerImpl implements JdbcManager {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		final ResultSet resultSet = null;
-
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -216,4 +220,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			closeConnection(connection, statement, resultSet);
 		}
 	}
+
+
+
 }

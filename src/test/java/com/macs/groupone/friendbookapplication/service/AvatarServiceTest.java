@@ -1,10 +1,11 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import org.junit.After;
-import org.junit.Before;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -12,30 +13,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class AvatarServiceTest {
 	
-	@Autowired
-	AvatarService avatarService;
-	
-	
-	@Before
-	public void setUp() throws Exception {
-
-	}
-
-	@After
-	public void tearDown() throws Exception {
-
-	}
 	
    @Test	
-   public void testgetProfileAvatar()
+   public void testgetDefaultProfileAvatar()
    {
-	   
+	   String avatarExistsPath=AvatarService.getProfileAvatar("abc");
+	   assertTrue(avatarExistsPath.contains("avatar"));
    }
    
    
    @Test	
-   public void testuploadAvatarAndSave()
+   public void testgetProfileAvatar()
    {
+	   String avatarExists=AvatarService.getProfileAvatar("smn.singh444@gmail.com");
+	   assertNotNull(avatarExists);
 	   
    }
 	

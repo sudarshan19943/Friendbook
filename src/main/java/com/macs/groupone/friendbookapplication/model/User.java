@@ -1,33 +1,57 @@
 package com.macs.groupone.friendbookapplication.model;
 
-public class User {
+import java.io.Serializable;
+import java.sql.Blob;
+import java.util.ArrayList;
+
+public class User implements Serializable{
 
 	private int id;
 	private String email;
 	private String password;
-	private String first_name;
-	private String last_name;
+	private String firstName;
+	private String lastName;
 	private boolean enabled;
-	private String confirmation_token;
-	private String province;
-	private String country;
-	private String city;
-
-	public String getCity() {
-		return city;
+	private String confirmationToken;
+	private String stateId;
+	private String countryId;
+	private String cityId;
+	private String passwordConfirm;
+    private int friend_token;
+	private int friend_confirm_token;
+	private ArrayList<Post> posts;
+	private String userImage;
+  
+	public String getUserImage() {
+		return userImage;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
 	}
 
+	public ArrayList<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(ArrayList<Post> posts) {
+		this.posts = posts;
+	}
+
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 
 	public String getConfirmationToken() {
-		return confirmation_token;
+		return confirmationToken;
 	}
 
 	public void setConfirmationToken(String confirmationToken) {
-		this.confirmation_token = confirmationToken;
+		this.confirmationToken = confirmationToken;
 	}
 
 	public int getId() {
@@ -47,19 +71,19 @@ public class User {
 	}
 
 	public String getFirstName() {
-		return first_name;
+		return firstName;
 	}
 
 	public void setFirstName(String firstname) {
-		this.first_name = firstname;
+		this.firstName = firstname;
 	}
 
 	public String getLastName() {
-		return last_name;
+		return lastName;
 	}
 
 	public void setLastName(String lastname) {
-		this.last_name = lastname;
+		this.lastName = lastname;
 	}
 
 	public String getEmail() {
@@ -78,20 +102,49 @@ public class User {
 		this.enabled = value;
 	}
 
-	public String getProvince() {
-		return province;
+	public String getStateId() {
+		return stateId;
 	}
 
-	public void setProvince(String province) {
-		this.province = province;
+	public void setStateId(String stateId) {
+		this.stateId = stateId;
+	}
+	
+	public String getCityId() {
+		return cityId;
 	}
 
-	public String getCountry() {
-		return country;
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+	
+	
+	public String getCountryId() {
+		return countryId;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryId(String countryId) {
+		this.countryId = countryId;
 	}
-
+	
+	public int getFriendToken()
+	{
+		return friend_token;
+	}
+	
+	public void setFriendToken(int token)
+	{
+		this.friend_token = token;
+	}
+	
+	public int getFriendConfirmationToken()
+	{
+		return friend_confirm_token;
+	}
+	
+	public void setFriendConfirmationToken(int token)
+	{
+		this.friend_confirm_token = token;
+	}
+	
 }

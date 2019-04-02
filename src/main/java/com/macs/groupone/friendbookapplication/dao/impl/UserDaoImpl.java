@@ -1,10 +1,16 @@
 package com.macs.groupone.friendbookapplication.dao.impl;
 
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.apache.tomcat.util.codec.binary.Base64;
+//import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -42,10 +48,28 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setLastName(resultSet.getString("last_name"));
 			user.setPassword(resultSet.getString("password"));
 			user.setEnabled(resultSet.getBoolean("enabled"));
+			user.setCityId(resultSet.getString("city"));
+			user.setStateId(resultSet.getString("province"));
+			user.setCountryId(resultSet.getString("country"));
+			user.setFriendToken(resultSet.getInt("friend_token"));
+			user.setFriendConfirmationToken(resultSet.getInt("friend_confirm_token"));
+			Blob imageBlob = resultSet.getBlob("user_image");
+			if(imageBlob!=null)
+			{
+				byte[] imageBytes = imageBlob.getBytes(1,(int) imageBlob.length());
+				System.out.println("base 64 bit..."+Base64.encodeBase64String(imageBytes));
+				user.setUserImage(Base64.encodeBase64String(imageBytes));
+			}
+			
 			return user;
 		}
 	};
-
+	
+	
+	public void uploadAvatarAndSaveBLOB(Blob userImage,String userEmail)
+	{
+		jdbcManager().update("{call updateUserImage(?, ?)}",userImage, userEmail);
+	}
 
 	@Override
 	public User getUserById(int id) {
@@ -59,13 +83,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	/*@Override
-	public User getUserByEmailPassword(String email, String password) {
-		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL_PASSWORD, USER_MAPPER, email, password);
-		return result.isEmpty() ? null : result.get(0);
-		
-		
-	}*/
 	
 	@Override
 	public User getUserByEmailPassword(String email, String password) {
@@ -87,10 +104,22 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public void updateUser(User user) {
-		jdbcManager().update("{call updateUser(?, ?, ?, ?, ?, ?, ?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled(),
-				user.getFirstName(), user.getLastName(), user.getPassword(), user.getId(),user.getProvince(),user.getCountry());
+		jdbcManager().update("{call updateUser(?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled());
 
 	}
+	
+	@Override
+	public void updateUserLocation(User user) {
+		jdbcManager().update("{call updateUserLocation(?, ?, ?,?)}", user.getCountryId(), user.getStateId(), user.getCityId(),user.getEmail());
+	}
+	
+	
+	@Override
+	public void resetUserPassword(User user) {
+		jdbcManager().update("{call resetUserPassword(?, ?, ?, ?)}",user.getPassword(), user.getConfirmationToken(),user.getEmail(),user.getEnabled());
+
+	}
+	
 	
 	@Override
 	public User findUserByResetToken(String resetToken) {
@@ -99,22 +128,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	@Override
-	public void removeUser(User user) {
-
-	}
-
-	@Override
-	public void changePassword(User user, String password) {
-
-	}
-	
-	@Override
-	public int getNumberOfUsers() {
-
-		return 0;
-	}
-
-	
+	public Collection<User> findUsers(String firstName, String lastName, String city) {
+		Collection<User> results = new ArrayList<>(); 
+		results.addAll(jdbcManager().select("{call getUserList(?,?,?)}", USER_MAPPER, firstName, lastName, city)); 
+		return results;
+	}	
 
 }

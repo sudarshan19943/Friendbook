@@ -7,9 +7,11 @@ CREATE TABLE `friends` (
   CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+ALTER TABLE `friends` 
+CHANGE COLUMN `friend_token` `friend_token` TINYINT(4) NULL DEFAULT 0 ;
 
 CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
@@ -24,6 +26,17 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_uindex` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `friends` (
+  `userid` bigint(20) NOT NULL,
+  `friendid` bigint(20) NOT NULL,
+  UNIQUE KEY `unique_index` (`userid`,`friendid`),
+  KEY `friends_users_friendid_fk` (`friendid`),
+  CONSTRAINT `friends_users_friendid_fk` FOREIGN KEY (`friendid`) REFERENCES `users` (`id`),
+  CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 CREATE TABLE `post` (
@@ -41,7 +54,7 @@ CREATE TABLE `comment` (
   `comment` varchar(255) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
   `receiver_id` int(11) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT NULL,
+  `comment_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `post_id_fk` int(11) DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `post_id_fk_idx` (`post_id_fk`),
@@ -60,7 +73,7 @@ CREATE TABLE `logs` (
 
 CREATE PROCEDURE `getUserById` (IN id BIGINT(20))
 BEGIN
-SELECT * FROM users WHERE id = id;
+SELECT * FROM users WHERE users.id = id;
 END
 
 CREATE PROCEDURE `getUserByEmailPassword`(IN email VARCHAR(45), password VARCHAR(45))
@@ -86,6 +99,13 @@ END
 CREATE PROCEDURE `findUserByResetToken` (IN confirmation_token VARCHAR(255))
 BEGIN
 SELECT * FROM users WHERE confirmation_token = confirmation_token;
+END
+
+CREATE PROCEDURE `getUserList`()
+BEGIN
+select * from
+users
+where  first_name LIKE '%%'AND last_name LIKE '%%' AND city LIKE '%Halifax%' AND country LIKE '%%';
 END
 
 ###POST SECTION######
@@ -118,20 +138,73 @@ SELECT * from comment where post_id = comment_id;
 END
 
 #####FRIENDS####
-CREATE PROCEDURE `addFriend`(IN userid BIGINT(20), friendid BIGINT(20))
+CREATE PROCEDURE `addFriend`(IN friendid BIGINT(20))
 BEGIN
-INSERT INTO friends (userid, friendid) VALUES (userid = userid, friendid = friendid);
+INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
 END
 
-CREATE PROCEDURE `removeFriend` (IN userid BIGINT(20), friendid BIGINT(20))
+CREATE PROCEDURE `removeFriend`(IN id BIGINT(20))
 BEGIN
-DELETE FROM friends WHERE userid = userid AND friendid = friendid;
+DELETE FROM friends WHERE  friends.friendid = id;
 END
 
-CREATE PROCEDURE `getFriendList`(IN id INT(11))
+##Change parameters to pass different fields
+CREATE PROCEDURE `findFriends`(IN id INT(11))
 BEGIN
-SELECT *
-FROM users
+SELECT * FROM users 
 INNER JOIN  friends ON friends.friendid = users.id
-where id = friends.userid;
+where id = friends.userid and friends.friend_token = 1;
+END
+
+CREATE PROCEDURE `confirmFriend` (id INT(20))
+BEGIN
+UPDATE `friends` SET `friend_token` = '1' WHERE (`friendid` = id);
+END
+
+
+
+#session Management
+CREATE TABLE CSCI5308_1_DEVINT.SPRING_SESSION (
+PRIMARY_ID CHAR(36) NOT NULL,
+SESSION_ID CHAR(36) NOT NULL,
+CREATION_TIME BIGINT NOT NULL,
+LAST_ACCESS_TIME BIGINT NOT NULL,
+MAX_INACTIVE_INTERVAL INT NOT NULL,
+EXPIRY_TIME BIGINT NOT NULL,
+PRINCIPAL_NAME VARCHAR(100),
+CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
+);
+CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON CSCI5308_1_DEVINT.SPRING_SESSION (SESSION_ID);
+CREATE INDEX SPRING_SESSION_IX2 ON CSCI5308_1_DEVINT.SPRING_SESSION (EXPIRY_TIME);
+CREATE INDEX SPRING_SESSION_IX3 ON CSCI5308_1_DEVINT.SPRING_SESSION (PRINCIPAL_NAME);
+
+CREATE TABLE CSCI5308_1_DEVINT.SPRING_SESSION_ATTRIBUTES (
+SESSION_PRIMARY_ID CHAR(36) NOT NULL,
+ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
+ATTRIBUTE_BYTES BLOB NOT NULL,
+CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
+CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES CSCI5308_1_DEVINT.SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
+);
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateFriendToken`(IN id INT(11))
+BEGIN
+UPDATE friends  SET friend_token = '1'  WHERE (friends.friendid = id);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateConfirmToken`(IN friendid INT(11))
+BEGIN
+UPDATE `friends` SET `confirm_token` = '1'  WHERE (friends.friendid = friendid);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `confirmFriend`(IN friendid BIGINT(20))
+BEGIN
+INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
+UPDATE friends SET confirm_token = 1 WHERE (friends.friendid = friendid) AND friend_token =1;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findFriends`(IN id INT(11))
+BEGIN
+SELECT * FROM users 
+inner join friends on friends.userid = users.id
+where id = friends.userid and friends.friend_token = 1; 
 END

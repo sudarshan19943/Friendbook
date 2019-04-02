@@ -23,6 +23,7 @@
 <meta charset="utf-8" name="viewport"
 	content="width=device-width, initial-scale=1">
 </head>
+		
 
 <fmt:setBundle basename="locale" var="loc" />
 <fmt:message bundle="${loc}" key="local.label.logout" var="logout" />
@@ -35,30 +36,52 @@
 <body>
 
 	<div class="header">
+		<div class="search-container" style="float: right;">
+			<input type="text" placeholder="Search..">
+			<button type="button" onclick="location.href='/friends'" value="Find Friends" name="findFriends"><i class="fa fa-search"></i></button>
+		</div>
 		<h2>Friend Book</h2>
 	</div>
 
+
+	<!--  -->
+
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
-			<a href="login.jsp"> <img class="avatar"
-				src="../../icons/avatar.png" />
+			<a href="login.jsp"> <!-- <img class="avatar"
+				src="../../icons/avatar.png" /> -->
+				 <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
 			</a> <br></br> <a href="logout" onClick=""> ${logout} </a> <br></br> <a
-				href="profile_update" onClick=""> ${profile_update} </a> <br></br> <a
-				href="return_to_timeline" onClick=""> ${return_to_timeline} </a> <br></br>
+				href="profile" onClick="profile.jsp"> ${profile_update} </a> <br></br> <a
+				href="timeline" onClick="timeline.jsp"> ${return_to_timeline} </a> <br></br>
 		</div>
+
 		<div class="col-md-8">
 			<br></br>
 			<form role="form" action="/newpost" method="post" autocomplete="off">
 				<div class="form-group">
 					<input class="form-control" name="post" value='${param.post}'
-						type="text">
+						type="text" required>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-lg btn-primary btn-block"
 						value="${post}">
 				</div>
-				<br></br>
 			</form>
+			<c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger">
+                                    <strong>
+                                        ${errorMessage}
+                                    </strong>
+                                </div>
+                                </c:if>
+                                <c:if test="${not empty successMessage}">
+                                <div class="alert alert-success">
+                                    <strong>
+                                        ${successMessage}
+                                    </strong>
+                                </div>
+                                </c:if>                
 		</div>
 	</div>
 	</div>
