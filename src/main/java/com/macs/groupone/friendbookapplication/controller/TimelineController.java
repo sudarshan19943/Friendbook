@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.macs.groupone.friendbookapplication.model.Comment;
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
-import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.CommentService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
@@ -48,43 +47,37 @@ class TimelineController {
 	@GetMapping(value = "/timeline") 
 	public String showTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		String currentUseremail=(String) session.getAttribute("email");
-		if(currentUseremail==null)
+		User currentUser=(User) session.getAttribute("user");
+		if(currentUser==null)
 			return "redirect:login";
-		
-		User findUserFromEmail=userService.getUserByEmail(currentUseremail) ; 
-		Collection<User> listOfFriends=(Collection) friendsService.findFriends(findUserFromEmail);
-		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(findUserFromEmail,listOfFriends);
+		//get all the posts which are mine and shared by friends...
+		// so when i post- add this post to all my friends 
+		//when any of my friend post- add to all his friends
+		//when i open my timeline i see all mine m=posts
+		Collection<User> listOfFriends=(Collection<User>) friendsService.findFriends(currentUser);
+		//get all the posts from list of friends...
+		LinkedHashMap<String,Post> listOfPostsFromAllMyFriendsSorted=messageService.getMessagesByTimeStampWithComments(currentUser,listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
-		String emailfromsession=(String) request.getSession().getAttribute("email");
-		User userFromSession=userService.getUserByEmail(emailfromsession);
-		if(userFromSession.getUserImage()==null)
-		{//show default image
-			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
-		}else
-		{
-			System.out.println("image found in new post :"+userFromSession.getUserImage());
-			model.addAttribute("avatarpic",userFromSession.getUserImage());
-		}
 		return "timeline"; 
 	}
 
 
-	@RequestMapping(value = "/comment", params = "comment", method = RequestMethod.POST)
-	public String processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
-			@RequestParam("comment") String commentVal,@RequestParam("postId") String postId) { 
-		
-		String email=(String) request.getSession().getAttribute("email");
-		User userByEmailAndPassword = userService.getUserByEmail(email);
+	@PostMapping(value = "/comment") 
+	public ModelAndView processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir, 
+			@RequestParam("comment") String commentVal,@RequestParam("post") String post) { 
+		User commentCreator=(User)request.getSession().getAttribute("user");
+		int postId=1;
 		Comment comment=new Comment();
-		comment.setSender(userByEmailAndPassword.getId());
+		comment.setSender(commentCreator.getId());
+		//set it to who has recieed comment that is postID , sender id from post table
 		comment.setRecipient(7);//whose post is
-		comment.setBody("Still in progrtess..");
-		commentService.addNewComment(comment,9);
-		return "redirect:timeline"; 
+		comment.setBody("nice pic");
+		commentService.addNewComment(comment,postId)
+		;
+		return modelAndView; 
 	}
 	
-	     // Going to reset page without a token redirects to login page
+	// Going to reset page without a token redirects to login page
 			@ExceptionHandler(MissingServletRequestParameterException.class)
 			public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
 				return new ModelAndView("redirect:login");
