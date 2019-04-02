@@ -101,9 +101,10 @@ public class ProfileController {
 					//if image size exceed
 					 if(profilepic.getSize()>1048576)
 					 {
-					   model.addAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
+					   redirect.addFlashAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
+					   //model.addAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
 					 //redirect.addFlashAttribute("errorMessage","Image Size exceeded.");
-					   return "profile";
+					   return "redirect:/profile";
 					 }else
 					 {
 						 avatarService.uploadAvatarAndSaveBLOB(profilepic,sessionUser.getEmail());
