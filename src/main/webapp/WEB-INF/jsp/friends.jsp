@@ -86,7 +86,8 @@
                 <h4 style="margin-top: 50px;">Results</h4>
                 <c:forEach var="users" items="${users}" varStatus="status">
                 <form:form role="form" action="/addfriends" method="post" modelAttribute = "addfriendsForm">
-				<p> ${users.getFriendToken()} ${users.getFriendConfirmationToken()} ${users.getId()} ${users.getFirstName()} ${users.getLastName()}, ${users.getCityId()}, ${users.getStateId()}, ${users.getCountryId()} </p>
+				<p>${users.getId()} ${users.getFirstName()} ${users.getLastName()} <c:if test="${users.getCityId()}">, ${users.getCityId()},
+				</c:if><c:if test="${users.getStateId()}"> ${users.getStateId()}, </c:if> <c:if test="${users.getCountryId()}"> ${users.getCountryId()}</c:if></p>
 				 <div class="add-friends">
 				<input type = "hidden" value="${users.getId()}" name = "addFriends">
                    <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Add friend"/>
@@ -94,16 +95,11 @@
 		
 				</form:form>
 				</c:forEach> 				
-				<div>${enableConfirmButton}</div>
-				<div>${enableRemoveButton}</div>
-				<div>${friends}</div>
                 <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friend" items="${friends}" varStatus="status">
-                <p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
-                <div>${enableRemoveButton}</div>
                 <c:if test="${enableRemoveButton == true}">
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
-				<p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
+				<p>${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}<c:if test="${friend.getCityId()}">, ${friend.getCityId()}</c:if><c:if test="${friend.getStateId()}">, ${friend.getStateId()}</c:if><c:if test="${friend.getCountryId()}">, ${friend.getCountryId()}</c:if></p>
 				<div>
 
 				<input type = "hidden" value="${friend.getId()}" name = "removeFriends">
@@ -111,11 +107,10 @@
                 </div>
 				</form:form>
 				</c:if>
-				<div>${enableConfirmButton}</div>
  				 <c:if test="${enableConfirmButton == true}">
 				<form:form role="form" action="/confirmfriend" method="post" modelAttribute = "confirmfriendForm">
 				<div class="confirm-friend">
-				<p>${friend.getFriendToken()} ${friend.getFriendConfirmationToken()} ${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}, ${friend.getCityId()}, ${friend.getStateId()}, ${friend.getCountryId()} </p>
+				<p>${friend.getId()} ${friend.getFirstName()} ${friend.getLastName()}<c:if test="${friend.getCityId()}">, ${friend.getCityId()}</c:if><c:if test="${friend.getStateId()}">, ${friend.getStateId()}</c:if><c:if test="${friend.getCountryId()}">, ${friend.getCountryId()}</c:if></p>
                 <input type = "hidden" value="${friend.getId()}" name = "confirmfriend">
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Confirm Friend"/>
                 </div>
