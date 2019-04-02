@@ -56,7 +56,7 @@ public class RegistrationController {
 				if (emailService.sendEmail(registrationForm.getEmail(), Constants.EMAIL_TITLE,
 						"You have been Registered with Friendbook.")) {
 					model.addAttribute(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
-					return "registration"; 
+					return "redirect:profile"; 
 				} else {
 					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
 					//model.addAttribute(Constants.SUCCESSMESSAGE, Constants.REGISTRATIONSUCCESS);
