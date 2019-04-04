@@ -147,12 +147,12 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
-				<configuration>
+<!-- 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 					<fork>true</fork>
 					<executable>C:\Program Files\Java\jdk1.8.0_102\bin\javac</executable>
-				</configuration>
+				</configuration> -->
 			</plugin> 
 			<plugin>
 				<groupId>com.heroku.sdk</groupId>
