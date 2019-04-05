@@ -1,6 +1,7 @@
 <%--@elvariable id="errorMessage" type="String"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -57,8 +58,8 @@ window.history.pushState(null, "", window.location.href);
 		</div>
 		<div class="col-md-8">
 			<br></br>
+			<c:forEach var="post" items="${types}">
 			 <form role="form" action="/comment" method="post" autocomplete="off">
-			 <c:forEach var="post" items="${types}">
 				   <div class="postKey">
 				   ${post.key}<br></br>
 				   </div>
@@ -66,19 +67,18 @@ window.history.pushState(null, "", window.location.href);
 				   <div class="button-group">
 				    <c:if test = "${fn:contains(post.key, 'Message')}">
 				    <div class="commentBody">
-				  <input type="text" placeholder="You can comment here...">
+				  <input type="text" placeholder="You can comment here..." name = "comment">
 				   </div>
 				   <input type = "hidden" value="${post.value.getId()}" name = "postId">
-         				<input type="submit" class="btn btn-lg btn-primary btn-block" 
-         				value="comment" id="comment" name="comment">
+         				<input type="submit" class="btn btn-lg btn-primary btn-block" value="comment">
       				</c:if>
       				</div>
-				<c:forEach var="comment" items="${post.value.getComments()}">
+ 				<c:forEach var="comment" items="${post.value.getComments()}">
 				<input type = "hidden" value="${comment.getBody()}" name = "comment">
-				   <div class="commentPersonName">Comments: ${comment.getBody()} <br></br></div>
+				   <div class="commentPersonName">${comment.getBody()} <br></br></div>
 				</c:forEach>
-			</c:forEach>
 		 </form>
+		 </c:forEach>
 		</div>
 		<br></br>
 		</div>
