@@ -55,15 +55,7 @@ public class ProfileController {
 		User user=userService.getUserByEmail(emailFromSession) ;   
 		model.addAttribute("fullName", user.getFirstName()+" "+user.getLastName());
 		model.addAttribute("city", user.getCityId());
-		if(user.getUserImage()==null)
-		{//show default image
-			//model.addAttribute("avatarpic","../../avatarImages/avatar.png");
-			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
-		}else
-		{
-			model.addAttribute("avatarpic",user.getUserImage());
-		}
-		System.out.println(user.getUserImage());
+	    model.addAttribute("avatarpic",user.getUserImage());
 		return "profile";
 	}
 
@@ -100,12 +92,9 @@ public class ProfileController {
 				if(null!=profilepic && !StringUtils.isNullOrEmpty(profilepic.getOriginalFilename()))
 				{
 					 System.out.println("Profile Pic Size"+profilepic.getSize());
-					//if image size exceed
 					 if(profilepic.getSize()>1048576)
 					 {
 					   redirect.addFlashAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
-					   //model.addAttribute("errorMessage","Image Size exceeded, chose image less than 20 KB");
-					 //redirect.addFlashAttribute("errorMessage","Image Size exceeded.");
 					   return "redirect:/profile";
 					 }else
 					 {
@@ -114,7 +103,6 @@ public class ProfileController {
 					//check for image size
 				}
 				userService.updateUserLocation(findUserFromEmail);
-				//request.getSession().setAttribute("user", findUserFromEmail);
 				log.info("User Profile has been successfully updated.");
 			return "redirect:timeline";
 		}

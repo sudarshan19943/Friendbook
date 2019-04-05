@@ -3,18 +3,14 @@ package com.macs.groupone.friendbookapplication.controller;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,13 +23,14 @@ import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
 @Controller
 public class FriendsController {
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
-	private int FRIEND_TOKEN_VALUE = 0;
-	private int CONFIRM_FRIEND_TOKEN_VALUE = 0;
+	private static int FRIEND_TOKEN_VALUE = 0;
+	private static int CONFIRM_FRIEND_TOKEN_VALUE = 0;
 	private boolean enableConfirmButton = false;
 	private boolean enableRemoveButton = false;
 	@Autowired
@@ -45,17 +42,35 @@ public class FriendsController {
 	@Autowired
 	FriendsService friendsService;
 
-	@Autowired AvatarService avatarService;
+	@Autowired 
+	AvatarService avatarService;
 
 
 	// show friend page
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request) {
-
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
+		if(user.getUserImage()==null)
+		{
+			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}	
+		model.addAttribute("usersForm", new User());
+		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
+		
+		//remove if it is myself
+		for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
+		{
+			if(friendList.get(friendListIndex).getId() == user.getId())
+			{
+				friendList.remove(friendListIndex);
+			}
+		}
 		
 		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{
@@ -67,6 +82,7 @@ public class FriendsController {
 			enableConfirmButton = false;
 			enableRemoveButton = true;
 		}
+		modelAndView.addObject("friends", friendList);
 		model.addAttribute("enableConfirmButton", enableConfirmButton);
 		model.addAttribute("enableRemoveButton", enableRemoveButton);
 
@@ -76,14 +92,13 @@ public class FriendsController {
 	//On clicking the find friends button, combined results of friends and users are shown
 	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, @RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName, @RequestParam("cityId") String city, HttpServletRequest request) {
+			RedirectAttributes redirect, @ModelAttribute("usersForm") User usersForm, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		try {
-			
-		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);	
+		System.out.println(usersForm.getFirstName() + usersForm.getLastName() + usersForm.getCityId() + usersForm.getStateId() + usersForm.getCountryId());
+		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm.getFirstName(), usersForm.getLastName(), usersForm.getCityId(), usersForm.getStateId(), usersForm.getCountryId());	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
 		
 		//remove if it is myself

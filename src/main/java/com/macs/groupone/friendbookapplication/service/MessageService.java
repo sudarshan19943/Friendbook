@@ -47,72 +47,10 @@ public class MessageService implements IService {
 		return null;
 	}
 
-	public LinkedHashMap<String, Post> getMessagesByTimeStamp(User user, Collection<User> listOfFriends) {
-		HashMap<String, User> friendsAndThierPostsWithTime = new HashMap<String, User>();
-		ArrayList<User> friendsWithTheirPosts = new ArrayList<User>();
-		for (Iterator iterator = listOfFriends.iterator(); iterator.hasNext();) {
-			User friend = (User) iterator.next();
-			ArrayList<Post> friendPosts = messageDaoImpl.getMessage(friend);
-			friend.setPosts(friendPosts);
-			friendsWithTheirPosts.add(friend);
-		}
 
-		// sort post by posts
-		for (Iterator iterator = friendsWithTheirPosts.iterator(); iterator.hasNext();) {
-			User friend = (User) iterator.next();
-			ArrayList postsForThisUSer = friend.getPosts();
-			for (int i = 0; i < postsForThisUSer.size(); i++) {
-				Post post = (Post) postsForThisUSer.get(i);
-				friendsAndThierPostsWithTime.put(post.getTimeStamp(), friend);
-			}
-		}
-
-		// now you have Date AndTime and user of that post-sort this Hasmap by date and
-		// Time
-		List<String> sortedKeys = new ArrayList<String>(friendsAndThierPostsWithTime.size());
-		sortedKeys.addAll(friendsAndThierPostsWithTime.keySet());
-		Collections.sort(sortedKeys);
-
-		// now you have sorted Date
-		// fetch corresponding user from map and save in linked hasmap in order of keys
-		// date
-
-		LinkedHashMap<String, User> userPostOrderByDate = new LinkedHashMap<String, User>();
-		LinkedHashMap<String, Post> messageToreturn = new LinkedHashMap<String, Post>();
-		for (Iterator iterator = sortedKeys.iterator(); iterator.hasNext();) {
-			String timeStampSorted = (String) iterator.next();
-			User orderedUser = friendsAndThierPostsWithTime.get(timeStampSorted);
-			ArrayList<Post> postByTime = orderedUser.getPosts();
-			for (int i = 0; i < postByTime.size(); i++) {
-				Post post = postByTime.get(i);
-				if (timeStampSorted.equalsIgnoreCase(post.getTimeStamp())) {
-					User clonedUser = new User();
-					ArrayList posts = new ArrayList();
-					posts.add(post);
-					clonedUser.setId(orderedUser.getId());
-					clonedUser.setFirstName(orderedUser.getFirstName());
-					clonedUser.setLastName(orderedUser.getLastName());
-					clonedUser.setPosts(posts);
-					// orderedPost.put(timeStampSorted, post);
-					messageToreturn.put("message was posted by " + orderedUser.getFirstName() + " "
-							+ orderedUser.getLastName() + " on " + timeStampSorted, post);
-					userPostOrderByDate.put(timeStampSorted, clonedUser); // if user has multiple posts each post should
-																			// eb sorted by timestamp
-					break;
-				}
-			}
-
-		}
-
-		// make final list to return
-
-		return messageToreturn;
-	}
 
 	public LinkedHashMap<String, Post> getMessagesByTimeStampWithComments(User currentUser,
 			Collection<User> listOfFriends) {
-		// 1. fetch all the user's friends post and add to his timeline
-		// CommentService commentService=new CommentService();
 		HashMap<String, User> friendsAndThierPostsWithTime = new HashMap<String, User>();
 		ArrayList<User> friendsWithTheirPostsAndComments = new ArrayList<User>();
 		for (Iterator iterator = listOfFriends.iterator(); iterator.hasNext();) {

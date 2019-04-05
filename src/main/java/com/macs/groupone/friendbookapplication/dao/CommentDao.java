@@ -8,7 +8,6 @@ import com.macs.groupone.friendbookapplication.model.Comment;
 
 @Component
 public interface CommentDao {
-
 	List<Comment> getComment(int postId);
 	public void addNewComment(int commentSenderId,int commentRecieverId,String commentBody, int postId);
 	
