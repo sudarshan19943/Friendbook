@@ -100,7 +100,13 @@ public class FriendsController {
 		System.out.println(usersForm.getFirstName() + usersForm.getLastName() + usersForm.getCityId() + usersForm.getStateId() + usersForm.getCountryId());
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm.getFirstName(), usersForm.getLastName(), usersForm.getCityId(), usersForm.getStateId(), usersForm.getCountryId());	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
-		
+		if(user.getUserImage()==null)
+		{
+			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}
 		//remove if it is myself
 		for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
 		{
