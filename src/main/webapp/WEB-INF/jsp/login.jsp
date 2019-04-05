@@ -39,8 +39,10 @@
 	<div class="row">
         <div class="col-sm-7">
             <h3>Connect with your friends around the world</h3>
-          <img src="../../avatarImages/promo.jpg" alt="promotional image">
-           <!-- <img src="../../icons/promotional_image.jpg" alt="promotional image" border="2"> -->
+            <div class="type-text">
+            <h4><strong>Share you posts </strong> with your friends...</h4>
+            <h4><strong>See friends posts</strong> on your Timeline...</h4>
+        	</div>	
         </div>
 		<div class="col-sm-5">
 				<div class="panel panel-default">
