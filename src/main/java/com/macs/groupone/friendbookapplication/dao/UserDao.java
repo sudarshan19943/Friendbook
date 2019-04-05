@@ -14,8 +14,8 @@ public interface UserDao {
 	int addUser(String email, String password, String first_name, String last_name);
 	void updateUser(User user);
 	void resetUserPassword(User user);
-	void updateUserLocation(User user);
-	User findUserByResetToken(String resetToken);
-	public Collection<User> findUsers(String firstName, String lastName, String city);
+  void updateUserLocation(User user);
+  User findUserByResetToken(String resetToken);
+  public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country);
 
 }
