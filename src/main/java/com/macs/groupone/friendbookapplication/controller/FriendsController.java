@@ -3,18 +3,14 @@ package com.macs.groupone.friendbookapplication.controller;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,8 +28,8 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 public class FriendsController {
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
-	private int FRIEND_TOKEN_VALUE = 0;
-	private int CONFIRM_FRIEND_TOKEN_VALUE = 0;
+	private static int FRIEND_TOKEN_VALUE = 0;
+	private static int CONFIRM_FRIEND_TOKEN_VALUE = 0;
 	private boolean enableConfirmButton = false;
 	private boolean enableRemoveButton = false;
 	@Autowired
@@ -45,7 +41,8 @@ public class FriendsController {
 	@Autowired
 	FriendsService friendsService;
 
-	@Autowired AvatarService avatarService;
+	@Autowired 
+	AvatarService avatarService;
 
 
 	// show friend page
@@ -56,7 +53,13 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-		
+		if(user.getUserImage()==null)
+		{
+			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}
 		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{
 			enableConfirmButton = true;

@@ -2,7 +2,6 @@ package com.macs.groupone.friendbookapplication.controller;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.EmailService;
 import com.macs.groupone.friendbookapplication.service.UserService;
 import com.macs.groupone.friendbookapplication.validator.RegistrationValidator;
@@ -38,6 +36,8 @@ public class RegistrationController {
 	@Autowired
     private RegistrationValidator registrationValidator;
 
+	@Autowired 
+	AvatarService avatarService;
 
 	@GetMapping("/registration")
 	public String registration(Model model) {
@@ -56,12 +56,11 @@ public class RegistrationController {
 				if (emailService.sendEmail(registrationForm.getEmail(), Constants.EMAIL_TITLE,
 						"You have been Registered with Friendbook.")) {
 					model.addAttribute(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
-					return "registration"; 
+					return "redirect:profile"; 
 				} else {
 					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
-					//model.addAttribute(Constants.SUCCESSMESSAGE, Constants.REGISTRATIONSUCCESS);
+					avatarService.saveDefaultAvatar(registrationForm.getEmail());
 					request.getSession().setAttribute("email", registrationForm.getEmail());
-					//redirect.addFlashAttribute("email", registrationForm.getEmail());
 					redirect.addFlashAttribute("firstName", registrationForm.getFirstName());
 					redirect.addFlashAttribute("lastName", registrationForm.getLastName());
 					redirect.addFlashAttribute("password", registrationForm.getPassword());

@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.apache.tomcat.util.codec.binary.Base64;
-//import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,12 +22,16 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
 
-	public static final String GET_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-	public static final String GET_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
-	public static final String GET_USER_BY_EMAIL_PASSWORD = "SELECT * FROM users WHERE email = ? and password = ?";
-	public static final String INSER_INTO_USER = "INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)";
-	public static final String UPDATE_USER_BY_ID = "UPDATE users SET confirmation_token=?, email=?, enabled=?, first_name=?, last_name=?, password =?, province=?,country=? WHERE  id=?";
-	public static final String GET_USER_BY_RESET_TOKEN="SELECT * FROM users WHERE confirmation_token = ?";
+	public static final String UPDATE_USER_AVATAR = "{call updateUserImage(?, ?)}";
+	public static final String GET_USER_BY_USER_ID = "{call getUserById(?)}";
+	public static final String GET_USER_BY_EMAIL = "{call getUserByEmail(?)}";
+	public static final String GET_USER_BY_EMAIL_AND_PASSWORD = "{call getUserByEmailPassword(?, ?)}";
+	public static final String GET_RESET_TOKEN="{call findUserByResetToken(?)}";
+	public static final String ADD_USER ="{call addUser(?, ?, ?, ?)}";
+	public static final String UPDATE_USER_PASSWORD="{call updateUser(?, ?, ?)}";
+	public static final String UPDATE_USER_LOCATION="{call updateUserLocation(?, ?, ?,?)}";
+	public static final String RESET_USER_PASSWORD="{call resetUserPassword(?, ?, ?, ?)}";
+	public static final String GET_USER_LIST="{call getUserList(?,?,?)}";
 	
 	
 	public UserDaoImpl() {
@@ -68,69 +69,64 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	
 	public void uploadAvatarAndSaveBLOB(Blob userImage,String userEmail)
 	{
-		jdbcManager().update("{call updateUserImage(?, ?)}",userImage, userEmail);
+		jdbcManager().update(UPDATE_USER_AVATAR,userImage, userEmail);
 	}
-
+	
 	@Override
 	public User getUserById(int id) {
-		final List<User> result = jdbcManager().select("{call getUserById(?)}", USER_MAPPER, id);
+		final List<User> result = jdbcManager().select(GET_USER_BY_USER_ID, USER_MAPPER, id);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	@Override
 	public User getUserByEmail(String email) {
-		final List<User> result = jdbcManager().select("{call getUserByEmail(?)}", USER_MAPPER, email);
+		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL, USER_MAPPER, email);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	
 	@Override
 	public User getUserByEmailPassword(String email, String password) {
-		final List<User> result = jdbcManager().select("{call getUserByEmailPassword(?, ?)}", USER_MAPPER, email, password);
+		final List<User> result = jdbcManager().select(GET_USER_BY_EMAIL_AND_PASSWORD, USER_MAPPER, email, password);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	@Override
-	public Collection<User> getUserList() {
 
-		return null;
-	}
 
 	@Override
 	public int addUser(String email, String password, String first_name, String last_name) {
-		final long id = jdbcManager().insertAndGetId("{call addUser(?, ?, ?, ?)}", email, password, first_name, last_name);
+		final long id = jdbcManager().insertAndGetId(ADD_USER, email, password, first_name, last_name);
 		return (int) id;
 	}
 
 	@Override
 	public void updateUser(User user) {
-		jdbcManager().update("{call updateUser(?, ?, ?)}", user.getConfirmationToken(), user.getEmail(), user.getEnabled());
+		jdbcManager().update(UPDATE_USER_PASSWORD, user.getConfirmationToken(), user.getEmail(), user.getEnabled());
 
 	}
 	
 	@Override
 	public void updateUserLocation(User user) {
-		jdbcManager().update("{call updateUserLocation(?, ?, ?,?)}", user.getCountryId(), user.getStateId(), user.getCityId(),user.getEmail());
+		jdbcManager().update(UPDATE_USER_LOCATION, user.getCountryId(), user.getStateId(), user.getCityId(),user.getEmail());
 	}
 	
 	
 	@Override
 	public void resetUserPassword(User user) {
-		jdbcManager().update("{call resetUserPassword(?, ?, ?, ?)}",user.getPassword(), user.getConfirmationToken(),user.getEmail(),user.getEnabled());
-
+		jdbcManager().update(RESET_USER_PASSWORD,user.getPassword(), user.getConfirmationToken(),user.getEmail(),user.getEnabled());
 	}
 	
 	
 	@Override
 	public User findUserByResetToken(String resetToken) {
-		final List<User> result = jdbcManager().select("{call findUserByResetToken(?)}", USER_MAPPER,
+		final List<User> result = jdbcManager().select(GET_RESET_TOKEN, USER_MAPPER,
 				resetToken);
 		return result.isEmpty() ? null : result.get(0);
 	}
 
 	public Collection<User> findUsers(String firstName, String lastName, String city) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call getUserList(?,?,?)}", USER_MAPPER, firstName, lastName, city)); 
+		results.addAll(jdbcManager().select(GET_USER_LIST, USER_MAPPER, firstName, lastName, city)); 
 		return results;
 	}	
 

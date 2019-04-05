@@ -46,7 +46,7 @@ public class ForgetPasswordController {
     }
 
     @PostMapping("/forgotpassword")
-    public String registration(Model mode,@ModelAttribute("forgotPasswordForm") User forgotPasswordForm, BindingResult bindingResult,HttpServletRequest request) {
+    public String registration(Model mode,@ModelAttribute("forgotPasswordForm") User forgotPasswordForm, BindingResult bindingResult,HttpServletRequest request,RedirectAttributes redirect) {
     	forgetPasswordValidator.validate(forgotPasswordForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "forgotpassword";
@@ -60,8 +60,9 @@ public class ForgetPasswordController {
 			String message = "To reset your password, click the link below:\n" + appUrl + "/resetpassword?token="
 					+ user.getConfirmationToken();
 			try {
-			emailService.sendEmail(user.getEmail(), "Friend Book Registration Confirmation", message);
+			emailService.sendEmail(user.getEmail(), "Reset Password", message);
 			mode.addAttribute("successMessage", "Reset link has been mailed to your registered mail id.");
+			redirect.addFlashAttribute("successMessage", "Reset link has been mailed to your registered mail id.");
 			}
 			catch(Exception e )
 			{
@@ -110,7 +111,8 @@ public class ForgetPasswordController {
 			redirect.addFlashAttribute("firstName", resetUser.getFirstName());
 			redirect.addFlashAttribute("lastName", resetUser.getLastName());
 			redirect.addFlashAttribute("password", resetUser.getPassword());
-   			//model.addAttribute("successMessage", "You have successfully reset your password.  You may now login.");
+			//redirect.addFlashAttribute("successMessage", "Reset link has been mailed to your registered mail id.");
+			redirect.addFlashAttribute("successMessage", "You have successfully reset your password.  You may now login.");
    			return "redirect:/profile";
    		} else {
    			model.addAttribute("errorMessage", "Oops!  This is an invalid password reset link.");

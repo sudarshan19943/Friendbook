@@ -3,6 +3,7 @@
  */
 package com.macs.groupone.friendbookapplication.jdbc;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.CallableStatement;
@@ -26,6 +27,8 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationExcep
 
 public class JdbcManagerImpl implements JdbcManager {
 	
+	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
+	
 	public static final String URL = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
 	public static final String USERNAME = "CSCI5308_1_DEVINT_USER";
 	public static final String PASSWORD = "CSCI5308_1_DEVINT_1161";
@@ -36,13 +39,11 @@ public class JdbcManagerImpl implements JdbcManager {
 	private String url;
 	private String username;
 	private String password;
-
-	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
 	
 	public JdbcManagerImpl() {
-		this.url = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
-		this.username = "CSCI5308_1_DEVINT_USER";
-		this.password = "CSCI5308_1_DEVINT_1161";
+		this.url = URL;
+		this.username =USERNAME;
+		this.password =PASSWORD;
 	}
 
 	protected final Connection getConnection() {
@@ -57,7 +58,6 @@ public class JdbcManagerImpl implements JdbcManager {
 
 	private void closeConnection(final Connection connection, final PreparedStatement statement,
 			final ResultSet resultSet) {
-
 		if (null != connection)
 			try {
 				connection.close();
@@ -65,7 +65,6 @@ public class JdbcManagerImpl implements JdbcManager {
 				log.error("Connection cannot be closed" + e);
 				e.printStackTrace();
 			}
-		
 		if (null != statement)
 			try {
 				statement.close();
@@ -127,7 +126,10 @@ public class JdbcManagerImpl implements JdbcManager {
 				statement.setBigDecimal(parameterIndex, (BigDecimal) parameter);
 			}else if (parameter instanceof Blob) {
 				statement.setBlob(parameterIndex, (Blob) parameter);
-			} else {
+			}else if (parameter instanceof InputStream) {
+				statement.setBinaryStream(parameterIndex, (InputStream) parameter);
+			}  
+			else {
 				throw new IllegalArgumentException(
 						String.format("parameter is found. [param: %s, paramIndex: %s]", parameter,
 								parameterIndex));
@@ -135,7 +137,6 @@ public class JdbcManagerImpl implements JdbcManager {
 		}
 	}
 	
-
 	@Override
 	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
 			throws DatabaseAccessException {
@@ -166,20 +167,12 @@ public class JdbcManagerImpl implements JdbcManager {
 		Connection connection = null;
 		CallableStatement statement = null;
 		ResultSet resultSet = null;
-
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 			statement = connection.prepareCall(procedureName);
 			setParameters(statement, parameters);
 			final int result = statement.executeUpdate();
-			/*Long id = null;
-			if (0 != result) {
-				resultSet = statement.getGeneratedKeys();
-				if (resultSet.next()) {
-					id = resultSet.getLong(1);
-				}
-			}*/
 			connection.commit();
 			return 1;
 		} catch (final DatabaseAccessException e) {
@@ -220,7 +213,5 @@ public class JdbcManagerImpl implements JdbcManager {
 			closeConnection(connection, statement, resultSet);
 		}
 	}
-
-
 
 }

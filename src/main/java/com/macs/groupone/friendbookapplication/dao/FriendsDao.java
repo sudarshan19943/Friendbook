@@ -1,10 +1,6 @@
 package com.macs.groupone.friendbookapplication.dao;
 
-
-import java.util.Collection;
-
 import org.springframework.stereotype.Component;
-
 import com.macs.groupone.friendbookapplication.model.User;
 
 @Component
