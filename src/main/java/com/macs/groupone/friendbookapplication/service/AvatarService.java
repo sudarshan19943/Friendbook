@@ -1,7 +1,9 @@
 package com.macs.groupone.friendbookapplication.service;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,11 +16,16 @@ import javax.sql.rowset.serial.SerialException;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.macs.groupone.friendbookapplication.config.Config;
 import com.macs.groupone.friendbookapplication.dao.impl.UserDaoImpl;
@@ -27,8 +34,9 @@ import com.macs.groupone.friendbookapplication.dao.impl.UserDaoImpl;
 public class AvatarService implements IService {
 
 	private static final Logger log = LoggerFactory.getLogger(AvatarService.class);
-	private static final String AVATAR_FOLDER = Config.getProperty("avatarImages");
-	private static final String AVATART_DEFAULT_IMAGE = "avatar.png";
+	private static final String AVATAR_FOLDER = Config.getProperty("image.upload.uploadedFiles");
+	private static final String AVATART_DEFAULT_IMAGE = "default.jpg";
+	private static final String WELCOME_PAGE_IMAGE = "promo.jpg";
 	private static final String AVATAR_IMAGE_EXTENSION = ".JPG";
 	private static final ClassLoader loader = AvatarService.class.getClassLoader();
 
@@ -61,7 +69,34 @@ public class AvatarService implements IService {
 		}
 
 	} // method uploadFile
-
+	
+	
+	
+	public void saveDefaultAvatar(String email)
+	{
+		String defaultImageFIle=AVATAR_FOLDER+AVATART_DEFAULT_IMAGE;
+		File fBlob = new File(defaultImageFIle);
+		try {
+			FileInputStream is = new FileInputStream ( fBlob );
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			byte[] buffer = new byte[1024];
+			int count;
+			while ((count = is.read(buffer)) != -1)
+			    output.write(buffer, 0, count);
+			byte[] contents = output.toByteArray();
+			Blob userImageBlob = new javax.sql.rowset.serial.SerialBlob(contents);
+			UserDaoImpl dao = new UserDaoImpl();
+			dao.uploadAvatarAndSaveBLOB(userImageBlob, email);
+		} catch (FileNotFoundException e) { 
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SerialException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	public static void uploadAvatarAndSave(MultipartFile uploadfile, String emailID) {
 		try {
 			// Get the filename and build the local file path
@@ -81,24 +116,26 @@ public class AvatarService implements IService {
 
 		}
 
-	} // method uploadFile
-
-	public static URL getResource(String email) {
-		String directory = Config.getProperty("avatarImagesForResourse");
-		String avatarImagesForResoursePath = directory + email + AVATAR_IMAGE_EXTENSION;
-		URL url = ResourceLoader.class.getResource(avatarImagesForResoursePath);
-		return url;
-	}
+	} 
 	
-	public static String  getDefaultAvatarImage()
+	/*public void setDefaultImage()
 	{
-		/*String directory = Config.getProperty("avatarImagesForUrl");
-		System.out.println("directory : " + directory);
-		String filepath = Paths.get(directory, AVATART_DEFAULT_IMAGE).toString();
-		System.out.println("filepath : " + filepath);
-		String pathToReturn = directory + AVATART_DEFAULT_IMAGE;
-		System.out.println("pathToReturn : " + pathToReturn);
-		return pathToReturn;*/
+		    File imgfile = new File("src/test/resources/avatarImages/default.jpg");
+		    try {
+				FileInputStream fin = new FileInputStream(imgfile);
+				DiskFileItemFactory factory = new DiskFileItemFactory();
+				FileItem fileItem = factory.createItem("formFieldName", "application/zip", false,
+				    "/var/temp/somefile.zip");
+				MultipartFile uploadfile=new CommonsMultipartFile(fileItem);
+			
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	*/
+	public static String  getResource()
+	{
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 		String path="avatarImages/avatar.png";
 		File file = new File(classLoader.getResource(path).getFile());
@@ -109,7 +146,7 @@ public class AvatarService implements IService {
 	}
 
 	public static String getProfileAvatar(String email) {
-		if (getResource(email) != null) {
+		if (getResource() != null) {
 			String directory = Config.getProperty("avatarImagesForUrl");
 			System.out.println("directory : " + directory);
 			String filepath = Paths.get(directory, email + AVATAR_IMAGE_EXTENSION).toString();

@@ -57,7 +57,7 @@ public class NewPostController {
 		User userFromSession=userService.getUserByEmail(emailfromsession);
 		if(userFromSession.getUserImage()==null)
 		{//show default image
-			model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
 		}else
 		{
 			System.out.println("image found in new post :"+userFromSession.getUserImage());

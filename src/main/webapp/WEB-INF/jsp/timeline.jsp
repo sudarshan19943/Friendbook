@@ -57,7 +57,6 @@ window.history.pushState(null, "", window.location.href);
 		</div>
 		<div class="col-md-8">
 			<br></br>
-			 <div>Friends: </div> 
 			 <form role="form" action="/comment" method="post" autocomplete="off">
 			 <c:forEach var="post" items="${types}">
 				   <div class="postKey">

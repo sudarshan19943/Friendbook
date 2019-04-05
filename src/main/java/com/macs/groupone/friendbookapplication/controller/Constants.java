@@ -9,9 +9,6 @@ public class Constants {
 	
 	//Error Messages
 	public static final String ERRORMESSAGE="errorMessage";
-	public static final String ALREADY_REGISTERED="alreadyRegisteredMessage";
-	public static final String ALREADY_REGISTERED_ERROR= "Oops!  There is already a user registered with the email provided.";
-	public static final String USER_DOES_NOT_EXISTS="Oops user does not exist.";
 	public static final String INVALID_PASSWORD_LINK="Oops!  This is an invalid password reset link.";
 	public static final String ACCOUNT_NOT_FOUND="We didn't find an account for that e-mail address.";
 	

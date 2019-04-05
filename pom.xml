@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Friendbook</name>
 	<description>Friendbook QA group work</description>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -25,13 +25,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		    <version>1.2</version>
 		</dependency>
 
 		<!-- Logger properties -->
@@ -113,9 +106,10 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.icegreen</groupId>
-			<artifactId>greenmail</artifactId>
-			<version>1.5.5</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>2.0.8</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -177,9 +171,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainclass>com.macs.groupone.frinedbookapplication</mainclass>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

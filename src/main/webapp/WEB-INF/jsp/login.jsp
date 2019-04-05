@@ -39,7 +39,7 @@
 	<div class="row">
         <div class="col-sm-7">
             <h3>Connect with your friends around the world</h3>
-          <img src="../../avatarImages/promo.jpg" alt="promotional image"> -->
+          <img src="../../avatarImages/promo.jpg" alt="promotional image">
            <!-- <img src="../../icons/promotional_image.jpg" alt="promotional image" border="2"> -->
         </div>
 		<div class="col-sm-5">
@@ -68,7 +68,12 @@
 							</spring:bind>
 							<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 							</div>
-							 <c:if test="${not empty errorMessage}">
+                                  <div class="form-signin"> 
+                                    <a href="forgotpassword" onClick="forgotpassword.jsp"> ${forgot_password} </a>
+				             </div>
+						</form:form>
+						<div>
+						<c:if test="${not empty errorMessage}">
                                 <div class="alert alert-danger">
                                     <strong>
                                         ${errorMessage}
@@ -82,10 +87,7 @@
                                     </strong>
                                 </div>
                                 </c:if>
-                                  <div class="form-signin"> 
-                                    <a href="forgotpassword" onClick="forgotpassword.jsp"> ${forgot_password} </a>
-				             </div>
-						</form:form>
+						</div>
 					</div>
 					<div class="panel-footer">
                      <strong>${new_user}</strong> 
