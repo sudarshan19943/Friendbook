@@ -1,6 +1,6 @@
 package com.macs.groupone.friendbookapplication.controller;
 
-
+// Dummy comment for testing CI CDs
 
 import java.util.ArrayList;
 
