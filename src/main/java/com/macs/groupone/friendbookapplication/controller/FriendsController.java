@@ -1,6 +1,6 @@
 package com.macs.groupone.friendbookapplication.controller;
 
-
+// Dummy comment for testing CI CDs
 
 import java.util.ArrayList;
 
@@ -96,6 +96,13 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
+		if(user.getUserImage()==null)
+		{
+			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
+		}else
+		{
+			model.addAttribute("avatarpic",user.getUserImage());
+		}
 		try {
 		System.out.println(usersForm.getFirstName() + usersForm.getLastName() + usersForm.getCityId() + usersForm.getStateId() + usersForm.getCountryId());
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm.getFirstName(), usersForm.getLastName(), usersForm.getCityId(), usersForm.getStateId(), usersForm.getCountryId());	

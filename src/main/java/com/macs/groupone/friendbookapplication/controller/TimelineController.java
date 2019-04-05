@@ -62,16 +62,17 @@ class TimelineController {
 		return "timeline";
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.POST)
+	@RequestMapping(value = "/comment", params = "comment", method = RequestMethod.POST)
 	public String processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir,
-			@RequestParam("comment") String comment, @RequestParam("postId") String postId) {
+			@RequestParam("comment") String comment, @RequestParam("postId") int postID) {
 		String email = (String) request.getSession().getAttribute("email");
 		User userByEmailAndPassword = userService.getUserByEmail(email);
 		Comment commentBean = new Comment();
 		commentBean.setSender(userByEmailAndPassword.getId());
-		commentBean.setRecipient(9);// whose post is
-		commentBean.setBody("Demo to vismay...");
-		commentService.addNewComment(commentBean, 48);
+		System.out.println(messageService.getPostCreator(postID).get(0).getSender());
+		commentBean.setRecipient(messageService.getPostCreator(postID).get(0).getSender());// creator of post
+		commentBean.setBody(comment);
+		commentService.addNewComment(commentBean, postID);
 		return "redirect:timeline";
 	}
 

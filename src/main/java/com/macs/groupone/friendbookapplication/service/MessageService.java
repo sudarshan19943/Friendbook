@@ -39,16 +39,6 @@ public class MessageService implements IService {
 		messageDaoImpl.addNewPost(sender, post);
 	}
 
-	public Collection<Post> getAll(User userOne, User userTwo) {
-		return null;
-	}
-
-	public Collection<Post> getLast(User userOne) {
-		return null;
-	}
-
-
-
 	public LinkedHashMap<String, Post> getMessagesByTimeStampWithComments(User currentUser,
 			Collection<User> listOfFriends) {
 		HashMap<String, User> friendsAndThierPostsWithTime = new HashMap<String, User>();
@@ -129,6 +119,11 @@ public class MessageService implements IService {
 		// make final list to return
 
 		return messageToreturn;
+	}
+	
+	public ArrayList<Post> getPostCreator(int postID)
+	{
+		return messageDaoImpl.getPostCreator(postID);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,12 +58,11 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao {
 				results.addAll(jdbcManager().select("{call getMessageSuman(?)}",MESSAGE_MAPPER, user.getId()));
 				return results;
 			}
-
-			//previously written
-			/*@Override
-			public ArrayList<Post> getMessage(User user) {
-				ArrayList<Post> results = new ArrayList<>(); 
-				results.addAll(jdbcManager().select("{call getMessage(?)}",MESSAGE_MAPPER, user.getId()));
+			
+			public ArrayList<Post> getPostCreator(int postID)
+			{
+				ArrayList<Post> results = new ArrayList<>();
+				results.addAll(jdbcManager().select("{call getPostCreator(?)}",MESSAGE_MAPPER, postID));
 				return results;
-			}*/
+			}
 }
