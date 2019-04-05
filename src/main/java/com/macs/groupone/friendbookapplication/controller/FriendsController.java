@@ -27,6 +27,7 @@ import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
 @Controller
 public class FriendsController {
@@ -52,10 +53,20 @@ public class FriendsController {
 	@RequestMapping(value = "/friends", method = RequestMethod.GET)
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request) {
-
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
+		User user=userService.getUserByEmail(emailfromsession);	
+		model.addAttribute("usersForm", new User());
+		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
+		
+		//remove if it is myself
+		for(int friendListIndex =0; friendListIndex<friendList.size(); friendListIndex++)
+		{
+			if(friendList.get(friendListIndex).getId() == user.getId())
+			{
+				friendList.remove(friendListIndex);
+			}
+		}
 		
 		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{
@@ -67,6 +78,7 @@ public class FriendsController {
 			enableConfirmButton = false;
 			enableRemoveButton = true;
 		}
+		modelAndView.addObject("friends", friendList);
 		model.addAttribute("enableConfirmButton", enableConfirmButton);
 		model.addAttribute("enableRemoveButton", enableRemoveButton);
 
@@ -76,14 +88,13 @@ public class FriendsController {
 	//On clicking the find friends button, combined results of friends and users are shown
 	@RequestMapping(value = "/friends", params = "findFriends", method = RequestMethod.POST)
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView,
-			RedirectAttributes redirect, @RequestParam("firstName") String firstName,@RequestParam("lastName") String lastName, @RequestParam("cityId") String city, HttpServletRequest request) {
+			RedirectAttributes redirect, @ModelAttribute("usersForm") User usersForm, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
 		try {
-			
-		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(firstName, lastName, city);	
+		System.out.println(usersForm.getFirstName() + usersForm.getLastName() + usersForm.getCityId() + usersForm.getStateId() + usersForm.getCountryId());
+		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm.getFirstName(), usersForm.getLastName(), usersForm.getCityId(), usersForm.getStateId(), usersForm.getCountryId());	
 		ArrayList<User> friendList=(ArrayList<User>) friendsService.findFriends(user);
 		
 		//remove if it is myself

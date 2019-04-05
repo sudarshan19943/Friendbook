@@ -17,6 +17,6 @@ public interface UserDao{
 	void resetUserPassword(User user);
   void updateUserLocation(User user);
   User findUserByResetToken(String resetToken);
-  public Collection<User> findUsers(String firstName, String lastName, String city);
+  public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country);
 
 }

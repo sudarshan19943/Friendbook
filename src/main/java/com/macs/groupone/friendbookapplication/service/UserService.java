@@ -64,8 +64,8 @@ public class UserService  implements IService{
 		userDao.resetUserPassword(user);
 	}
 
-	public Collection<User> findUsers(String firstName, String lastName, String city) {
-		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(firstName, lastName, city);
+	public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country) {
+		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(firstName, lastName, city, state, country);
 		return users;
 	}
 	
