@@ -22,14 +22,6 @@ import com.macs.groupone.friendbookapplication.model.User;
 @Service
 public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	
-	private int friendToken;
-	
-	private static final Logger log = LoggerFactory.getLogger(FriendsDaoImpl.class);
-	
-	
-	public FriendsDaoImpl() {
-		friendToken = 0;
-	}
 
 	private static final RowMapper<Friend> FRIENDS_MAPPER = new RowMapper<Friend>() {
 		@Override
@@ -41,19 +33,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		}
 	};
   
-	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
-	@Override
-	public User map(final ResultSet resultSet) throws SQLException {
-		final User friend = new User();
-		friend.setId(resultSet.getInt("id"));
-		friend.setFirstName(resultSet.getString("first_name"));
-		friend.setLastName(resultSet.getString("last_name"));
-		friend.setCityId(resultSet.getString("city"));
-		friend.setCountryId(resultSet.getString("country"));
-		friend.setStateId(resultSet.getString("province"));
-		return friend;
-	}
-};
 
 	@Override
 	public long addFriend(User friend, User user) {
@@ -78,11 +57,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		return 0;
 	}
 	
-	public Collection<User> findFriends(User user) {
-		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call findFriends(?)}", USER_MAPPER, user.getId())); 
-		return results;
-	}
 
 	public Collection<User> findFriendsSuman(User user) {
 		Collection<Friend> results = new ArrayList<>(); 
