@@ -2,30 +2,48 @@ package com.macs.groupone.friendbookapplication.service;
 
 
 public class ServiceFactory implements IServiceFactory{
+	
+	private static ServiceFactory serviceFactory;
 
 	@Override
 	public IService getUserService() {
-		return new UserService();
+		return UserService.getUserServiceInstance();
 	}
 
 	@Override
 	public IService getFriendService() {
-		return new FriendsService();
+		return FriendsService.getFriendServiceInstance();
 	}
 
 	@Override
 	public IService getAvatarService() {
-		return new AvatarService();
+		return  AvatarService.getAvatarServiceInstance();
 	}
 
 	@Override
 	public IService getMessageService() {
-		return new MessageService();
+		return MessageService.getMessageServiceInstance();
 	}
 
 	@Override
 	public IService getEmailService() {
-		return new EmailService();
+		return EmailService.getEmailServiceInstance();
 	}
+	
+	@Override
+	public IService getCommentService() {
+		return CommentService.getCommentServiceInstance();
+	}
+	
+	public static ServiceFactory getInstance()
+	{
+		if(serviceFactory==null)
+		{
+			serviceFactory=new ServiceFactory();
+			return  serviceFactory;
+		}
+		return serviceFactory;
+	}
+	
 
 }
