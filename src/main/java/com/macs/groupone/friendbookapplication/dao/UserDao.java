@@ -24,4 +24,5 @@ public interface UserDao {
 
 	public Collection<User> findUsers(String firstName, String lastName, String city);
 
+
 }

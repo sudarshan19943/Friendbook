@@ -54,40 +54,33 @@
             <div class="col-sm-3">
                 <div class="panel panel-default" style="margin-top: 10px">
                     <div class="panel-body" style="width:300px;">
-                    
-						<form role="form" action="/friends" method="post"
-							autocomplete="off">
+						
+					<form:form role="form" action="/friends" method="post" autocomplete="off" modelAttribute="usersForm">
 							<div class="form-group">
-								<input type="text" name="firstName" id="firstName" class="form-control"
+								<form:input path="firstName" type="text" name="firstName" id="firstName" class="form-control"
 									placeholder="First Name" maxlength="255"
-									value='${param.firstName}'>
+									value='${param.firstName}'/>
 							</div>
 							<div class="form-group">
-								<input type="text" name="lastName" id="lastName" class="form-control"
+								<form:input path="lastName" type="text" name="lastName" id="lastName" class="form-control"
 									placeholder="Last name" maxlength="255"
-									value='${param.lastName}'>
+									value='${param.lastName}'/>
 							</div>
 							
 							<div class="form-group">
-								<input type="text" name="cityId" id="cityId" class="form-control"
+								<form:input path="cityId" type="text" name="cityId" id="cityId" class="form-control"
 									placeholder="City" maxlength="255"
-									value='${param.cityId}'>
+									value='${param.cityId}'/>
 							</div>
 							
 							 <!-- Dropdown -->
 							<div class="form-group">
-								<select name="country" class="countries" id="countryId">
-									<option value="" >Select Country</option>
-								</select>
-								
-								 <select name="state" class="states" id="stateId" >
-									<option value="" >Select State</option>
-								</select> 
-								
-								<select name="city" class="cities" id="cityId">
-									<option value="" >Select City</option>
-								</select>
-								
+								<form:select name="country" class="countries" id="countryId" path="countryId">
+									<form:option value='${param.countryId}' >Select Country</form:option>
+								</form:select>
+								 <form:select name="state" class="states" id="stateId" path="stateId" >
+									<form:option value='${param.stateId}'>Select State</form:option>
+								</form:select> 
 								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
 							</div>
@@ -95,22 +88,10 @@
 								<input type="submit" class="btn btn-lg btn-primary btn-block"
 									value="Find Friends" name="findFriends">
 							</div>
-						</form>
+						</form:form>
 					</div>
                 </div>
-                <h4 style="margin-top: 50px;">Results</h4>
-                <c:forEach var="users" items="${users}" varStatus="status">
-                <form:form role="form" action="/addfriends" method="post" modelAttribute = "addfriendsForm">
-				<p>${users.getId()} ${users.getFirstName()} ${users.getLastName()} <c:if test="${users.getCityId()}">, ${users.getCityId()},
-				</c:if><c:if test="${users.getStateId()}"> ${users.getStateId()}, </c:if> <c:if test="${users.getCountryId()}"> ${users.getCountryId()}</c:if></p>
-				 <div class="add-friends">
-				<input type = "hidden" value="${users.getId()}" name = "addFriends">
-                   <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Add friend"/>
-                </div>
-		
-				</form:form>
-				</c:forEach> 				
-                <h4 style="margin-top: 20px;">My Friends</h4>
+                                <h4 style="margin-top: 20px;">My Friends</h4>
                 <c:forEach var="friend" items="${friends}" varStatus="status">
                 <c:if test="${enableRemoveButton == true}">
                 <form:form role="form" action="/removefriends" method="post" modelAttribute = "removefriendsForm">
@@ -133,6 +114,20 @@
                   </c:if> 
                   
 				</c:forEach>
+				
+                <h4 style="margin-top: 50px;">Results</h4>
+                <c:forEach var="users" items="${users}" varStatus="status">
+                <form:form role="form" action="/addfriends" method="post" modelAttribute = "addfriendsForm">
+				<p>${users.getId()} ${users.getFirstName()} ${users.getLastName()} <c:if test="${users.getCityId()}">, ${users.getCityId()},
+				</c:if><c:if test="${users.getStateId()}"> ${users.getStateId()}, </c:if> <c:if test="${users.getCountryId()}"> ${users.getCountryId()}</c:if></p>
+				 <div class="add-friends">
+				<input type = "hidden" value="${users.getId()}" name = "addFriends">
+                   <input type = "submit" class="btn btn-lg btn-primary btn-block" value="Add friend"/>
+                </div>
+		
+				</form:form>
+				</c:forEach> 				
+
         </div>
 
        </div>   
