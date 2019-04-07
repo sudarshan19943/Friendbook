@@ -1,18 +1,14 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.model.User;
 
-@Service
 public class ConfirmFriendStateService implements IStateService {
 	
-	private int CONFIRM_FRIEND_TOKEN_VALUE = 1;
-	private int FRIEND_TOKEN_VALUE = 0;
+	private static boolean CONFIRM_FRIEND_TOKEN_VALUE = true;
+	private static boolean FRIEND_TOKEN_VALUE = false;
 	
-	@Autowired
-	FriendsService friendsService;
+	FriendsService friendsService = new FriendsService();
 
 	@Override
 	public void handleState(User friend, User user) {
@@ -25,7 +21,9 @@ public class ConfirmFriendStateService implements IStateService {
 		friend.setFriendConfirmationToken(CONFIRM_FRIEND_TOKEN_VALUE);
 		
 		friendsService.addFriend(friend, user);
+		user.setFriendToken(CONFIRM_FRIEND_TOKEN_VALUE);
+		user.setFriendConfirmationToken(FRIEND_TOKEN_VALUE);
 		
 	}
-
+	
 }

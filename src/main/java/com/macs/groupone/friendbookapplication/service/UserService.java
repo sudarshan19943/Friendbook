@@ -1,8 +1,6 @@
 package com.macs.groupone.friendbookapplication.service;
 
-
 import java.util.Collection;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
@@ -64,9 +62,14 @@ public class UserService  implements IService{
 		userDao.resetUserPassword(user);
 	}
 
-	public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country) {
-		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(firstName, lastName, city, state, country);
+	public Collection<User> findUsers(User user) {
+		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(user);
 		return users;
+	}
+	
+	public Collection<User> findFriendsFromDatabase(User user) {
+		Collection<User> friends=(Collection<User>) userDaoimpl.findFriends(user);
+		return friends;
 	}
 	
 	private String getEncryptedPassword(String password) {

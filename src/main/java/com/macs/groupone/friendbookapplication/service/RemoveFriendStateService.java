@@ -1,17 +1,14 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.model.User;
 
-@Service
+
 public class RemoveFriendStateService implements IStateService {
 	
-	private int clearToken = 0;
+	private boolean clearToken = false;
 	
-	@Autowired
-	FriendsService friendsService;
+	FriendsService friendsService = new FriendsService();
 
 	@Override
 	public void handleState(User friend, User user) {
