@@ -6,8 +6,8 @@ import com.macs.groupone.friendbookapplication.dao.MessageDao;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 
 public interface IDAOFactory {
-	UserDao makeUserDao();
-	FriendsDao makeFriendDao();
-	MessageDao makeMessageDao();
-	CommentDao makeCommentsDao();
+	UserDao getUserDao();
+	FriendsDao getFriendDao();
+	MessageDao getMessageDao();
+	CommentDao getCommentsDao();
 }

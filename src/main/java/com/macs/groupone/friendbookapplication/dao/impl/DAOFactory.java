@@ -6,25 +6,37 @@ import com.macs.groupone.friendbookapplication.dao.MessageDao;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 
 public class DAOFactory implements IDAOFactory{
+	
+	private static DAOFactory daoFactory;
 
 	@Override
-	public UserDao makeUserDao() {
+	public UserDao getUserDao() {
 		return new UserDaoImpl();
 	}
 
 	@Override
-	public FriendsDao makeFriendDao() {
+	public FriendsDao getFriendDao() {
 		return new FriendsDaoImpl();
 	}
 
 	@Override
-	public MessageDao makeMessageDao() {
+	public MessageDao getMessageDao() {
 		return new MessageDaoImpl();
 	}
 
 	@Override
-	public CommentDao makeCommentsDao() {
+	public CommentDao getCommentsDao() {
 		return new CommentDaoImpl();
 	}
 
+	
+	public static DAOFactory getInstance()
+	{
+		if(daoFactory==null)
+		{
+			daoFactory=new DAOFactory();
+			return  daoFactory;
+		}
+		return daoFactory;
+	}
 }
