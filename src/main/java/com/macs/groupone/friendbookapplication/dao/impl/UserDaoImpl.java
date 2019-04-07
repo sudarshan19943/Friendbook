@@ -7,20 +7,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
 import com.macs.groupone.friendbookapplication.dao.UserDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.User;
 
-@Service
+
 public class UserDaoImpl extends AbstractDao implements UserDao {
 	
-	private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
+	final static Logger logger = Logger.getLogger(UserDaoImpl.class);
 
 	public static final String UPDATE_USER_AVATAR = "{call updateUserImage(?, ?)}";
 	public static final String GET_USER_BY_USER_ID = "{call getUserById(?)}";
@@ -33,10 +31,6 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	public static final String RESET_USER_PASSWORD="{call resetUserPassword(?, ?, ?, ?)}";
 	public static final String GET_USER_LIST="{call getUserList(?,?,?)}";
 	
-	
-	public UserDaoImpl() {
-
-	}
 
 	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
 
@@ -95,7 +89,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
 	@Override
 	public int addUser(String email, String password, String first_name, String last_name) {
-		final long id = jdbcManager().insertAndGetId(ADD_USER, email, password, first_name, last_name);
+		final long id = jdbcManager().insert(ADD_USER, email, password, first_name, last_name);
 		return (int) id;
 	}
 

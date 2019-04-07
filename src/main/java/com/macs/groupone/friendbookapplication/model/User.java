@@ -1,10 +1,8 @@
 package com.macs.groupone.friendbookapplication.model;
 
-import java.io.Serializable;
-import java.sql.Blob;
 import java.util.ArrayList;
 
-public class User implements Serializable{
+public class User {
 
 	private int id;
 	private String email;
@@ -17,11 +15,11 @@ public class User implements Serializable{
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
-    private int friend_token;
+	private int friend_token;
 	private int friend_confirm_token;
 	private ArrayList<Post> posts;
 	private String userImage;
-  
+
 	public String getUserImage() {
 		return userImage;
 	}
@@ -109,7 +107,7 @@ public class User implements Serializable{
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
 	}
-	
+
 	public String getCityId() {
 		return cityId;
 	}
@@ -117,8 +115,7 @@ public class User implements Serializable{
 	public void setCityId(String cityId) {
 		this.cityId = cityId;
 	}
-	
-	
+
 	public String getCountryId() {
 		return countryId;
 	}
@@ -126,25 +123,21 @@ public class User implements Serializable{
 	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
-	
-	public int getFriendToken()
-	{
+
+	public int getFriendToken() {
 		return friend_token;
 	}
-	
-	public void setFriendToken(int token)
-	{
+
+	public void setFriendToken(int token) {
 		this.friend_token = token;
 	}
-	
-	public int getFriendConfirmationToken()
-	{
+
+	public int getFriendConfirmationToken() {
 		return friend_confirm_token;
 	}
-	
-	public void setFriendConfirmationToken(int token)
-	{
+
+	public void setFriendConfirmationToken(int token) {
 		this.friend_confirm_token = token;
 	}
-	
+
 }

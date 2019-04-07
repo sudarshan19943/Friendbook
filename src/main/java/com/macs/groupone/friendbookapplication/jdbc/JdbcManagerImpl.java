@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.macs.groupone.friendbookapplication.jdbc;
 
 import java.io.InputStream;
@@ -20,37 +17,32 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.macs.groupone.friendbookapplication.config.Config;
-import com.macs.groupone.friendbookapplication.controller.LoginController;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
 public class JdbcManagerImpl implements JdbcManager {
 	
-	private static final Logger log = Logger.getLogger(JdbcManagerImpl.class);
+	private final  Logger logger = Logger.getLogger(JdbcManagerImpl.class);
+	private final static String URL="spring.datasource.url";
+	private final static String USER_NAME="spring.datasource.username";
+	private final static String PASSWORD="spring.datasource.password";
 	
-	public static final String URL = "jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false";
-	public static final String USERNAME = "CSCI5308_1_DEVINT_USER";
-	public static final String PASSWORD = "CSCI5308_1_DEVINT_1161";
-
-	// Application FIle path
-	public static final String APPLICATION_PROPERTIES = "src/main/resources/application.properties";
-
 	private String url;
 	private String username;
 	private String password;
 	
 	public JdbcManagerImpl() {
-		this.url = URL;
-		this.username =USERNAME;
-		this.password =PASSWORD;
+		this.url = Config.getProperty(URL);
+		this.username =Config.getProperty(USER_NAME);
+		this.password =Config.getProperty(PASSWORD);
 	}
 
-	protected final Connection getConnection() {
+	private final Connection getConnection() {
 		try {
 			return DriverManager.getConnection(url, username, password);
 		} catch (final SQLException e) {
-			log.error("Connection failure" + e);
+			logger.error("Connection failure" + e);
 			throw new DatabaseConnectionFailure(e);
 		}
 
@@ -62,14 +54,14 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				connection.close();
 			} catch (final Exception e) {
-				log.error("Connection cannot be closed" + e);
+				logger.error("Connection cannot be closed" + e);
 				e.printStackTrace();
 			}
 		if (null != statement)
 			try {
 				statement.close();
 			} catch (final Exception e) {
-				log.error("Statement cannot be closed" + e);
+				logger.error("Statement cannot be closed" + e);
 				e.printStackTrace();
 			}
 		
@@ -77,7 +69,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				resultSet.close();
 			} catch (final Exception e) {
-				log.error("Resultset cannot be closed" + e);
+				logger.error("Resultset cannot be closed" + e);
 				e.printStackTrace();
 			}
 
@@ -88,11 +80,90 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				connection.rollback();
 			} catch (final Exception e) {
-				log.error("Connection error" + e);
+				logger.error("Connection error" + e);
 				e.printStackTrace();
 			}
 		}
 	}
+
+	
+	@Override
+	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
+			throws DatabaseAccessException {
+		Connection connection = null;
+		CallableStatement statement = null;
+		ResultSet resultSet = null;
+		final List<T> result = new ArrayList<T>();
+		try {
+			connection = getConnection();
+			statement = connection.prepareCall(procedureName);
+			setParameters(statement, parameters);
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				result.add(rowMapper.map(resultSet));
+			}
+		} catch (final SQLException e) {
+			logger.error("Database Exception" + e);
+			throw new DatabaseOperationException(e);
+		} finally {
+			closeConnection(connection, statement, resultSet);
+		}
+		return result;
+	}
+
+	@Override
+	public long insert(final String procedureName, final Object... parameters) throws DatabaseAccessException {
+		Connection connection = null;
+		CallableStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			statement = connection.prepareCall(procedureName);
+			setParameters(statement, parameters);
+			statement.executeUpdate();
+			connection.commit();
+			return 1;
+		} catch (final DatabaseAccessException e) {
+			logger.error("Database exception" + e);
+			rollback(connection);
+			throw e;
+		} catch (final Exception e) {
+			rollback(connection);
+			logger.error("Database Exception" + e);
+			throw new DatabaseOperationException(e);
+		} finally {
+			closeConnection(connection, statement, resultSet);
+		}
+	}
+
+	@Override
+	public int update(final String procedureName, final Object... parameters) throws DatabaseAccessException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		final ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			statement = connection.prepareCall(procedureName);
+			setParameters(statement, parameters);
+			final int result = statement.executeUpdate();
+			connection.commit();
+			return result;
+		} catch (final DatabaseAccessException e) {
+			rollback(connection);
+			logger.error("Database Access Exception" + e);
+			throw e;
+		} catch (final Exception e) {
+			rollback(connection);
+			logger.error("Exception occured while updating database" + e);
+			throw new DatabaseOperationException(e);
+		} finally {
+			closeConnection(connection, statement, resultSet);
+		}
+	}
+
+	
 
 	private void setParameters(final PreparedStatement statement, final Object... parameters) throws SQLException {
 		for (int i = 0, length = parameters.length; i < length; i++) {
@@ -137,81 +208,4 @@ public class JdbcManagerImpl implements JdbcManager {
 		}
 	}
 	
-	@Override
-	public <T> List<T> select(final String procedureName, final RowMapper<T> rowMapper, final Object... parameters)
-			throws DatabaseAccessException {
-		Connection connection = null;
-		CallableStatement statement = null;
-		ResultSet resultSet = null;
-		final List<T> result = new ArrayList<T>();
-		try {
-			connection = getConnection();
-			statement = connection.prepareCall(procedureName);
-			setParameters(statement, parameters);
-			resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				result.add(rowMapper.map(resultSet));
-			}
-		} catch (final SQLException e) {
-			log.error("Database Exception" + e);
-			throw new DatabaseOperationException(e);
-		} finally {
-			closeConnection(connection, statement, resultSet);
-			log.info("Connection closed");
-		}
-		return result;
-	}
-
-	@Override
-	public long insertAndGetId(final String procedureName, final Object... parameters) throws DatabaseAccessException {
-		Connection connection = null;
-		CallableStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			connection = getConnection();
-			connection.setAutoCommit(false);
-			statement = connection.prepareCall(procedureName);
-			setParameters(statement, parameters);
-			final int result = statement.executeUpdate();
-			connection.commit();
-			return 1;
-		} catch (final DatabaseAccessException e) {
-			log.error("Database exception" + e);
-			rollback(connection);
-			throw e;
-		} catch (final Exception e) {
-			rollback(connection);
-			log.error("Database Exception" + e);
-			throw new DatabaseOperationException(e);
-		} finally {
-			closeConnection(connection, statement, resultSet);
-		}
-	}
-
-	@Override
-	public int update(final String procedureName, final Object... parameters) throws DatabaseAccessException {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		final ResultSet resultSet = null;
-		try {
-			connection = getConnection();
-			connection.setAutoCommit(false);
-			statement = connection.prepareCall(procedureName);
-			setParameters(statement, parameters);
-			final int result = statement.executeUpdate();
-			connection.commit();
-			return result;
-		} catch (final DatabaseAccessException e) {
-			rollback(connection);
-			log.error("Database Exception" + e);
-			throw e;
-		} catch (final Exception e) {
-			rollback(connection);
-			log.error("Database Exception" + e);
-			throw new DatabaseOperationException(e);
-		} finally {
-			closeConnection(connection, statement, resultSet);
-		}
-	}
-
 }

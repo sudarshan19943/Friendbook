@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,44 +22,36 @@ import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
+import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
 public class FriendsController {
 
-	private static final Logger log = Logger.getLogger(FriendsController.class);
+	final static Logger logger = Logger.getLogger(FriendsController.class);
 	private static int FRIEND_TOKEN_VALUE = 0;
 	private static int CONFIRM_FRIEND_TOKEN_VALUE = 0;
 	private boolean enableConfirmButton = false;
 	private boolean enableRemoveButton = false;
-	@Autowired
-	UserService userService;
+	
+	
+	UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+	FriendsService friendsService=(FriendsService) ServiceFactory.getInstance().getFriendService();
+	AvatarService avatarService=(AvatarService)ServiceFactory.getInstance().getAvatarService();
+	MessageService messageService=(MessageService)ServiceFactory.getInstance().getMessageService();
 
-	@Autowired
-	MessageService messageService;
-
-	@Autowired
-	FriendsService friendsService;
-
-	@Autowired 
-	AvatarService avatarService;
 
 
 	// show friend page
-	@RequestMapping(value = "/friends", method = RequestMethod.GET)
+	@GetMapping(value = "/friends")
 	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView,
 			RedirectAttributes redirect, HttpServletRequest request) {
 
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
+		
 		User user=userService.getUserByEmail(emailfromsession);
-		if(user.getUserImage()==null)
-		{
-			//model.addAttribute("avatarpic",AvatarService.getDefaultAvatarImage());
-		}else
-		{
-			model.addAttribute("avatarpic",user.getUserImage());
-		}
+		model.addAttribute("avatarpic",user.getUserImage());
 		if(user.getFriendToken() == 1 && user.getFriendConfirmationToken() == 0)
 		{
 			enableConfirmButton = true;
@@ -149,11 +141,11 @@ public class FriendsController {
 		
 
 		
-		log.info("List of friends" + friendList);
+		logger.info("List of friends" + friendList);
 		}
 		catch(NullPointerException e)
 		{
-			log.error(e);
+			logger.error(e);
 			e.printStackTrace();
 		}
 		return modelAndView;
@@ -195,7 +187,7 @@ public class FriendsController {
 		
 		
 		modelAndView.addObject("user", friend);
-		log.debug("Friend removed");
+		logger.debug("Friend removed");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";
 	}
@@ -227,7 +219,7 @@ public class FriendsController {
 		System.out.println("User: "+user.getId());
 		System.out.println(user.getId()+" friend token"+user.getFriendToken());
 		System.out.println(user.getId()+" confirmation token "+user.getFriendConfirmationToken());
-		log.debug("Friend added");
+		logger.debug("Friend added");
 		return "redirect:friends";
 	}
 
@@ -250,7 +242,7 @@ public class FriendsController {
 		System.out.println("User: "+user.getId());
 		System.out.println(user.getId() +" friend token"+user.getFriendToken());
 		System.out.println(user.getId() +" confirmation token "+user.getFriendConfirmationToken());
-		log.debug("Friend added");
+		logger.debug("Friend added");
 		//all the posts related to this person must be deleted from timeline
 		return "redirect:friends";
 	}

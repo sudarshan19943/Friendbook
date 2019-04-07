@@ -15,7 +15,10 @@ public enum ValidationCode {
         PASSWORD_SIZE_POLICY("Size.registrationForm.password"),
 	
 	    //Profile Image Size
-	     PROFILE_MAX__SIZE("MaxSize.profileForm.userImage");
+	     PROFILE_MAX_SIZE("MaxSize.profileForm.userImage"),
+	
+	   //mandatory Field
+	    NOTEMPTY("NotEmpty");
 
         private final String propertyName;
 

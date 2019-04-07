@@ -9,9 +9,7 @@ public class Comment {
 	private int recipient;
 	private String comment;
 	private int sender;
-	
 
-	
 	public Date getTimestamp() {
 		return timestamp;
 	}
@@ -20,7 +18,6 @@ public class Comment {
 		this.timestamp = timestamp;
 	}
 
-	
 	public int getSender() {
 		return sender;
 	}
@@ -30,20 +27,19 @@ public class Comment {
 	}
 
 	public Date getDate() {
-		return  new Date();
+		return new Date();
 	}
 
 	public void setDate(Date date) {
 		this.timestamp = date;
 	}
 
-
 	public int getRecipient() {
 		return recipient;
 	}
 
 	public void setRecipient(int recipient) {
-		this.recipient=recipient;
+		this.recipient = recipient;
 	}
 
 	public String getBody() {
@@ -51,9 +47,9 @@ public class Comment {
 	}
 
 	public void setBody(String text) {
-		this.comment= text;
+		this.comment = text;
 	}
-	
+
 	public long getCommentId() {
 		return commentId;
 	}
@@ -63,4 +59,3 @@ public class Comment {
 	}
 
 }
-
