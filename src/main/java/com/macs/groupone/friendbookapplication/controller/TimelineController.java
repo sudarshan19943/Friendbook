@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,7 +53,7 @@ class TimelineController
 		return Constants.TIMELINE_VIEW;
 	}
 
-	@GetMapping(value = "/comment")
+	@PostMapping(value = "/comment")
 	public String processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir,
 			@RequestParam("comment") String comment, @RequestParam("postId") int postID) 
 	{
@@ -60,7 +61,7 @@ class TimelineController
 		User userByEmailAndPassword = userService.getUserByEmail(email);
 		Comment commentBean = new Comment();
 		commentBean.setSender(userByEmailAndPassword.getId());
-		commentBean.setRecipient(messageService.getPostCreator(postID).get(0).getSender());
+		commentBean.setRecipient(messageService.getPostCreator(postID).get(0).getSender());// creator of post
 		commentBean.setBody(comment);
 		commentService.addNewComment(commentBean, postID);
 		return Constants.REDIRECT_TIMELINE;

@@ -1,6 +1,7 @@
 package com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator;
 
 public class ContainsDigitRule implements PasswordRule {
+	
     @Override
     public boolean isCriteriaSatisfied(String password) {
         if(password == null) throw new IllegalArgumentException("password cannot be null.");

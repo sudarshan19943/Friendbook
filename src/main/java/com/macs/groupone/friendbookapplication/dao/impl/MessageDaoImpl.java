@@ -46,5 +46,12 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao
 		results.addAll(jdbcManager().select(GET_POSTS_BY_USER, MESSAGE_MAPPER, user.getId()));
 		return results;
 	}
+	
+	public ArrayList<Post> getPostCreator(int postID)
+	{
+		ArrayList<Post> results = new ArrayList<>();
+		results.addAll(jdbcManager().select("{call getPostCreator(?)}",MESSAGE_MAPPER, postID));
+		return results;
+	}
 
 }

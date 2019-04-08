@@ -2,9 +2,6 @@ package com.macs.groupone.friendbookapplication.validator.passwordandemailvalida
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.util.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 
 public class EmailValidator {
 

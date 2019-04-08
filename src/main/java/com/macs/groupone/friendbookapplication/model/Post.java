@@ -51,8 +51,6 @@ public class Post implements Comparable<Post>{
 		this.text= text;
 	}
 	
-	
-
 	@Override
 	  public int compareTo(Post o) {
 	    return getTimeStamp().compareTo(o.getTimeStamp());

@@ -59,8 +59,7 @@ public class MessageServiceTest {
 		post.setBody("Testing Custom Post");
 
 		LinkedHashMap<String, Post> messageToReturn = new LinkedHashMap<String, Post>();
-		messageToReturn = messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(),
-				post);
+		messageToReturn = messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(), post);
 
 		if (currentUser.getId() == cloneUser.getId()) {
 			for (String timeStamp : messageToReturn.keySet()) {

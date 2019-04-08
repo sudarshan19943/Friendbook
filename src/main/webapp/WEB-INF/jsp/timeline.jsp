@@ -20,14 +20,12 @@
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
-
 <script type="text/javacscript">
 window.history.pushState(null, "", window.location.href);        
         window.onpopstate = function() {
             window.history.pushState(null, "", window.location.href);
         };
 </script>        
-
 <html>
 <head>
 <title>Time Line</title>
@@ -35,13 +33,9 @@ window.history.pushState(null, "", window.location.href);
 	content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-
-
 	<div class="header">
 		<h2>Friend Book</h2>
 	</div>
-
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
 		<img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
@@ -52,7 +46,6 @@ window.history.pushState(null, "", window.location.href);
 			<a href="friends" onClick="friends.jsp">Find / Manage Friends</a> <br></br>
 		</div>
 		
-
 		<div class="search-box">
 		<input type="text" placeholder="Find Friends...">
 		</div>

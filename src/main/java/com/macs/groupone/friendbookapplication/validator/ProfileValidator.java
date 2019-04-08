@@ -1,23 +1,16 @@
 package com.macs.groupone.friendbookapplication.validator;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.macs.groupone.friendbookapplication.model.User;
-import com.macs.groupone.friendbookapplication.service.UserService;
-import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.EmailValidator;
-import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.PassWordValidator;
 
 @Component
 public class ProfileValidator implements Validator {
 	
-    @Autowired
-    private UserService userService;
-    
+  
     @Override
     public boolean supports(Class<?> aClass) {
         return User.class.equals(aClass);

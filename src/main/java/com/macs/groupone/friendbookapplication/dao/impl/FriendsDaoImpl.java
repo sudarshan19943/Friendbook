@@ -8,9 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.apache.log4j.Logger;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
 import com.macs.groupone.friendbookapplication.dao.FriendsDao;
@@ -19,9 +17,20 @@ import com.macs.groupone.friendbookapplication.model.Friend;
 import com.macs.groupone.friendbookapplication.model.User;
 
 
-@Service
 public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	
+	final static Logger logger = Logger.getLogger(FriendsDaoImpl.class);
+	
+	public static final String ADD_FRIEND = "{call addFriend(?, ?)}";
+	public static final String REMOVE_FRIEND = "{call removeFriend(?)}";
+	public static final String UPDATE_FRIEND_TOKEN ="{call updateFriendToken(?)}";
+	public static final String FIND_FRIEND ="{call findFriend(?)}";
+	public static final String CONFIRM_FRIEND="{call confirmFriend(?)}";
+	public static final String UPDATE_CONFIRM_TOKEN="{call updateConfirmToken(?)}";
+	public static final String UPDATE_FRIEND_CONNECTION_TOKEN="{call updateFriendTokenInFriends(?)}";
+	public static final String REMOVE_FRIEND_USER="{call removeFriendUser(?)}";
+	public static final String CLEAR_FRIEND_CONFIRM_TOKEN="{call clearFriendConfirmToken(?)}";
+	public static final String CLEAR_FRIEND_TOKEN="{call clearFriendToken(?)}";
 
 	private static final RowMapper<Friend> FRIENDS_MAPPER = new RowMapper<Friend>() {
 		@Override
@@ -36,37 +45,55 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	@Override
 	public long addFriend(User friend, User user) {
-		final long id = jdbcManager().insertAndGetId("{call addFriend(?, ?)}", friend.getId(), user.getId());
+		final long id = jdbcManager().insert(ADD_FRIEND, friend.getId(), user.getId());
 		return (int) id;
 	}
 
 	@Override
 	public void removeFriend(User user) {
-		jdbcManager().update("{call removeFriend(?)}", user.getId());
+		jdbcManager().update(REMOVE_FRIEND, user.getId());
 		
 	}
 	
 	@Override
 	public void updateFriendToken(User user) {
-		jdbcManager().update("{call updateFriendToken(?)}", user.getId());
+		jdbcManager().update(UPDATE_FRIEND_TOKEN, user.getId());
 		
-	}
-
-	@Override
-	public long getNumberOfFriends(User user, String searchText) {
-		return 0;
 	}
 	
-
-	public Collection<User> findFriendsSuman(User user) {
-		Collection<Friend> results = new ArrayList<>(); 
-		results=jdbcManager().select("{call findFriendsSuman(?)}", FRIENDS_MAPPER, user.getId()); 
-		Set<Integer> friendSet= new HashSet<Integer>(); 
+	@Override
+	public void confirmFriend(User user) {
+		jdbcManager().update(CONFIRM_FRIEND, user.getId());
 		
-		//get all users who are my friends
-		friendSet.add(user.getId());//first add yourself-as you are always your friend
-		for (Iterator iterator = results.iterator(); iterator.hasNext();) {
-			Friend friend = (Friend) iterator.next();
+	}
+
+	public void updateConfirmToken(User friend) {
+		jdbcManager().update(UPDATE_CONFIRM_TOKEN, friend.getId());
+		
+	}
+	
+	public void removeFriendUser(User user) {
+		jdbcManager().update(REMOVE_FRIEND_USER, user.getId());
+		
+	}
+
+	public void clearFriendConfirmToken(User user) {
+		jdbcManager().update(CLEAR_FRIEND_CONFIRM_TOKEN, user.getId());
+		
+	}
+	
+	public void clearFriendToken(User user) {
+		jdbcManager().update(CLEAR_FRIEND_TOKEN, user.getId());
+		
+	}
+	
+	public Collection<User> findFriends(User user) {
+		Collection<Friend> results = new ArrayList<>(); 
+		results=jdbcManager().select(FIND_FRIEND, FRIENDS_MAPPER, user.getId()); 
+		Set<Integer> friendSet= new HashSet<>(); 
+		friendSet.add(user.getId());
+		for (Iterator<Friend> iterator = results.iterator(); iterator.hasNext();) {
+			Friend friend = iterator.next();
 			if(user.getId()==friend.getUserid())
 			{
 				friendSet.add(friend.getFriendid());
@@ -75,47 +102,14 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 				friendSet.add(friend.getUserid());
 			}
 		}
-		//now make the user Friend list
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
-		final ArrayList<User> friendListOfUser= new ArrayList<User>(); 
-	    for (Iterator iterator = friendSet.iterator(); iterator.hasNext();) {
+		final ArrayList<User> friendListOfUser= new ArrayList<>(); 
+	    for (Iterator<Integer> iterator = friendSet.iterator(); iterator.hasNext();) {
 			int friendId = (Integer) iterator.next();
-			//create User object from friend object
-		    User userbyID=(User) userDaoImpl.getUserById(friendId);
+		    User userbyID=userDaoImpl.getUserById(friendId);
 		    friendListOfUser.add(userbyID);
 		}
 		return friendListOfUser;
-	}
-
-	@Override
-	public void confirmFriend(User user) {
-		jdbcManager().update("{call confirmFriend(?)}", user.getId());
-		
-	}
-
-	public void updateConfirmToken(User friend) {
-		jdbcManager().update("{call updateConfirmToken(?)}", friend.getId());
-		
-	}
-
-	public void updateFriendTokenInFriends(User friend) {
-		jdbcManager().update("{call updateFriendTokenInFriends(?)}", friend.getId());
-		
-	}
-	
-	public void removeFriendUser(User user) {
-		jdbcManager().update("{call removeFriendUser(?)}", user.getId());
-		
-	}
-
-	public void clearFriendConfirmToken(User user) {
-		jdbcManager().update("{call clearFriendConfirmToken(?)}", user.getId());
-		
-	}
-	
-	public void clearFriendToken(User user) {
-		jdbcManager().update("{call clearFriendToken(?)}", user.getId());
-		
 	}
 
 }

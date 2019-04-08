@@ -1,10 +1,8 @@
 package com.macs.groupone.friendbookapplication.model;
 
-import java.io.Serializable;
-import java.sql.Blob;
 import java.util.ArrayList;
 
-public class User implements Serializable{
+public class User {
 
 	private int id;
 	private String email;
@@ -21,7 +19,7 @@ public class User implements Serializable{
 	private boolean friendConfirmToken;
 	private ArrayList<Post> posts;
 	private String userImage;
-  
+
 	public String getUserImage() {
 		return userImage;
 	}
@@ -109,7 +107,7 @@ public class User implements Serializable{
 	public void setStateId(String stateId) {
 		this.stateId = stateId;
 	}
-	
+
 	public String getCityId() {
 		return cityId;
 	}
@@ -117,8 +115,7 @@ public class User implements Serializable{
 	public void setCityId(String cityId) {
 		this.cityId = cityId;
 	}
-	
-	
+
 	public String getCountryId() {
 		return countryId;
 	}
@@ -146,5 +143,5 @@ public class User implements Serializable{
 	{
 		this.friendConfirmToken = token;
 	}
-	
+
 }

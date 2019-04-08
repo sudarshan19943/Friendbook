@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,7 @@ import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.ConfirmFriendStateService;
 import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
+import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.RemoveFriendStateService;
 import com.macs.groupone.friendbookapplication.service.StateContextService;
 import com.macs.groupone.friendbookapplication.service.StateFactoryService;
@@ -30,20 +30,16 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 @Controller
 public class FriendsController {
 
-
+	final static Logger logger = Logger.getLogger(FriendsController.class);
 	private boolean enableConfirmButton = false;
 	private boolean enableRemoveButton = false;
-	@Autowired
-	UserService userService;
+	
+	
+	UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+	FriendsService friendsService=(FriendsService) ServiceFactory.getInstance().getFriendService();
+	AvatarService avatarService=(AvatarService)ServiceFactory.getInstance().getAvatarService();
+	MessageService messageService=(MessageService)ServiceFactory.getInstance().getMessageService();
 
-	@Autowired
-	MessageService messageService;
-
-	@Autowired
-	FriendsService friendsService;
-
-	@Autowired 
-	AvatarService avatarService;
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
 	private AddFriendStateService addFriendState = (AddFriendStateService)StateFactoryService.getInstance().addFriendState();
@@ -88,8 +84,6 @@ public class FriendsController {
 		modelAndView.addObject("friends", friendList);
 		modelAndView.addObject("users", userList);
 		model.addAttribute("avatarpic",user.getUserImage());
-
-
 		return modelAndView;
 
 	}
@@ -104,7 +98,6 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-
 		StateContextService  context = new StateContextService (removeFriendState);
 		context.executeState(friend, user);
 
@@ -121,7 +114,6 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-
 		StateContextService  context = new StateContextService (confirmFriendState);
 		context.executeState(friend, user);
 
@@ -137,7 +129,6 @@ public class FriendsController {
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user=userService.getUserByEmail(emailfromsession);
-
 		StateContextService  context = new StateContextService (addFriendState);
 		context.executeState(friend, user);
 

@@ -7,11 +7,8 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessExceptio
 
 public interface JdbcManager
 {
-	
 	<T> List<T> select(String procedureName, RowMapper<T> rowMapper, Object... parameters) throws DatabaseAccessException;
-
-	long insertAndGetId(final String procedureName, final Object... parameters) throws DatabaseAccessException;
-
+	long insert(final String procedureName, final Object... parameters) throws DatabaseAccessException;
 	int update(final String procedureName, final Object... parameters) throws DatabaseAccessException;
 
 }

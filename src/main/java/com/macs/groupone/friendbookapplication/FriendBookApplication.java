@@ -16,8 +16,6 @@ public class FriendBookApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(FriendBookApplication.class, args);
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
-		logger.trace("Friendbook Application has been started..");
-		logger.trace("Testing heroku CI.again...");
 	}
 	
 	@Override

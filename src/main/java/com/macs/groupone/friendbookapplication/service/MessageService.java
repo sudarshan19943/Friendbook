@@ -39,7 +39,7 @@ public class MessageService implements IService
 		messageDaoImpl.addNewPost(sender, post);
 	}
 
-	private ArrayList<User> getFriendsWithPostsAndComments(User currentUser, Collection<User> listOfFriends) {
+	public ArrayList<User> getFriendsWithPostsAndComments(User currentUser, Collection<User> listOfFriends) {
 		ArrayList<User> friendsWithTheirPostsAndComments = new ArrayList<>();
 		for (Iterator<User> friendsiterator = listOfFriends.iterator(); friendsiterator.hasNext();) {
 			User friend = friendsiterator.next();
@@ -55,7 +55,7 @@ public class MessageService implements IService
 		return friendsWithTheirPostsAndComments;
 	}
 
-	private HashMap<String, User> createTimestampPostMap(ArrayList<User> friendsWithTheirPostsAndComments) {
+	public HashMap<String, User> createTimestampPostMap(ArrayList<User> friendsWithTheirPostsAndComments) {
 		HashMap<String, User> friendsAndThierPostsWithTime = new HashMap<>();
 		for (Iterator<User> iterator = friendsWithTheirPostsAndComments.iterator(); iterator.hasNext();) {
 			User friend = iterator.next();
@@ -68,14 +68,14 @@ public class MessageService implements IService
 		return friendsAndThierPostsWithTime;
 	}
 
-	private List<String> SortTimeStampPostMap(HashMap<String, User> friendsAndThierPostsWithTime) {
+	public List<String> SortTimeStampPostMap(HashMap<String, User> friendsAndThierPostsWithTime) {
 		List<String> sortedKeys = new ArrayList<>(friendsAndThierPostsWithTime.size());
 		sortedKeys.addAll(friendsAndThierPostsWithTime.keySet());
 		Collections.sort(sortedKeys, Collections.reverseOrder());
 		return sortedKeys;
 	}
 
-	private Map<String, Post> createSeperatePostSortedByTimeStamp(HashMap<String, User> friendsAndThierPostsWithTime,
+	public Map<String, Post> createSeperatePostSortedByTimeStamp(HashMap<String, User> friendsAndThierPostsWithTime,
 			List<String> sortedTimeStamp, User currentUser) {
 		LinkedHashMap<String, Post> messageToReturn = new LinkedHashMap<>();
 		for (Iterator<String> sortedTimeStampIterator = sortedTimeStamp.iterator(); sortedTimeStampIterator.hasNext();) {
@@ -92,7 +92,7 @@ public class MessageService implements IService
 		return messageToReturn;
 	}
 
-	private HashMap<String, Post> attachCommentsWithPost(LinkedHashMap<String, Post> messageToreturn,String timeStampSorted, Post post, User orderedUser,
+	public HashMap<String, Post> attachCommentsWithPost(LinkedHashMap<String, Post> messageToreturn,String timeStampSorted, Post post, User orderedUser,
 			User currentUser) {
 		ArrayList<Post> posts = new ArrayList<>();
 		ArrayList<Comment> comments = (ArrayList<Comment>) post.getComments();
@@ -111,7 +111,7 @@ public class MessageService implements IService
 
 	}
 
-	private void customizePosts(User currentUser, LinkedHashMap<String, Post> messageToreturn, User clonedUser,
+	public LinkedHashMap<String, Post> customizePosts(User currentUser, LinkedHashMap<String, Post> messageToreturn, User clonedUser,
 			String timeStampSorted, Post post) {
 		if (currentUser.getId() == clonedUser.getId()) {
 			messageToreturn.put("<HTML>" + "<b>" + " You" + "</b>" + "  posted a message on " + "<b>" + timeStampSorted
@@ -120,9 +120,10 @@ public class MessageService implements IService
 			messageToreturn.put("<HTML>" + "Message Posted by " + "<b>" + clonedUser.getFirstName() + " "
 					+ clonedUser.getLastName() + "</b>" + " on " + "<b>" + timeStampSorted + "</b>" + "</HTML>", post);
 		}
+		return messageToreturn;
 	}
 
-	private User cloneUser(User orderedUser) {
+	public User cloneUser(User orderedUser) {
 		User clonedUser = new User();
 		clonedUser.setId(orderedUser.getId());
 		clonedUser.setFirstName(orderedUser.getFirstName());
@@ -136,6 +137,10 @@ public class MessageService implements IService
 		friendsAndThierPostsWithTime = createTimestampPostMap(friendsWithTheirPostsAndComments);
 		List<String> sortedTimeStamp = SortTimeStampPostMap(friendsAndThierPostsWithTime);
 		return createSeperatePostSortedByTimeStamp(friendsAndThierPostsWithTime, sortedTimeStamp, currentUser);
+	}
+
+	public ArrayList<Post> getPostCreator(int postID) {
+		return messageDaoImpl.getPostCreator(postID);
 	}
 
 }

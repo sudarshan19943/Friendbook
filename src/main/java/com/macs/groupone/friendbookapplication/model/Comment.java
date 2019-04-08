@@ -10,9 +10,7 @@ public class Comment
 	private int recipient;
 	private String comment;
 	private int sender;
-	
 
-	
 	public Date getTimestamp() 
 	{
 		return timestamp;
@@ -23,7 +21,6 @@ public class Comment
 		this.timestamp = timestamp;
 	}
 
-	
 	public int getSender() 
 	{
 		return sender;
@@ -43,7 +40,6 @@ public class Comment
 	{
 		this.timestamp = date;
 	}
-
 
 	public int getRecipient() 
 	{
@@ -76,4 +72,3 @@ public class Comment
 	}
 
 }
-
