@@ -19,18 +19,17 @@ import com.macs.groupone.friendbookapplication.model.User;
 
 public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	
-	final static Logger logger = Logger.getLogger(FriendsDaoImpl.class);
+	public final  Logger logger = Logger.getLogger(FriendsDaoImpl.class);
 	
-	public static final String ADD_FRIEND = "{call addFriend(?, ?)}";
-	public static final String REMOVE_FRIEND = "{call removeFriend(?)}";
-	public static final String UPDATE_FRIEND_TOKEN ="{call updateFriendToken(?)}";
-	public static final String FIND_FRIEND ="{call findFriend(?)}";
-	public static final String CONFIRM_FRIEND="{call confirmFriend(?)}";
-	public static final String UPDATE_CONFIRM_TOKEN="{call updateConfirmToken(?)}";
-	public static final String UPDATE_FRIEND_CONNECTION_TOKEN="{call updateFriendTokenInFriends(?)}";
-	public static final String REMOVE_FRIEND_USER="{call removeFriendUser(?)}";
-	public static final String CLEAR_FRIEND_CONFIRM_TOKEN="{call clearFriendConfirmToken(?)}";
-	public static final String CLEAR_FRIEND_TOKEN="{call clearFriendToken(?)}";
+	private static final String ADD_FRIEND = "{call addFriend(?, ?)}";
+	private static final String REMOVE_FRIEND = "{call removeFriend(?)}";
+	private static final String UPDATE_FRIEND_TOKEN ="{call updateFriendToken(?)}";
+	private static final String FIND_FRIEND ="{call findFriend(?)}";
+	private static final String CONFIRM_FRIEND="{call confirmFriend(?)}";
+	private static final String UPDATE_CONFIRM_TOKEN="{call updateConfirmToken(?)}";
+	private static final String REMOVE_FRIEND_USER="{call removeFriendUser(?)}";
+	private static final String CLEAR_FRIEND_CONFIRM_TOKEN="{call clearFriendConfirmToken(?)}";
+	private static final String CLEAR_FRIEND_TOKEN="{call clearFriendToken(?)}";
 
 	private static final RowMapper<Friend> FRIENDS_MAPPER = new RowMapper<Friend>() {
 		@Override
@@ -92,6 +91,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		results=jdbcManager().select(FIND_FRIEND, FRIENDS_MAPPER, user.getId()); 
 		Set<Integer> friendSet= new HashSet<>(); 
 		friendSet.add(user.getId());
+		logger.debug("Adding current user as frined in list : "+user.getEmail() + "User Id : "+user.getId());
 		for (Iterator<Friend> iterator = results.iterator(); iterator.hasNext();) {
 			Friend friend = iterator.next();
 			if(user.getId()==friend.getUserid())
