@@ -27,7 +27,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	private static final String FIND_FRIEND ="{call findFriend(?)}";
 	private static final String CONFIRM_FRIEND="{call confirmFriend(?)}";
 	private static final String UPDATE_CONFIRM_TOKEN="{call updateConfirmToken(?)}";
-	private static final String UPDATE_FRIEND_CONNECTION_TOKEN="{call updateFriendTokenInFriends(?)}";
 	private static final String REMOVE_FRIEND_USER="{call removeFriendUser(?)}";
 	private static final String CLEAR_FRIEND_CONFIRM_TOKEN="{call clearFriendConfirmToken(?)}";
 	private static final String CLEAR_FRIEND_TOKEN="{call clearFriendToken(?)}";

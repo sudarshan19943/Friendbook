@@ -1,10 +1,8 @@
 package com.macs.groupone.friendbookapplication.service;
 
-import org.springframework.stereotype.Service;
 
 import com.macs.groupone.friendbookapplication.model.User;
 
-@Service
 public class AddFriendStateService implements IStateService {
 	
 	private boolean FRIEND_TOKEN_VALUE = true;
