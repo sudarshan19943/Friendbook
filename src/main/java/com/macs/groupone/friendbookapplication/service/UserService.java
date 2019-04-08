@@ -1,72 +1,78 @@
 package com.macs.groupone.friendbookapplication.service;
 
-
+import java.sql.Blob;
 import java.util.Collection;
-import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.macs.groupone.friendbookapplication.dao.UserDao;
+
+import org.apache.log4j.Logger;
+
+import com.macs.groupone.friendbookapplication.dao.impl.DAOFactory;
 import com.macs.groupone.friendbookapplication.dao.impl.UserDaoImpl;
 import com.macs.groupone.friendbookapplication.model.User;
 
-@Service
-public class UserService  implements IService{
+public class UserService implements IService {
 
 	public static final String SECRET = "secret";
+	final static Logger logger = Logger.getLogger(UserService.class);
 
-	@Autowired
-	UserDao userDao;
-	@Autowired
-	UserDaoImpl userDaoimpl;
+	private static IService userService;
 
-	public UserService() {
-
+	public static IService getUserServiceInstance() {
+		if (userService == null) {
+			return new UserService();
+		} else {
+			return userService;
+		}
 	}
 
-	public int getNumberOfUsers() {
-
-		return 0;
-	}
+	UserDaoImpl userDaoImpl = (UserDaoImpl) DAOFactory.getInstance().getUserDao();
 
 	public User getUserById(int id) {
-		return userDao.getUserById(id);
+		return userDaoImpl.getUserById(id);
 	}
 
 	public User getUserByEmail(String email) {
-		return userDao.getUserByEmail(email);
+		return userDaoImpl.getUserByEmail(email);
 	}
 
 	public User getUserByEmailPassword(String email, String password) {
-		return userDao.getUserByEmailPassword(email, getEncryptedPassword(password));
+		return userDaoImpl.getUserByEmailPassword(email, getEncryptedPassword(password));
 
 	}
 
 	public int addUser(String email, String password, String firstName, String lastName) {
-		return userDao.addUser(email, getEncryptedPassword(password), firstName, lastName);
+		return userDaoImpl.addUser(email, getEncryptedPassword(password), firstName, lastName);
 
 	}
 
 	public User findUserByResetToken(String resetToken) {
-		return userDao.findUserByResetToken(resetToken);
+		return userDaoImpl.findUserByResetToken(resetToken);
 	}
 
 	public void updateUser(User user) {
-		userDao.updateUser(user);
+		userDaoImpl.updateUser(user);
 	}
 	
+	public void updateUserImage(Blob userImageBlob, String emailID) {
+		userDaoImpl.uploadAvatarAndSaveBLOB(userImageBlob,emailID);
+	}
+
 	public void updateUserLocation(User user) {
-		userDao.updateUserLocation(user);
+		userDaoImpl.updateUserLocation(user);
 	}
-	
 
 	public void resetUserPassword(User user) {
 		user.setPassword(getEncryptedPassword(user.getPassword()));
-		userDao.resetUserPassword(user);
+		userDaoImpl.resetUserPassword(user);
 	}
 
-	public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country) {
-		Collection<User> users=(Collection<User>) userDaoimpl.findUsers(firstName, lastName, city, state, country);
+	public Collection<User> findUsers(User user) {
+		Collection<User> users=(Collection<User>) userDaoImpl.findUsers(user);
 		return users;
+	}
+	
+	public Collection<User> findFriendsFromDatabase(User user) {
+		Collection<User> friends=(Collection<User>) userDaoImpl.findFriends(user);
+		return friends;
 	}
 	
 	private String getEncryptedPassword(String password) {

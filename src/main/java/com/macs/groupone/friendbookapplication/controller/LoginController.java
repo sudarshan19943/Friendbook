@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,72 +12,63 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
+import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.LoginValidator;
 
 @Controller
 public class LoginController {
 
-	private static final Logger log = Logger.getLogger(LoginController.class);
-
-	@Autowired
-	UserService userService;
-
-	@Autowired
-	private LoginValidator loginValidator;
+	private static final Logger logger = Logger.getLogger(LoginController.class);
+	private LoginValidator loginValidator = FormValidatorFactory.getInstance().getLoginValidator();
 
 	@GetMapping("/login")
-	public String registration(Model model,HttpSession session) {
-		model.addAttribute("loginForm", new User());
-		model.addAttribute("avatarpic", new User());
-		return "login";
+	public String displayLogin(Model model, HttpSession session) {
+		model.addAttribute(Constants.LOGIN_FORM, new User());
+		return Constants.LOGIN_VIEW;
 	}
 
 	@PostMapping("/login")
-	public String registration(Model model, @ModelAttribute("loginForm") User loginForm, BindingResult bindingResult,
+	public String processLogin(Model model, @ModelAttribute("loginForm") User loginForm, BindingResult bindingResult,
 			HttpServletRequest request, RedirectAttributes redirect) {
 		loginValidator.validate(loginForm, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "login";
+			logger.debug("Login Form has validation errors");
+			return Constants.LOGIN_VIEW;
 		} else {
+			UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
 			User userByEmailAndPassword = userService.getUserByEmailPassword(loginForm.getEmail(),
 					loginForm.getPassword());
 			if (userByEmailAndPassword != null) {
-				HttpSession session=request.getSession();
-				session.setAttribute("email", loginForm.getEmail());
-				session.setAttribute("password", loginForm.getPassword());
-				//session.setAttribute("user", userByEmailAndPassword);
-				return "redirect:/timeline";
+				HttpSession session = request.getSession();
+				session.setAttribute(Constants.EMAIL, loginForm.getEmail());
+				logger.debug("User" + userByEmailAndPassword.getFirstName() + "," + userByEmailAndPassword.getLastName()
+						+ "has been logged sucessfully");
+				return Constants.REDIRECT_TIMELINE;
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
-				return "login";
+				return Constants.LOGIN_VIEW;
 			}
 		}
 
 	}
-	
-	@RequestMapping(value="/logout",method = RequestMethod.GET) 
-    public String signOut(HttpServletRequest request){
-           HttpSession session=request.getSession(); 
-           System.out.println("session id before invalidating it:"+session.getId());
-         // UserDTO userDTO=(UserDTO)session.getAttribute("UserDTO");
-         // System.out.println("userDTO obje"+userDTO.getFirst_name());
-          session.removeAttribute("email");   
-          session.invalidate(); 
-         System.out.println("session id after invalidating session is:"+session.getId()); 
-         //System.out.println("session id after invalidating session is:"+session.getAttribute("user")); 
-         return "redirect:/login";
-}
-	
+
+	@GetMapping(value = "/logout")
+	public String processSignOut(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.removeAttribute("email");
+		session.invalidate();
+		logger.debug("session id after invalidating session is:" + session.getId());
+		return Constants.REDIRECT_LOGIN;
+	}
+
 	// Going to reset page without a token redirects to login page
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-		return new ModelAndView("redirect:login");
+	public String handleMissingParams(MissingServletRequestParameterException ex) {
+		return Constants.REDIRECT_LOGIN;
 	}
 }

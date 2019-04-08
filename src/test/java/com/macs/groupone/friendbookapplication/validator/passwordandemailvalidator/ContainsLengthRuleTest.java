@@ -1,21 +1,15 @@
 package com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import junit.framework.Assert;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,7 +21,11 @@ public class ContainsLengthRuleTest {
 	public void setUp() throws Exception {
 		containsLengthRule=new ContainsLengthRule();
 	}
-
+	
+	@After
+	public void tearDown() {
+		containsLengthRule = null;
+	}
 
 	@Test
 	public void testPasswordNotContainsRequiredLength() {

@@ -1,4 +1,3 @@
-
 package com.macs.groupone.friendbookapplication.dao;
 
 import com.macs.groupone.friendbookapplication.jdbc.JdbcManager;

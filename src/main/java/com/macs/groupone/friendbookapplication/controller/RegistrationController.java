@@ -4,81 +4,59 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.EmailService;
+import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.RegistrationValidator;
 
 @Controller
 public class RegistrationController {
 
-	private static final Logger log = Logger.getLogger(RegistrationController.class);
+	private static final Logger logger = Logger.getLogger(RegistrationController.class);
 
-	@Autowired
-	UserService userService;
-
-	@Autowired
-	EmailService emailService;
-	
-	@Autowired
-    private RegistrationValidator registrationValidator;
-
-	@Autowired 
-	AvatarService avatarService;
+	private AvatarService avatarService = (AvatarService) ServiceFactory.getInstance().getAvatarService();
+	private RegistrationValidator registrationValidator = FormValidatorFactory.getInstance().getRegistrationValidator();
 
 	@GetMapping("/registration")
-	public String registration(Model model) {
+	public String displayRegistration(Model model) {
 		model.addAttribute("registrationForm", new User());
-		return "registration";
+		return Constants.REGISTER_VIEW;
 	}
-	
+
 	@PostMapping("/registration")
-	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm, BindingResult bindingResult,
-			HttpServletRequest request, RedirectAttributes redirect) {
+	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm,
+			BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redirect) {
 		registrationValidator.validate(registrationForm, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "registration";
+			return Constants.REGISTER_VIEW;
 		} else {
 			try {
-				if (emailService.sendEmail(registrationForm.getEmail(), Constants.EMAIL_TITLE,
-						"You have been Registered with Friendbook.")) {
-					model.addAttribute(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
-					return "redirect:profile"; 
-				} else {
-					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
-					avatarService.saveDefaultAvatar(registrationForm.getEmail());
-					request.getSession().setAttribute("email", registrationForm.getEmail());
-					redirect.addFlashAttribute("firstName", registrationForm.getFirstName());
-					redirect.addFlashAttribute("lastName", registrationForm.getLastName());
-					redirect.addFlashAttribute("password", registrationForm.getPassword());
-					return "redirect:/profile";
-				}
+				UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+				userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(),
+						registrationForm.getFirstName(), registrationForm.getLastName());
+				EmailService emailService = (EmailService) ServiceFactory.getInstance().getEmailService();
+				emailService.sendEmail(registrationForm.getEmail(), Constants.REGISTRATION_CONFIRMATION_TITLE,
+						Constants.REGISTRATION_CONFIRMATION_MESSAGE);
+				avatarService.saveDefaultAvatar(registrationForm.getEmail());
+				request.getSession().setAttribute(Constants.EMAIL, registrationForm.getEmail());
+				logger.debug("User has been registedred Successfully with email Id : " + registrationForm.getEmail());
+				return Constants.REDIRECT_PROFILE;
 			} catch (MessagingException e) {
+				logger.error("Exception occured while sending and email to User. " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
-		return "login";
-
-		}
-	
-	
-	 // Going to reset page without a token redirects to login page
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-		return new ModelAndView("redirect:registration");
+		return Constants.LOGIN_VIEW;
 	}
-
 }
