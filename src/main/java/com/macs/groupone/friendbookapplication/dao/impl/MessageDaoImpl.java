@@ -17,7 +17,7 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao
 {
 	final  Logger logger = Logger.getLogger(MessageDaoImpl.class);
 	private static final String ADD_NEW_POST = "{call addNewPost(?, ?)}";
-	private static final String GET_POSTS_BY_USER = "{call getMessageSuman(?)}";
+	private static final String GET_POSTS_BY_USER = "{call getMessageByUserID(?)}";
 	private static final String GET_POST_CREATOR ="{call getPostCreator(?)}";
 	
 
