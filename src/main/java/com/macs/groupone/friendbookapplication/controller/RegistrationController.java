@@ -58,5 +58,5 @@ public class RegistrationController {
 			}
 		}
 		return Constants.LOGIN_VIEW;
-		}
+	}
 }

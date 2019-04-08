@@ -12,15 +12,15 @@ import javax.sql.rowset.serial.SerialException;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.macs.groupone.friendbookapplication.config.Config;
-import com.macs.groupone.friendbookapplication.dao.impl.DAOFactory;
-import com.macs.groupone.friendbookapplication.dao.impl.UserDaoImpl;
+import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
 public class AvatarService implements IService {
 
-	final static Logger logger = Logger.getLogger(AvatarService.class);
-	private static final String AVATAR_FOLDER = Config.getProperty("image.upload.uploadedFiles");
+	private final static Logger logger = Logger.getLogger(AvatarService.class);
+	private static final String AVATAR_FOLDER = ApplicationConfigPropertyConfigurator.getProperty("image.upload.uploadedFiles");
 	private static final String AVATART_DEFAULT_IMAGE = "default.jpg";
+
+	private UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
 
 	private static IService avatarService;
 
@@ -32,48 +32,49 @@ public class AvatarService implements IService {
 		}
 	}
 
-	
-
-	public static void uploadAvatarAndSaveBLOB(MultipartFile uploadfile, String emailID) {
-		byte[] bytes;
+	public void uploadAvatarAndSaveBLOB(MultipartFile uploadfile, String emailID) {
+		byte[] imageBytes;
 		try {
-			bytes = uploadfile.getBytes();
-			Blob userImageBlob = new javax.sql.rowset.serial.SerialBlob(bytes);
-			UserDaoImpl uerDao = (UserDaoImpl) DAOFactory.getInstance().getUserDao();
-			uerDao.uploadAvatarAndSaveBLOB(userImageBlob, emailID);
+			imageBytes = uploadfile.getBytes();
+			Blob userImageBlob = new javax.sql.rowset.serial.SerialBlob(imageBytes);
+			userService.updateUserImage(userImageBlob, emailID);
 		} catch (IOException e) {
 			logger.error("IOException has Occured for User : " + emailID);
 		} catch (SerialException e) {
 			logger.error("Image to Byte Conversion has Occured for User : " + emailID);
 		} catch (SQLException e) {
-			logger.error("Image to Byte Conversion has Occured for User : " + emailID);
+			logger.error("SQL exception occured while converting Image to Byte : " + emailID);
+			e.printStackTrace();
 		}
 
-	} // method uploadFile
+	}
 
-	public void saveDefaultAvatar(String email) {
+	public void saveDefaultAvatar(String emailID) {
 		String defaultImageFIle = AVATAR_FOLDER + AVATART_DEFAULT_IMAGE;
-		File fBlob = new File(defaultImageFIle);
-		FileInputStream fis;
+		File imageFile = new File(defaultImageFIle);
+		FileInputStream imageFileInputStream;
 		try {
-			fis = new FileInputStream(fBlob);
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			imageFileInputStream = new FileInputStream(imageFile);
+			ByteArrayOutputStream imageByteArrayOutPut = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
 			int count;
-			while ((count = fis.read(buffer)) != -1)
-				output.write(buffer, 0, count);
-			byte[] contents = output.toByteArray();
-			Blob userImageBlob = new javax.sql.rowset.serial.SerialBlob(contents);
-			UserDaoImpl dao = new UserDaoImpl();
-			dao.uploadAvatarAndSaveBLOB(userImageBlob, email);
+			while ((count = imageFileInputStream.read(buffer)) != -1)
+				imageByteArrayOutPut.write(buffer, 0, count);
+			byte[] imageContent = imageByteArrayOutPut.toByteArray();
+			Blob userImageBlob = new javax.sql.rowset.serial.SerialBlob(imageContent);
+			userService.updateUserImage(userImageBlob, emailID);
 		} catch (FileNotFoundException e) {
 			logger.error("Could not find default avatar image : " + defaultImageFIle);
+			e.printStackTrace();
 		} catch (IOException e) {
 			logger.error("Could not read image: " + defaultImageFIle);
+			e.printStackTrace();
 		} catch (SerialException e) {
-			logger.error("Image to Byte Conversion has Occured for User : " + defaultImageFIle);
+			logger.error("Image to Byte Conversion has Occured for User : " + emailID);
+			e.printStackTrace();
 		} catch (SQLException e) {
 			logger.error("Database communication error : " + defaultImageFIle);
+			e.printStackTrace();
 		}
 	}
 

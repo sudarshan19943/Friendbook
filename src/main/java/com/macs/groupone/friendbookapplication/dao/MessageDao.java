@@ -8,5 +8,6 @@ import com.macs.groupone.friendbookapplication.model.User;
 public interface MessageDao {
 	
 	void addNewPost(User sender, String post);
+
 	public Collection<Post> getPosts(User user);
 }

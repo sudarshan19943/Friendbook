@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.macs.groupone.friendbookapplication.config.Config;
+import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
 public class PassWordValidatorTest {
 	

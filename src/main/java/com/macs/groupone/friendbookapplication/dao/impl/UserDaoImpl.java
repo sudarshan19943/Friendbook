@@ -18,18 +18,19 @@ import com.macs.groupone.friendbookapplication.model.User;
 
 public class UserDaoImpl extends AbstractDao implements UserDao {
 	
-	final static Logger logger = Logger.getLogger(UserDaoImpl.class);
+	final  Logger logger = Logger.getLogger(UserDaoImpl.class);
 
-	public static final String UPDATE_USER_AVATAR = "{call updateUserImage(?, ?)}";
-	public static final String GET_USER_BY_USER_ID = "{call getUserById(?)}";
-	public static final String GET_USER_BY_EMAIL = "{call getUserByEmail(?)}";
-	public static final String GET_USER_BY_EMAIL_AND_PASSWORD = "{call getUserByEmailPassword(?, ?)}";
-	public static final String GET_RESET_TOKEN="{call findUserByResetToken(?)}";
-	public static final String ADD_USER ="{call addUser(?, ?, ?, ?)}";
-	public static final String UPDATE_USER_PASSWORD="{call updateUser(?, ?, ?)}";
-	public static final String UPDATE_USER_LOCATION="{call updateUserLocation(?, ?, ?,?)}";
-	public static final String RESET_USER_PASSWORD="{call resetUserPassword(?, ?, ?, ?)}";
-	public static final String GET_USER_LIST="{call getUserList(?,?,?,?,?)}";
+	private static final String UPDATE_USER_AVATAR = "{call updateUserImage(?, ?)}";
+	private static final String GET_USER_BY_USER_ID = "{call getUserById(?)}";
+	private static final String GET_USER_BY_EMAIL = "{call getUserByEmail(?)}";
+	private static final String GET_USER_BY_EMAIL_AND_PASSWORD = "{call getUserByEmailPassword(?, ?)}";
+	private static final String GET_RESET_TOKEN="{call findUserByResetToken(?)}";
+	private static final String ADD_USER ="{call addUser(?, ?, ?, ?)}";
+	private static final String GET_FRIENDS_AS_USER="{call findFriends(?)}";
+	private static final String UPDATE_USER_PASSWORD="{call updateUser(?, ?, ?)}";
+	private static final String UPDATE_USER_LOCATION="{call updateUserLocation(?, ?, ?,?)}";
+	private static final String RESET_USER_PASSWORD="{call resetUserPassword(?, ?, ?, ?)}";
+	private static final String GET_USER_LIST="{call getUserList(?,?,?,?,?)}";
 	
 
 	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
@@ -52,10 +53,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			if(imageBlob!=null)
 			{
 				byte[] imageBytes = imageBlob.getBytes(1,(int) imageBlob.length());
-				System.out.println("base 64 bit..."+Base64.encodeBase64String(imageBytes));
 				user.setUserImage(Base64.encodeBase64String(imageBytes));
 			}
-			
 			return user;
 		}
 	};
@@ -127,7 +126,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	
 	public Collection<User> findFriends(User user) {
 		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select("{call findFriends(?)}", USER_MAPPER, user.getId())); 
+		results.addAll(jdbcManager().select(GET_FRIENDS_AS_USER, USER_MAPPER, user.getId())); 
 		return results;
 	}
 

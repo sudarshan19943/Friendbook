@@ -3,6 +3,7 @@ package com.macs.groupone.friendbookapplication.validator.passwordandemailvalida
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,10 @@ public class ContainesLowerCaseRuleTest {
 	@Before
 	public void setUp() throws Exception {
 		containesLowerCaseRule = new ContainesLowerCaseRule();
+	}
+	@After
+	public void tearDown() {
+		containesLowerCaseRule = null;
 	}
 
 	@Test
