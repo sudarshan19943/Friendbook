@@ -131,7 +131,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainclass>com.macs.groupone.friendbookapplication</mainclass>
+					<mainclass>com.macs.groupone.frinedbookapplication</mainclass>
 				</configuration>
 			</plugin>
 		</plugins>
