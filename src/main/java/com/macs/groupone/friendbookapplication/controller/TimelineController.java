@@ -36,7 +36,6 @@ class TimelineController {
 	private CommentService commentService = (CommentService) ServiceFactory.getInstance().getCommentService();
 	private MessageService messageService = (MessageService) ServiceFactory.getInstance().getMessageService();
 
-
 	@GetMapping(value = "/timeline")
 	public String displayTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();

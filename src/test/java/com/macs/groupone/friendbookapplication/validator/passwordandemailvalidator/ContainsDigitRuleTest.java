@@ -3,6 +3,7 @@ package com.macs.groupone.friendbookapplication.validator.passwordandemailvalida
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,11 @@ public class ContainsDigitRuleTest {
 	@Before
 	public void setUp() throws Exception {
 		containsDigitRule = new ContainsDigitRule();
+	}
+	
+	@After
+	public void tearDown() {
+		containsDigitRule = null;
 	}
 
 	@Test

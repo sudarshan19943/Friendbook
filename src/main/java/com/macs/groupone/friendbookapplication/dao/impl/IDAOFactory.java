@@ -7,7 +7,10 @@ import com.macs.groupone.friendbookapplication.dao.UserDao;
 
 public interface IDAOFactory {
 	UserDao getUserDao();
+
 	FriendsDao getFriendDao();
+
 	MessageDao getMessageDao();
+
 	CommentDao getCommentsDao();
 }

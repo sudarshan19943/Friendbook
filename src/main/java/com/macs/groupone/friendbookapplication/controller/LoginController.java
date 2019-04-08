@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,20 +24,20 @@ import com.macs.groupone.friendbookapplication.validator.LoginValidator;
 public class LoginController {
 
 	private static final Logger logger = Logger.getLogger(LoginController.class);
-	private LoginValidator loginValidator=FormValidatorFactory.getInstance().getLoginValidator();
+	private LoginValidator loginValidator = FormValidatorFactory.getInstance().getLoginValidator();
 
 	@GetMapping("/login")
-	public String registration(Model model, HttpSession session) {
+	public String displayLogin(Model model, HttpSession session) {
 		model.addAttribute(Constants.LOGIN_FORM, new User());
 		return Constants.LOGIN_VIEW;
 	}
 
 	@PostMapping("/login")
-	public String registration(Model model, @ModelAttribute("loginForm") User loginForm, BindingResult bindingResult,
+	public String processLogin(Model model, @ModelAttribute("loginForm") User loginForm, BindingResult bindingResult,
 			HttpServletRequest request, RedirectAttributes redirect) {
 		loginValidator.validate(loginForm, bindingResult);
 		if (bindingResult.hasErrors()) {
-			logger.debug("Login Form could not be validated.");
+			logger.debug("Login Form has validation errors");
 			return Constants.LOGIN_VIEW;
 		} else {
 			UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
@@ -44,7 +46,8 @@ public class LoginController {
 			if (userByEmailAndPassword != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute(Constants.EMAIL, loginForm.getEmail());
-				logger.debug("User"+ userByEmailAndPassword.getFirstName()+"," +userByEmailAndPassword.getLastName() +"has been logged sucessfully");
+				logger.debug("User" + userByEmailAndPassword.getFirstName() + "," + userByEmailAndPassword.getLastName()
+						+ "has been logged sucessfully");
 				return Constants.REDIRECT_TIMELINE;
 			} else {
 				model.addAttribute(Constants.ERRORMESSAGE, Constants.PASSWORD_DOES_NOT_MATCH);
@@ -55,7 +58,7 @@ public class LoginController {
 	}
 
 	@GetMapping(value = "/logout")
-	public String signOut(HttpServletRequest request) {
+	public String processSignOut(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		session.removeAttribute("email");
 		session.invalidate();
@@ -63,9 +66,9 @@ public class LoginController {
 		return Constants.REDIRECT_LOGIN;
 	}
 
-	/*// Going to reset page without a token redirects to login page
+	// Going to reset page without a token redirects to login page
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public String handleMissingParams(MissingServletRequestParameterException ex) {
 		return Constants.REDIRECT_LOGIN;
-	}*/
+	}
 }

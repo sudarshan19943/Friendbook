@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,11 @@ public class MessageServiceTest {
 	@Before
 	public void setUp() {
 		messageService = new MessageService();
+	}
+	
+	@After
+	public void tearDown() {
+		messageService = null;
 	}
 
 	@Test
@@ -97,19 +103,18 @@ public class MessageServiceTest {
 		}
 
 	}
-	
-	
+
+
 	@Test
 	public void testSortTimeStampPostMap() {
-		
+
 		ArrayList<Post> posts=new ArrayList<>();
-		
-		
+
 		User user = new User();
 		user.setId(1);
 		user.setFirstName("Yash");
 		user.setLastName("Desai");
-		
+
 		Post post3=new Post();
 		post3.setTimeStamp(new Timestamp(1));
 		post3.setBody("First Post");
@@ -119,35 +124,34 @@ public class MessageServiceTest {
 		Post post1=new Post();
 		post1.setTimeStamp(new Timestamp(3));
 		post1.setBody("Third Post");
-		
+
 		posts.add(post1);
 		posts.add(post2);
 		posts.add(post3);
-		
+
 		user.setPosts(posts);
-		
+
 		Map<String, User> friendsAndThierPostsWithTime=new HashMap<>();
 		friendsAndThierPostsWithTime.put(post1.getTimeStamp(), user);
 		friendsAndThierPostsWithTime.put(post2.getTimeStamp(), user);
 		friendsAndThierPostsWithTime.put(post3.getTimeStamp(), user);
-		
-		
-		 List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
-		 assertEquals(post1.getTimeStamp(), sortedTimeStamp.get(0)); //thirst post is latest post
+
+
+		List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
+		assertEquals(post1.getTimeStamp(), sortedTimeStamp.get(0)); //thirst post is latest post
 
 	}
-	
-	
+
 	@Test
 	public void testfriendsAndThierPostsWithTime() {
-		
+
 		ArrayList<Post> posts=new ArrayList<>();
-		
+
 		User user = new User();
 		user.setId(1);
 		user.setFirstName("Yash");
 		user.setLastName("Desai");
-		
+
 		Post post3=new Post();
 		post3.setTimeStamp(new Timestamp(1));
 		post3.setBody("First Post");
@@ -157,28 +161,27 @@ public class MessageServiceTest {
 		Post post1=new Post();
 		post1.setTimeStamp(new Timestamp(3));
 		post1.setBody("Third Post");
-		
+
 		posts.add(post1);
 		posts.add(post2);
 		posts.add(post3);
-		
+
 		user.setPosts(posts);
-		
+
 		User loggedInUser = new User();
 		loggedInUser.setId(2);
 		loggedInUser.setFirstName("Sudarshan");
 		loggedInUser.setLastName("Suresh");
-		
+
 		Map<String, User> friendsAndThierPostsWithTime=new HashMap<>();
 		friendsAndThierPostsWithTime.put(post1.getTimeStamp(), user);
 		friendsAndThierPostsWithTime.put(post2.getTimeStamp(), user);
 		friendsAndThierPostsWithTime.put(post3.getTimeStamp(), user);
-		
-		
-		 List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
-		 LinkedHashMap<String, Post> messageToReturn=(LinkedHashMap<String, Post>) messageService.createSeperatePostSortedByTimeStamp(friendsAndThierPostsWithTime, sortedTimeStamp, loggedInUser);
-		 Post updatedPost=messageToReturn.get(0);
-		 //assertEquals(post3.getTimeStamp(),updatedPost.getTimeStamp());
 
+
+		List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
+		LinkedHashMap<String, Post> messageToReturn=(LinkedHashMap<String, Post>) messageService.createSeperatePostSortedByTimeStamp(friendsAndThierPostsWithTime, sortedTimeStamp, loggedInUser);
+		Post updatedPost=messageToReturn.get(0);
+		//assertEquals(post3.getTimeStamp(),updatedPost.getTimeStamp());
 	}
 }

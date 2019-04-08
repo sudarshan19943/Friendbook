@@ -3,6 +3,7 @@ package com.macs.groupone.friendbookapplication.validator.passwordandemailvalida
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,11 @@ public class ContainsLengthRuleTest {
 	public void setUp() throws Exception {
 		containsLengthRule=new ContainsLengthRule();
 	}
-
+	
+	@After
+	public void tearDown() {
+		containsLengthRule = null;
+	}
 
 	@Test
 	public void testPasswordNotContainsRequiredLength() {
