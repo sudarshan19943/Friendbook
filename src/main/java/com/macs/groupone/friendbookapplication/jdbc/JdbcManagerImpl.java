@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.macs.groupone.friendbookapplication.config.Config;
+import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFailure;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
@@ -24,18 +24,18 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationExcep
 public class JdbcManagerImpl implements JdbcManager {
 	
 	private final  Logger logger = Logger.getLogger(JdbcManagerImpl.class);
-	private final static String URL="spring.datasource.url";
-	private final static String USER_NAME="spring.datasource.username";
-	private final static String PASSWORD="spring.datasource.password";
+	private final  String URL="spring.datasource.url";
+	private final  String USER_NAME="spring.datasource.username";
+	private final  String PASSWORD="spring.datasource.password";
 	
 	private String url;
 	private String username;
 	private String password;
 	
 	public JdbcManagerImpl() {
-		this.url = Config.getProperty(URL);
-		this.username =Config.getProperty(USER_NAME);
-		this.password =Config.getProperty(PASSWORD);
+		this.url = ApplicationConfigPropertyConfigurator.getProperty(URL);
+		this.username =ApplicationConfigPropertyConfigurator.getProperty(USER_NAME);
+		this.password =ApplicationConfigPropertyConfigurator.getProperty(PASSWORD);
 	}
 
 	private final Connection getConnection() {
@@ -54,14 +54,14 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				connection.close();
 			} catch (final Exception e) {
-				logger.error("Connection cannot be closed" + e);
+				logger.error("Exception occured while closing connection" + e);
 				e.printStackTrace();
 			}
 		if (null != statement)
 			try {
 				statement.close();
 			} catch (final Exception e) {
-				logger.error("Statement cannot be closed" + e);
+				logger.error("Exception occured while closing Statement" + e);
 				e.printStackTrace();
 			}
 		
@@ -69,7 +69,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				resultSet.close();
 			} catch (final Exception e) {
-				logger.error("Resultset cannot be closed" + e);
+				logger.error("Exception occured while closing Resultset" + e);
 				e.printStackTrace();
 			}
 
@@ -80,7 +80,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			try {
 				connection.rollback();
 			} catch (final Exception e) {
-				logger.error("Connection error" + e);
+				logger.error("Connection error occured." + e);
 				e.printStackTrace();
 			}
 		}
@@ -103,7 +103,7 @@ public class JdbcManagerImpl implements JdbcManager {
 				result.add(rowMapper.map(resultSet));
 			}
 		} catch (final SQLException e) {
-			logger.error("Database Exception" + e);
+			logger.error("Database Exception occured." + e);
 			throw new DatabaseOperationException(e);
 		} finally {
 			closeConnection(connection, statement, resultSet);
@@ -125,12 +125,12 @@ public class JdbcManagerImpl implements JdbcManager {
 			connection.commit();
 			return 1;
 		} catch (final DatabaseAccessException e) {
-			logger.error("Database exception" + e);
+			logger.error("Database Access exception" + e);
 			rollback(connection);
 			throw e;
 		} catch (final Exception e) {
 			rollback(connection);
-			logger.error("Database Exception" + e);
+			logger.error("Database Exception occured." + e);
 			throw new DatabaseOperationException(e);
 		} finally {
 			closeConnection(connection, statement, resultSet);
@@ -152,7 +152,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			return result;
 		} catch (final DatabaseAccessException e) {
 			rollback(connection);
-			logger.error("Database Access Exception" + e);
+			logger.error("Database Access Exception occured." + e);
 			throw e;
 		} catch (final Exception e) {
 			rollback(connection);
@@ -171,28 +171,28 @@ public class JdbcManagerImpl implements JdbcManager {
 			final int parameterIndex = i + 1;
 			if (null == parameter) {
 				statement.setObject(parameterIndex, null);
-			} else if (parameter instanceof Boolean) {
-				statement.setBoolean(parameterIndex, (Boolean) parameter);
-			} else if (parameter instanceof Character) {
-				statement.setString(parameterIndex, String.valueOf(parameter));
-			} else if (parameter instanceof Byte) {
-				statement.setByte(parameterIndex, (Byte) parameter);
-			} else if (parameter instanceof Short) {
+			}  else if (parameter instanceof Short) {
 				statement.setShort(parameterIndex, (Short) parameter);
-			} else if (parameter instanceof Integer) {
-				statement.setInt(parameterIndex, (Integer) parameter);
-			} else if (parameter instanceof Long) {
-				statement.setLong(parameterIndex, (Long) parameter);
-			} else if (parameter instanceof Float) {
-				statement.setFloat(parameterIndex, (Float) parameter);
-			} else if (parameter instanceof Double) {
-				statement.setDouble(parameterIndex, (Double) parameter);
 			} else if (parameter instanceof String) {
 				statement.setString(parameterIndex, (String) parameter);
 			} else if (parameter instanceof Date) {
 				statement.setDate(parameterIndex, new java.sql.Date(((Date) parameter).getTime()));
 			} else if (parameter instanceof Calendar) {
 				statement.setDate(parameterIndex, new java.sql.Date(((Calendar) parameter).getTimeInMillis()));
+			} else if (parameter instanceof Integer) {
+				statement.setInt(parameterIndex, (Integer) parameter);
+			} else if (parameter instanceof Long) {
+				statement.setLong(parameterIndex, (Long) parameter);
+			} else if (parameter instanceof Boolean) {
+				statement.setBoolean(parameterIndex, (Boolean) parameter);
+			} else if (parameter instanceof Character) {
+				statement.setString(parameterIndex, String.valueOf(parameter));
+			} else if (parameter instanceof Byte) {
+				statement.setByte(parameterIndex, (Byte) parameter);
+			}else if (parameter instanceof Float) {
+				statement.setFloat(parameterIndex, (Float) parameter);
+			} else if (parameter instanceof Double) {
+				statement.setDouble(parameterIndex, (Double) parameter);
 			} else if (parameter instanceof BigDecimal) {
 				statement.setBigDecimal(parameterIndex, (BigDecimal) parameter);
 			}else if (parameter instanceof Blob) {
@@ -202,7 +202,7 @@ public class JdbcManagerImpl implements JdbcManager {
 			}  
 			else {
 				throw new IllegalArgumentException(
-						String.format("parameter is found. [param: %s, paramIndex: %s]", parameter,
+						String.format("parameter type is not found. [param: %s, paramIndex: %s]", parameter,
 								parameterIndex));
 			}
 		}

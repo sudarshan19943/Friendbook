@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -26,18 +27,17 @@ import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
 
 @Controller
-class TimelineController 
-{
+class TimelineController {
+	
+	private static final Logger logger = Logger.getLogger(RegistrationController.class);
 
-	FriendsService friendsService=(FriendsService) ServiceFactory.getInstance().getFriendService();
-	UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
-	CommentService commentService = (CommentService) ServiceFactory.getInstance().getCommentService();
-	MessageService messageService = (MessageService) ServiceFactory.getInstance().getMessageService();
-
+	private FriendsService friendsService = (FriendsService) ServiceFactory.getInstance().getFriendService();
+	private UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+	private CommentService commentService = (CommentService) ServiceFactory.getInstance().getCommentService();
+	private MessageService messageService = (MessageService) ServiceFactory.getInstance().getMessageService();
 
 	@GetMapping(value = "/timeline")
-	public String showTimelinePage(Model model, HttpServletRequest request) 
-	{
+	public String displayTimelinePage(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String currentUseremail = (String) session.getAttribute("email");
 		if (currentUseremail == null)
@@ -45,7 +45,8 @@ class TimelineController
 
 		User findUserFromEmail = userService.getUserByEmail(currentUseremail);
 		Collection<User> listOfFriends = friendsService.findFriendsSuman(findUserFromEmail);
-		Map<String, Post> listOfPostsFromAllMyFriendsSorted = messageService.GetPostsSortedByTimeStamp(findUserFromEmail, listOfFriends);
+		Map<String, Post> listOfPostsFromAllMyFriendsSorted = messageService
+				.GetPostsSortedByTimeStamp(findUserFromEmail, listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
 		String emailfromsession = (String) request.getSession().getAttribute("email");
 		User userFromSession = userService.getUserByEmail(emailfromsession);
@@ -54,22 +55,22 @@ class TimelineController
 	}
 
 	@PostMapping(value = "/comment")
-	public String processPost(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir,
-			@RequestParam("comment") String comment, @RequestParam("postId") int postID) 
-	{
+	public String processComments(ModelAndView modelAndView, HttpServletRequest request, RedirectAttributes redir,
+			@RequestParam("comment") String comment, @RequestParam("postId") int postID) {
 		String email = (String) request.getSession().getAttribute("email");
 		User userByEmailAndPassword = userService.getUserByEmail(email);
 		Comment commentBean = new Comment();
 		commentBean.setSender(userByEmailAndPassword.getId());
-		commentBean.setRecipient(messageService.getPostCreator(postID).get(0).getSender());// creator of post
+		int recipient=messageService.getPostCreator(postID).get(0).getSender();
+		commentBean.setRecipient(recipient);// creator of post
 		commentBean.setBody(comment);
 		commentService.addNewComment(commentBean, postID);
+		logger.debug("Comment has been posted by user : "+userByEmailAndPassword.getEmail()+" on "+recipient +" Timeline Post.");
 		return Constants.REDIRECT_TIMELINE;
 	}
 
 	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) 
-	{
+	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
 		return new ModelAndView(Constants.REDIRECT_LOGIN);
 	}
 

@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
-import com.macs.groupone.friendbookapplication.service.FriendsService;
 import com.macs.groupone.friendbookapplication.service.MessageService;
 import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
@@ -23,12 +22,11 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 public class NewPostController {
 	private static final Logger logger = Logger.getLogger(NewPostController.class);
 
-	FriendsService friendsService = (FriendsService) ServiceFactory.getInstance().getFriendService();
-	UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
-	MessageService messageService = (MessageService) ServiceFactory.getInstance().getMessageService();
+	private UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+	private MessageService messageService = (MessageService) ServiceFactory.getInstance().getMessageService();
 
 	@GetMapping(value = "/newpost")
-	public String showNewpostPage(Model model, User user, HttpServletRequest request) {
+	public String displayNewpostPage(Model model, User user, HttpServletRequest request) {
 		if (request.getSession().getAttribute("email") == null)
 			return Constants.REDIRECT_LOGIN;
 
@@ -39,7 +37,7 @@ public class NewPostController {
 	}
 
 	@PostMapping(value = "/newpost", params = "post")
-	public String processPost(Model model, HttpServletRequest request, RedirectAttributes redir,
+	public String processNewPost(Model model, HttpServletRequest request, RedirectAttributes redir,
 			@RequestParam("post") String post, @Valid Post message, RedirectAttributes redirect) {
 		HttpSession session = request.getSession();
 		String emailfromsession = (String) session.getAttribute("email");
@@ -50,6 +48,7 @@ public class NewPostController {
 		model.addAttribute("postVal", post);
 		model.addAttribute(Constants.SUCCESSMESSAGE, Constants.MESSAGE_POSTED_SUCCESSFULLY);
 		redirect.addFlashAttribute(Constants.SUCCESSMESSAGE, Constants.MESSAGE_POSTED_SUCCESSFULLY);
+		logger.debug("Mesaage posted Successfully by user : "+emailfromsession);
 		return Constants.REDIRECT_NEWPOST;
 	}
 

@@ -3,7 +3,7 @@ package com.macs.groupone.friendbookapplication.service;
 import java.util.Date;
 import java.util.Properties;
 
-import com.macs.groupone.friendbookapplication.config.Config;
+import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -53,8 +53,8 @@ public class EmailService implements IService
 
 	private void createSession() 
 	{
-		final String userName = Config.getProperty(MAIL_USERNAME);
-		final String password = Config.getProperty(MAIL_PASSWORD);
+		final String userName = ApplicationConfigPropertyConfigurator.getProperty(MAIL_USERNAME);
+		final String password = ApplicationConfigPropertyConfigurator.getProperty(MAIL_PASSWORD);
 		Authenticator auth = new Authenticator() 
 		{
 			public PasswordAuthentication getPasswordAuthentication() 
@@ -68,10 +68,10 @@ public class EmailService implements IService
 	private void createProperties() 
 	{
 		properties = new Properties();
-		properties.put(HOST, Config.getProperty(HOST));
-		properties.put(PORT, Config.getProperty(PORT));
-		properties.put(AUTH, Config.getProperty(AUTH));
-		properties.put(ENABLED, Config.getProperty(ENABLED));
+		properties.put(HOST, ApplicationConfigPropertyConfigurator.getProperty(HOST));
+		properties.put(PORT, ApplicationConfigPropertyConfigurator.getProperty(PORT));
+		properties.put(AUTH, ApplicationConfigPropertyConfigurator.getProperty(AUTH));
+		properties.put(ENABLED, ApplicationConfigPropertyConfigurator.getProperty(ENABLED));
 	}
 
 	public void sendEmail(String toAddress, String subject, String message)
@@ -81,7 +81,7 @@ public class EmailService implements IService
 		createSession();
 		try 
 		{
-			createFromAddress(Config.getProperty(MAIL_USERNAME));
+			createFromAddress(ApplicationConfigPropertyConfigurator.getProperty(MAIL_USERNAME));
 			Message msg = new MimeMessage(session);
 			msg.setFrom(fromAddress);
 			InternetAddress[] toAddresses = { new InternetAddress(toAddress) };

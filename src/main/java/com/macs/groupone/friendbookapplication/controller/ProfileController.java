@@ -34,7 +34,7 @@ public class ProfileController {
 	AvatarService avatarService = (AvatarService) ServiceFactory.getInstance().getAvatarService();
 
 	@GetMapping("/profile")
-	public String getProfile(Model model, HttpServletRequest request, RedirectAttributes redirect) {
+	public String displayProfile(Model model, HttpServletRequest request, RedirectAttributes redirect) {
 
 		model.addAttribute("profileForm", new User());
 		HttpSession session = request.getSession();
@@ -54,7 +54,7 @@ public class ProfileController {
 			BindingResult bindingResult, HttpServletRequest request,
 			@RequestParam("profilepic") MultipartFile profilepic) {
 		logger.info("Skipping Profile Update.");
-		return "timeline";
+		return Constants.REDIRECT_TIMELINE;
 	}
 
 	// update Profile
@@ -64,7 +64,7 @@ public class ProfileController {
 			@RequestParam("profilepic") MultipartFile profilepic, RedirectAttributes redirect) {
 		String emailFromSession = (String) request.getSession().getAttribute("email");
 		if (emailFromSession == null)
-			return "redirect:login";
+			return Constants.REDIRECT_LOGIN;
 
 		User findUserFromEmail = userService.getUserByEmail(emailFromSession);
 		if (!StringUtils.isNullOrEmpty(profileForm.getCityId())) {
@@ -82,12 +82,12 @@ public class ProfileController {
 				redirect.addFlashAttribute(Constants.ERRORMESSAGE, Constants.IMAGE_SIZE_EXCEEDED);
 				return Constants.REDIRECT_PROFILE;
 			} else {
-				AvatarService.uploadAvatarAndSaveBLOB(profilepic, findUserFromEmail.getEmail());
+				avatarService.uploadAvatarAndSaveBLOB(profilepic, findUserFromEmail.getEmail());
 			}
 		}
 		userService.updateUserLocation(findUserFromEmail);
 		logger.info("User Profile has been successfully updated.");
-		return "timeline";
+		return Constants.REDIRECT_TIMELINE;
 	}
 
 	// Going to reset page without a token redirects to login page

@@ -5,180 +5,146 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
 <style type="text/css">
-    <%@include file="css/chat.css"%>
-    <%@include file="css/bootstrap.min.css"%>
-    <%@include file="css/bootstrap-formhelpers.min.css"%>
-    <%@include file="css/style.css"%>
+   <%@include file="css/chat.css"%>
+   <%@include file="css/bootstrap.min.css"%>
+   <%@include file="css/bootstrap-formhelpers.min.css"%>
+   <%@include file="css/style.css"%>
 </style>
 <script>
-    <%@include file="js/jquery.min.js"%>
-    <%@include file="js/bootstrap.min.js"%>
-    <%@include file="js/bootstrap-formhelpers.min.js"%>
+   <%@include file="js/jquery.min.js"%>
+   <%@include file="js/bootstrap.min.js"%>
+   <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
-
-<fmt:setBundle basename="locale" var="loc"/>
-<fmt:message bundle="${loc}" key="local.label.sign_in_continue" var="sign_in_continue"/>
-<fmt:message bundle="${loc}" key="local.button.sign_in" var="sign_in"/>
-<fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
-<fmt:message bundle="${loc}" key="local.label.new_user" var="new_user"/>
-<fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
-
-
 <script>
-/* Be sure that ur dom is loaded */    
-$(document).ready(function(){
-    $("div.form-group-lastname label.tbh:empty").parent().hide()
-});
+   /* Be sure that ur dom is loaded */    
+   $(document).ready(function(){
+       $("div.form-group-lastname label.tbh:empty").parent().hide()
+   });
 </script>
 <html>
-<head>
-    <title>Profile</title>
-    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-</head>
-
-<fmt:setBundle basename="locale" var="loc"/>
-<fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
-
-<style>
-
-
-
-
-#upload-file-input{
-display:none;
-}
-#profilepic{
-cursor:pointer;
-}
-</style>
-
- <script>
-  
-    // bind the on-change event for the input element (triggered when a file
-    // is chosen)
-    $(document).ready(function() {
+   <head>
+      <title>Profile</title>
+      <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+   </head>
+   <fmt:setBundle basename="locale" var="loc"/>
+   <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
+   <style>
+      #upload-file-input{
+      display:none;
+      }
+      #profilepic{
+      cursor:pointer;
+      }
+   </style>
+   <script>
+      // bind the on-change event for the input element (triggered when a file
+      // is chosen)
+      $(document).ready(function() {
+        
+        $("#profilepic").on("click", function(){
+      	  $('#upload-file-input').trigger('click');
+        })
+        function readURL(input) {
       
-      $("#profilepic").on("click", function(){
-    	  $('#upload-file-input').trigger('click');
-      })
-      function readURL(input) {
-
-    	  if (input.files && input.files[0]) {
-    	    var reader = new FileReader();
-
-    	    reader.onload = function(e) {
-    	      $('#profilepic').attr('src', e.target.result);
-    	    }
-
-    	    reader.readAsDataURL(input.files[0]);
-    	  }
-    	}
-
-    	$("#upload-file-input").change(function() {
-    	  readURL(this);
-    	});
-    	window.history.pushState(null, "", window.location.href);        
-        window.onpopstate = function() {
-            window.history.pushState(null, "", window.location.href);
-        };
-    });
-    
-  </script>
-<body>
-
-<div class="header">
-    <h2>Friend Book</h2>
-</div>
-
-<div class="container" style="margin-top:40px">
-    <div class="row centered-form">
-        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-          <!--   <img class="avatar" id="profilepic" src="../../icons/avatar.png"/>
-		    <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />			  -->
-           
-            <div class="panel panel-default" style="margin-top: 10px">
-                <div class="panel-body">
-                    
-                    <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
-                         <!-- Images -->
-                         
+      	  if (input.files && input.files[0]) {
+      	    var reader = new FileReader();
+      
+      	    reader.onload = function(e) {
+      	      $('#profilepic').attr('src', e.target.result);
+      	    }
+      
+      	    reader.readAsDataURL(input.files[0]);
+      	  }
+      	}
+      
+      	$("#upload-file-input").change(function() {
+      	  readURL(this);
+      	});
+      	window.history.pushState(null, "", window.location.href);        
+          window.onpopstate = function() {
+              window.history.pushState(null, "", window.location.href);
+          };
+      });
+      
+   </script>
+   <body>
+      <div class="header">
+         <h2>Friend Book</h2>
+      </div>
+      <div class="container" style="margin-top:40px">
+         <div class="row centered-form">
+            <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+               <!--   <img class="avatar" id="profilepic" src="../../icons/avatar.png"/>
+                  <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />			  -->
+               <div class="panel panel-default" style="margin-top: 10px">
+                  <div class="panel-body">
+                     <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
+                        <!-- Images -->
                         <div class="form-group-profilepic" align="center">
-                        <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
-                        </div> 
+                           <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
+                        </div>
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
                         </div>
-                       
-                         <!--  full name  -->
+                        <!--  full name  -->
                         <div class="form-group-firstname" style="text-align:center">
-                            <label for="fullName">${fullName}</label>
+                           <label for="fullName">${fullName}</label>
                         </div>
-                        
                         <!-- City Name --> 
                         <div class="form-group-lastname">
-                            <label for="city" class="tbh">${city}</label>
+                           <label for="city" class="tbh">${city}</label>
                         </div>
-                        
-                     
-                        
-                       <!-- Dropdown -->
-							<div class="form-group">
-							 <spring:bind path="countryId">
-								<form:select name="country" class="countries" id="countryId" path="countryId" >
-									<form:option value="" path="countryId">Select Country</form:option>
-								</form:select>
-								<form:errors path="email"></form:errors>
-								</spring:bind>
-								
-								 <spring:bind path="countryId">
-								 <form:select name="state" class="states" id="stateId" path="stateId">
-									<form:option value="" path="stateId">Select State</form:option>
-								</form:select> 
-								</spring:bind>
-								
-								<spring:bind path="cityId">
-								<form:select name="city" class="cities" id="cityId" path="cityId">
-									<form:option value="" path="cityId">Select City</form:option>
-								</form:select>
-								</spring:bind>
-								
-								<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-								<script src="//geodata.solutions/includes/countrystatecity.js"></script>
-							</div>
-							<!-- update and Skip button -->
-							<div class="button-group" style="margin:auto;max-width:50%">
-                            <input type="submit" class="btn btn-lg btn-primary btn-block" style="margin-bottom:20px" value="Update Profile" name="Update">
+                        <!-- Dropdown -->
+                        <div class="form-group">
+                           <spring:bind path="countryId">
+                              <form:select name="country" class="countries" id="countryId" path="countryId" >
+                                 <form:option value="" path="countryId">Select Country</form:option>
+                              </form:select>
+                              <form:errors path="email"></form:errors>
+                           </spring:bind>
+                           <spring:bind path="countryId">
+                              <form:select name="state" class="states" id="stateId" path="stateId">
+                                 <form:option value="" path="stateId">Select State</form:option>
+                              </form:select>
+                           </spring:bind>
+                           <spring:bind path="cityId">
+                              <form:select name="city" class="cities" id="cityId" path="cityId">
+                                 <form:option value="" path="cityId">Select City</form:option>
+                              </form:select>
+                           </spring:bind>
+                           <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                           <script src="//geodata.solutions/includes/countrystatecity.js"></script>
+                        </div>
+                        <!-- update and Skip button -->
+                        <div class="button-group" style="margin:auto;max-width:50%">
+                           <input type="submit" class="btn btn-lg btn-primary btn-block" style="margin-bottom:20px" value="Update Profile" name="Update">
                         </div>
                         <div class="button-group" style="margin:auto;max-width:50%">
-                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Skip" name="Skip">
+                           <input type="submit" class="btn btn-lg btn-primary btn-block" value="Skip" name="Skip">
                         </div>
                         <c:if test="${not empty errorMessage}">
-                                <div class="alert alert-danger">
-                                    <strong>
-                                        ${errorMessage}
-                                    </strong>
-                                </div>
-                                </c:if>
-                                <c:if test="${not empty successMessage}">
-                                <div class="alert alert-success">
-                                    <strong>
-                                        ${successMessage}
-                                    </strong>
-                                </div>
-                                </c:if>
-                        
-                       <!--  end of form -->
-                  
-                    </form:form>
-                </div>
+                           <div class="alert alert-danger">
+                              <strong>
+                              ${errorMessage}
+                              </strong>
+                           </div>
+                        </c:if>
+                        <c:if test="${not empty successMessage}">
+                           <div class="alert alert-success">
+                              <strong>
+                              ${successMessage}
+                              </strong>
+                           </div>
+                        </c:if>
+                        <!--  end of form -->
+                     </form:form>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
-</div>
-<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<%-- <script src="${contextPath}/resources/js/bootstrap.min.js"></script> --%>
-</body>
+         </div>
+      </div>
+      <script
+         src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   </body>
 </html>

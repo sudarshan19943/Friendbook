@@ -21,48 +21,42 @@ import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.RegistrationValidator;
 
 @Controller
-public class RegistrationController 
-{
+public class RegistrationController {
 
-	private static final Logger log = Logger.getLogger(RegistrationController.class);
-    
-	AvatarService avatarService=(AvatarService)ServiceFactory.getInstance().getAvatarService();
-    private RegistrationValidator registrationValidator=FormValidatorFactory.getInstance().getRegistrationValidator();
-	
+	private static final Logger logger = Logger.getLogger(RegistrationController.class);
+
+	private AvatarService avatarService = (AvatarService) ServiceFactory.getInstance().getAvatarService();
+	private RegistrationValidator registrationValidator = FormValidatorFactory.getInstance().getRegistrationValidator();
 
 	@GetMapping("/registration")
-	public String registration(Model model) 
-	{
+	public String displayRegistration(Model model) {
 		model.addAttribute("registrationForm", new User());
 		return Constants.REGISTER_VIEW;
 	}
-	
+
 	@PostMapping("/registration")
-	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm, BindingResult bindingResult,
-			HttpServletRequest request, RedirectAttributes redirect) 
-	{
+	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm,
+			BindingResult bindingResult, HttpServletRequest request, RedirectAttributes redirect) {
 		registrationValidator.validate(registrationForm, bindingResult);
-		if (bindingResult.hasErrors()) 
-		{
+		if (bindingResult.hasErrors()) {
 			return Constants.REGISTER_VIEW;
-		} 
-		else 
-		{
-			try 
-			{
-					UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
-					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
-					EmailService emailService = (EmailService) ServiceFactory.getInstance().getEmailService();
-					emailService.sendEmail(registrationForm.getEmail(), Constants.REGISTRATION_CONFIRMATION_TITLE,Constants.REGISTRATION_CONFIRMATION_MESSAGE);
-					avatarService.saveDefaultAvatar(registrationForm.getEmail());
-					request.getSession().setAttribute(Constants.EMAIL, registrationForm.getEmail());
-					return Constants.REDIRECT_PROFILE;
-			}
-			catch (MessagingException e) 
-			{
+		} else {
+			try {
+				UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
+				userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(),
+						registrationForm.getFirstName(), registrationForm.getLastName());
+				EmailService emailService = (EmailService) ServiceFactory.getInstance().getEmailService();
+				emailService.sendEmail(registrationForm.getEmail(), Constants.REGISTRATION_CONFIRMATION_TITLE,
+						Constants.REGISTRATION_CONFIRMATION_MESSAGE);
+				avatarService.saveDefaultAvatar(registrationForm.getEmail());
+				request.getSession().setAttribute(Constants.EMAIL, registrationForm.getEmail());
+				logger.debug("User has been registedred Successfully with email Id : " + registrationForm.getEmail());
+				return Constants.REDIRECT_PROFILE;
+			} catch (MessagingException e) {
+				logger.error("Exception occured while sending and email to User. " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
 		return Constants.LOGIN_VIEW;
-		}
+	}
 }

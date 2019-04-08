@@ -1,5 +1,6 @@
 package com.macs.groupone.friendbookapplication.service;
 
+import java.sql.Blob;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -49,6 +50,10 @@ public class UserService implements IService {
 
 	public void updateUser(User user) {
 		userDaoImpl.updateUser(user);
+	}
+	
+	public void updateUserImage(Blob userImageBlob, String emailID) {
+		userDaoImpl.uploadAvatarAndSaveBLOB(userImageBlob,emailID);
 	}
 
 	public void updateUserLocation(User user) {

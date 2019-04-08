@@ -3,6 +3,7 @@ package com.macs.groupone.friendbookapplication.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -15,8 +16,9 @@ import com.macs.groupone.friendbookapplication.model.User;
 public class MessageDaoImpl extends AbstractDao implements MessageDao 
 {
 	final  Logger logger = Logger.getLogger(MessageDaoImpl.class);
-	public static final String ADD_NEW_POST = "{call addNewPost(?, ?)}";
-	public static final String GET_POSTS_BY_USER = "{call getMessageSuman(?)}";
+	private static final String ADD_NEW_POST = "{call addNewPost(?, ?)}";
+	private static final String GET_POSTS_BY_USER = "{call getMessageSuman(?)}";
+	private static final String GET_POST_CREATOR ="{call getPostCreator(?)}";
 	
 
 	private static final RowMapper<Post> MESSAGE_MAPPER = new RowMapper<Post>() 
@@ -47,10 +49,10 @@ public class MessageDaoImpl extends AbstractDao implements MessageDao
 		return results;
 	}
 	
-	public ArrayList<Post> getPostCreator(int postID)
+	public List<Post> getPostCreator(int postID)
 	{
 		ArrayList<Post> results = new ArrayList<>();
-		results.addAll(jdbcManager().select("{call getPostCreator(?)}",MESSAGE_MAPPER, postID));
+		results.addAll(jdbcManager().select(GET_POST_CREATOR,MESSAGE_MAPPER, postID));
 		return results;
 	}
 
