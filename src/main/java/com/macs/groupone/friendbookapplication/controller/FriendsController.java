@@ -42,17 +42,23 @@ public class FriendsController {
 
 
 	private static final Logger log = Logger.getLogger(FriendsController.class);
+	
 	private AddFriendStateService addFriendState = (AddFriendStateService)StateFactoryService.getInstance().addFriendState();
 	private ConfirmFriendStateService confirmFriendState = (ConfirmFriendStateService)StateFactoryService.getInstance().confirmFriendState();
 	private RemoveFriendStateService removeFriendState = (RemoveFriendStateService)StateFactoryService.getInstance().removeFriendState();
 
-	@GetMapping(value = "/friends")
-	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView, RedirectAttributes redirect, HttpServletRequest request) 
+	private User getUserFromSession(HttpServletRequest request)
 	{
 		HttpSession session=request.getSession();
 		String emailfromsession=(String) session.getAttribute("email");
 		User user = userService.getUserByEmail(emailfromsession);
-
+		return user;
+	}
+	
+	@GetMapping(value = "/friends")
+	public ModelAndView showFriendPage(Model model, ModelAndView modelAndView, RedirectAttributes redirect, HttpServletRequest request) 
+	{
+		User user = getUserFromSession(request);
 		ArrayList<User> friendList=(ArrayList<User>) userService.findFriendsFromDatabase(user);
 
 		friendsService.removeUserFromFriendsList(user, friendList);
@@ -70,9 +76,7 @@ public class FriendsController {
 	@PostMapping(value = "/friends", params = "findFriends")
 	public ModelAndView findFriends(Model model, ModelAndView modelAndView, RedirectAttributes redirect, @ModelAttribute("usersForm") User usersForm, HttpServletRequest request) 
 	{
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
+		User user = getUserFromSession(request);
 
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm);
 		ArrayList<User> friendList=(ArrayList<User>) userService.findFriendsFromDatabase(user);
@@ -95,14 +99,12 @@ public class FriendsController {
 
 		friend.setId(Integer.parseInt(post));
 
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
+		User user = getUserFromSession(request);
 		StateContextService  context = new StateContextService (removeFriendState);
 		context.executeState(friend, user);
 
 		log.debug("Friend removed");
-		return "redirect:friends";
+		return Constants.REDIRECT_FRIENDS;
 	}
 
 	@PostMapping(value = "/confirmfriend", params = "confirmfriend")
@@ -111,14 +113,12 @@ public class FriendsController {
 	{
 
 		friend.setId(Integer.parseInt(confirmfriend));
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
+		User user = getUserFromSession(request);
 		StateContextService  context = new StateContextService (confirmFriendState);
 		context.executeState(friend, user);
 
 		log.debug("Friend confirmed");
-		return "redirect:friends";
+		return Constants.REDIRECT_FRIENDS;
 	}
 
 	@PostMapping(value = "/addfriends", params = "addFriends")
@@ -126,14 +126,12 @@ public class FriendsController {
 	{
 
 		friend.setId(Integer.parseInt(addfriends));
-		HttpSession session=request.getSession();
-		String emailfromsession=(String) session.getAttribute("email");
-		User user=userService.getUserByEmail(emailfromsession);
+		User user = getUserFromSession(request);
 		StateContextService  context = new StateContextService (addFriendState);
 		context.executeState(friend, user);
 
 		log.debug("Friend added");
-		return "redirect:friends";
+		return Constants.REDIRECT_FRIENDS;
 	}
 
 	private void getButtonState(User user)

@@ -41,6 +41,7 @@ public class Constants {
 	public static final String REDIRECT_PROFILE="redirect:/profile";
 	public static final String REDIRECT_NEWPOST="redirect:/newpost";
 	public static final String REDIRECT_RESETPASSWORD="redirect:/resetpassword";
+	public static final String REDIRECT_FRIENDS="redirect:/friends";
 	
 	//Session Attributes
 	public static final String EMAIL="email";
