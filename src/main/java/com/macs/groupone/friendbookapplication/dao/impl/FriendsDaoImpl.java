@@ -24,16 +24,14 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 	public static final String ADD_FRIEND = "{call addFriend(?, ?)}";
 	public static final String REMOVE_FRIEND = "{call removeFriend(?)}";
 	public static final String UPDATE_FRIEND_TOKEN ="{call updateFriendToken(?)}";
-	public static final String FIND_FRIENDS="{call findFriends(?)}";
-	public static final String FIND_FRIEND_SUMAN ="{call findFriendsSuman(?)}";
+	public static final String FIND_FRIEND ="{call findFriend(?)}";
 	public static final String CONFIRM_FRIEND="{call confirmFriend(?)}";
 	public static final String UPDATE_CONFIRM_TOKEN="{call updateConfirmToken(?)}";
 	public static final String UPDATE_FRIEND_CONNECTION_TOKEN="{call updateFriendTokenInFriends(?)}";
 	public static final String REMOVE_FRIEND_USER="{call removeFriendUser(?)}";
 	public static final String CLEAR_FRIEND_CONFIRM_TOKEN="{call clearFriendConfirmToken(?)}";
 	public static final String CLEAR_FRIEND_TOKEN="{call clearFriendToken(?)}";
-	
-	
+
 	private static final RowMapper<Friend> FRIENDS_MAPPER = new RowMapper<Friend>() {
 		@Override
 		public Friend map(final ResultSet resultSet) throws SQLException {
@@ -44,19 +42,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		}
 	};
   
-	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
-	@Override
-	public User map(final ResultSet resultSet) throws SQLException {
-		final User friend = new User();
-		friend.setId(resultSet.getInt("id"));
-		friend.setFirstName(resultSet.getString("first_name"));
-		friend.setLastName(resultSet.getString("last_name"));
-		friend.setCityId(resultSet.getString("city"));
-		friend.setCountryId(resultSet.getString("country"));
-		friend.setStateId(resultSet.getString("province"));
-		return friend;
-	}
-};
 
 	@Override
 	public long addFriend(User friend, User user) {
@@ -75,20 +60,7 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		jdbcManager().update(UPDATE_FRIEND_TOKEN, user.getId());
 		
 	}
-
-	@Override
-	public long getNumberOfFriends(User user, String searchText) {
-		return 0;
-	}
 	
-	public Collection<User> findFriends(User user) {
-		Collection<User> results = new ArrayList<>(); 
-		results.addAll(jdbcManager().select(FIND_FRIENDS, USER_MAPPER, user.getId())); 
-		return results;
-	}
-
-	
-
 	@Override
 	public void confirmFriend(User user) {
 		jdbcManager().update(CONFIRM_FRIEND, user.getId());
@@ -97,11 +69,6 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 
 	public void updateConfirmToken(User friend) {
 		jdbcManager().update(UPDATE_CONFIRM_TOKEN, friend.getId());
-		
-	}
-
-	public void updateFriendTokenInFriends(User friend) {
-		jdbcManager().update(UPDATE_FRIEND_CONNECTION_TOKEN, friend.getId());
 		
 	}
 	
@@ -120,12 +87,11 @@ public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
 		
 	}
 	
-	public Collection<User> findFriendsSuman(User user) {
+	public Collection<User> findFriends(User user) {
 		Collection<Friend> results = new ArrayList<>(); 
-		results=jdbcManager().select(FIND_FRIEND_SUMAN, FRIENDS_MAPPER, user.getId()); 
+		results=jdbcManager().select(FIND_FRIEND, FRIENDS_MAPPER, user.getId()); 
 		Set<Integer> friendSet= new HashSet<>(); 
-		//get all users who are my friends
-		friendSet.add(user.getId());//first add yourself-as you are always your friend
+		friendSet.add(user.getId());
 		for (Iterator<Friend> iterator = results.iterator(); iterator.hasNext();) {
 			Friend friend = iterator.next();
 			if(user.getId()==friend.getUserid())

@@ -22,7 +22,8 @@ public interface UserDao {
 
 	User findUserByResetToken(String resetToken);
 
-	public Collection<User> findUsers(String firstName, String lastName, String city);
+	public Collection<User> findUsers(User user);
 
+	public Collection<User> findFriends(User user);
 
 }

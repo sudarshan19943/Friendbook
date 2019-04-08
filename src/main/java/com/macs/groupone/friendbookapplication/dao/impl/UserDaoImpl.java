@@ -29,7 +29,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 	public static final String UPDATE_USER_PASSWORD="{call updateUser(?, ?, ?)}";
 	public static final String UPDATE_USER_LOCATION="{call updateUserLocation(?, ?, ?,?)}";
 	public static final String RESET_USER_PASSWORD="{call resetUserPassword(?, ?, ?, ?)}";
-	public static final String GET_USER_LIST="{call getUserList(?,?,?)}";
+	public static final String GET_USER_LIST="{call getUserList(?,?,?,?,?)}";
 	
 
 	private static final RowMapper<User> USER_MAPPER = new RowMapper<User>() {
@@ -46,8 +46,8 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 			user.setCityId(resultSet.getString("city"));
 			user.setStateId(resultSet.getString("province"));
 			user.setCountryId(resultSet.getString("country"));
-			user.setFriendToken(resultSet.getInt("friend_token"));
-			user.setFriendConfirmationToken(resultSet.getInt("friend_confirm_token"));
+			user.setFriendToken(resultSet.getBoolean("friend_token"));
+			user.setFriendConfirmationToken(resultSet.getBoolean("friend_confirm_token"));
 			Blob imageBlob = resultSet.getBlob("user_image");
 			if(imageBlob!=null)
 			{
@@ -118,11 +118,17 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 		return result.isEmpty() ? null : result.get(0);
 	}
 
-	public Collection<User> findUsers(String firstName, String lastName, String city, String state, String country) {
+	public Collection<User> findUsers(User user) {
 		Collection<User> results = new ArrayList<>(); 
 
-		results.addAll(jdbcManager().select("{call getUserList(?,?,?,?,?)}", USER_MAPPER, firstName, lastName, city, state, country)); 
+		results.addAll(jdbcManager().select(GET_USER_LIST, USER_MAPPER, user.getFirstName(), user.getLastName(), user.getCityId(), user.getStateId(), user.getCountryId())); 
 		return results;
-	}	
+	}
+	
+	public Collection<User> findFriends(User user) {
+		Collection<User> results = new ArrayList<>(); 
+		results.addAll(jdbcManager().select("{call findFriends(?)}", USER_MAPPER, user.getId())); 
+		return results;
+	}
 
 }

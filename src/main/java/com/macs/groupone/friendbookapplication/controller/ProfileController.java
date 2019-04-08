@@ -54,7 +54,7 @@ public class ProfileController {
 			BindingResult bindingResult, HttpServletRequest request,
 			@RequestParam("profilepic") MultipartFile profilepic) {
 		logger.info("Skipping Profile Update.");
-		return Constants.REDIRECT_TIMELINE;
+		return "timeline";
 	}
 
 	// update Profile
@@ -87,7 +87,7 @@ public class ProfileController {
 		}
 		userService.updateUserLocation(findUserFromEmail);
 		logger.info("User Profile has been successfully updated.");
-		return Constants.REDIRECT_TIMELINE;
+		return "timeline";
 	}
 
 	// Going to reset page without a token redirects to login page

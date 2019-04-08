@@ -1,6 +1,7 @@
 <%--@elvariable id="errorMessage" type="String"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -19,14 +20,12 @@
     <%@include file="js/bootstrap.min.js"%>
     <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
-
 <script type="text/javacscript">
 window.history.pushState(null, "", window.location.href);        
         window.onpopstate = function() {
             window.history.pushState(null, "", window.location.href);
         };
 </script>        
-
 <html>
 <head>
 <title>Time Line</title>
@@ -34,13 +33,9 @@ window.history.pushState(null, "", window.location.href);
 	content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-
-
 	<div class="header">
 		<h2>Friend Book</h2>
 	</div>
-
 	<div class="container-fluid" style="margin-top: 50px">
 		<div class="col-md-4 text-center">
 		<img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
@@ -51,14 +46,13 @@ window.history.pushState(null, "", window.location.href);
 			<a href="friends" onClick="friends.jsp">Find / Manage Friends</a> <br></br>
 		</div>
 		
-
 		<div class="search-box">
 		<input type="text" placeholder="Find Friends...">
 		</div>
 		<div class="col-md-8">
 			<br></br>
+			<c:forEach var="post" items="${types}">
 			 <form role="form" action="/comment" method="post" autocomplete="off">
-			 <c:forEach var="post" items="${types}">
 				   <div class="postKey">
 				   ${post.key}<br></br>
 				   </div>
@@ -66,19 +60,18 @@ window.history.pushState(null, "", window.location.href);
 				   <div class="button-group">
 				    <c:if test = "${fn:contains(post.key, 'Message')}">
 				    <div class="commentBody">
-				  <input type="text" placeholder="You can comment here...">
+				  <input type="text" placeholder="You can comment here..." name = "comment">
 				   </div>
 				   <input type = "hidden" value="${post.value.getId()}" name = "postId">
-         				<input type="submit" class="btn btn-lg btn-primary btn-block" 
-         				value="comment" id="comment" name="comment">
+         				<input type="submit" class="btn btn-lg btn-primary btn-block" value="comment">
       				</c:if>
       				</div>
-				<c:forEach var="comment" items="${post.value.getComments()}">
+ 				<c:forEach var="comment" items="${post.value.getComments()}">
 				<input type = "hidden" value="${comment.getBody()}" name = "comment">
-				   <div class="commentPersonName">Comments: ${comment.getBody()} <br></br></div>
+				   <div class="commentPersonName">${comment.getBody()} <br></br></div>
 				</c:forEach>
-			</c:forEach>
 		 </form>
+		 </c:forEach>
 		</div>
 		<br></br>
 		</div>

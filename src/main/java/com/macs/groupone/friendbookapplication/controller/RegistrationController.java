@@ -4,81 +4,65 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.AvatarService;
 import com.macs.groupone.friendbookapplication.service.EmailService;
+import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
+import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.RegistrationValidator;
 
 @Controller
-public class RegistrationController {
+public class RegistrationController 
+{
 
 	private static final Logger log = Logger.getLogger(RegistrationController.class);
-
-	@Autowired
-	UserService userService;
-
-	@Autowired
-	EmailService emailService;
+    
+	AvatarService avatarService=(AvatarService)ServiceFactory.getInstance().getAvatarService();
+    private RegistrationValidator registrationValidator=FormValidatorFactory.getInstance().getRegistrationValidator();
 	
-	@Autowired
-    private RegistrationValidator registrationValidator;
-
-	@Autowired 
-	AvatarService avatarService;
 
 	@GetMapping("/registration")
-	public String registration(Model model) {
+	public String registration(Model model) 
+	{
 		model.addAttribute("registrationForm", new User());
-		return "registration";
+		return Constants.REGISTER_VIEW;
 	}
 	
 	@PostMapping("/registration")
 	public String processRegistration(Model model, @ModelAttribute("registrationForm") User registrationForm, BindingResult bindingResult,
-			HttpServletRequest request, RedirectAttributes redirect) {
+			HttpServletRequest request, RedirectAttributes redirect) 
+	{
 		registrationValidator.validate(registrationForm, bindingResult);
-		if (bindingResult.hasErrors()) {
-			return "registration";
-		} else {
-			try {
-				if (emailService.sendEmail(registrationForm.getEmail(), Constants.EMAIL_TITLE,
-						"You have been Registered with Friendbook.")) {
-					model.addAttribute(Constants.ERRORMESSAGE, Constants.ACCOUNT_NOT_FOUND);
-					return "redirect:profile"; 
-				} else {
+		if (bindingResult.hasErrors()) 
+		{
+			return Constants.REGISTER_VIEW;
+		} 
+		else 
+		{
+			try 
+			{
+					UserService userService = (UserService) ServiceFactory.getInstance().getUserService();
 					userService.addUser(registrationForm.getEmail(), registrationForm.getPassword(), registrationForm.getFirstName(), registrationForm.getLastName());
+					EmailService emailService = (EmailService) ServiceFactory.getInstance().getEmailService();
+					emailService.sendEmail(registrationForm.getEmail(), Constants.REGISTRATION_CONFIRMATION_TITLE,Constants.REGISTRATION_CONFIRMATION_MESSAGE);
 					avatarService.saveDefaultAvatar(registrationForm.getEmail());
-					request.getSession().setAttribute("email", registrationForm.getEmail());
-					redirect.addFlashAttribute("firstName", registrationForm.getFirstName());
-					redirect.addFlashAttribute("lastName", registrationForm.getLastName());
-					redirect.addFlashAttribute("password", registrationForm.getPassword());
-					return "redirect:/profile";
-				}
-			} catch (MessagingException e) {
+					request.getSession().setAttribute(Constants.EMAIL, registrationForm.getEmail());
+					return Constants.REDIRECT_PROFILE;
+			}
+			catch (MessagingException e) 
+			{
 				e.printStackTrace();
 			}
 		}
-		return "login";
-
+		return Constants.LOGIN_VIEW;
 		}
-	
-	
-	 // Going to reset page without a token redirects to login page
-	@ExceptionHandler(MissingServletRequestParameterException.class)
-	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-		return new ModelAndView("redirect:registration");
-	}
-
 }

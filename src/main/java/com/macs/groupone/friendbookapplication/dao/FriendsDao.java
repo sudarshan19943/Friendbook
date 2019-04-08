@@ -8,8 +8,6 @@ public interface FriendsDao {
 
 	void removeFriend(User user);
 
-	long getNumberOfFriends(User user, String searchText);
-
 	void confirmFriend(User user);
 
 	void updateFriendToken(User user);

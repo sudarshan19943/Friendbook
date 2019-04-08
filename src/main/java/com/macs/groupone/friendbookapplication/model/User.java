@@ -15,8 +15,8 @@ public class User {
 	private String countryId;
 	private String cityId;
 	private String passwordConfirm;
-	private int friend_token;
-	private int friend_confirm_token;
+    private boolean friendToken;
+	private boolean friendConfirmToken;
 	private ArrayList<Post> posts;
 	private String userImage;
 
@@ -123,21 +123,25 @@ public class User {
 	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
-
-	public int getFriendToken() {
-		return friend_token;
+	
+	public boolean getFriendToken()
+	{
+		return friendToken;
 	}
-
-	public void setFriendToken(int token) {
-		this.friend_token = token;
+	
+	public void setFriendToken(boolean token)
+	{
+		this.friendToken = token;
 	}
-
-	public int getFriendConfirmationToken() {
-		return friend_confirm_token;
+	
+	public boolean getFriendConfirmationToken()
+	{
+		return friendConfirmToken;
 	}
-
-	public void setFriendConfirmationToken(int token) {
-		this.friend_confirm_token = token;
+	
+	public void setFriendConfirmationToken(boolean token)
+	{
+		this.friendConfirmToken = token;
 	}
 
 }

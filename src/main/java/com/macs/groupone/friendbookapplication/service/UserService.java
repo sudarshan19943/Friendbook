@@ -60,11 +60,16 @@ public class UserService implements IService {
 		userDaoImpl.resetUserPassword(user);
 	}
 
-	public Collection<User> findUsers(String firstName, String lastName, String city) {
-		Collection<User> users = (Collection<User>) userDaoImpl.findUsers(firstName, lastName, city);
+	public Collection<User> findUsers(User user) {
+		Collection<User> users=(Collection<User>) userDaoImpl.findUsers(user);
 		return users;
 	}
-
+	
+	public Collection<User> findFriendsFromDatabase(User user) {
+		Collection<User> friends=(Collection<User>) userDaoImpl.findFriends(user);
+		return friends;
+	}
+	
 	private String getEncryptedPassword(String password) {
 		return PasswordEncryptionService.encrypt(password, SECRET);
 
