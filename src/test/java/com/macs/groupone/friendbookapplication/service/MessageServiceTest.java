@@ -7,8 +7,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class MessageServiceTest {
 		post.setBody("Testing Custom Post");
 
 		LinkedHashMap<String, Post> messageToReturn = new LinkedHashMap<String, Post>();
-		messageToReturn = messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(), post);
+		messageToReturn = (LinkedHashMap<String, Post>) messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(), post);
 
 		if (currentUser.getId() == cloneUser.getId()) {
 			for (String timeStamp : messageToReturn.keySet()) {
@@ -86,7 +87,7 @@ public class MessageServiceTest {
 		post.setBody("Testing Custom Post");
 
 		LinkedHashMap<String, Post> messageToReturn = new LinkedHashMap<String, Post>();
-		messageToReturn = messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(),
+		messageToReturn = (LinkedHashMap<String, Post>) messageService.customizePosts(currentUser, messageToReturn, cloneUser, new Date().toString(),
 				post);
 		if (currentUser.getId() != cloneUser.getId()) {
 			for (String timeStamp : messageToReturn.keySet()) {
@@ -99,8 +100,7 @@ public class MessageServiceTest {
 	
 	
 	@Test
-	public void testCreateSeperatePostSortedByTimeStamp() {
-		HashMap<String, User> friendsAndThierPostsWithTime =new HashMap<String, User>();
+	public void testSortTimeStampPostMap() {
 		
 		ArrayList<Post> posts=new ArrayList<>();
 		
@@ -110,12 +110,15 @@ public class MessageServiceTest {
 		user.setFirstName("Yash");
 		user.setLastName("Desai");
 		
-		Post post1=new Post();
-		post1.setTimeStamp(new Timestamp(1));
+		Post post3=new Post();
+		post3.setTimeStamp(new Timestamp(1));
+		post3.setBody("First Post");
 		Post post2=new Post();
 		post2.setTimeStamp(new Timestamp(2));
-		Post post3=new Post();
-		post3.setTimeStamp(new Timestamp(3));
+		post2.setBody("Second Post");
+		Post post1=new Post();
+		post1.setTimeStamp(new Timestamp(3));
+		post1.setBody("Third Post");
 		
 		posts.add(post1);
 		posts.add(post2);
@@ -123,21 +126,59 @@ public class MessageServiceTest {
 		
 		user.setPosts(posts);
 		
-
-		User currentUser = new User();
-		currentUser.setId(2);
-		currentUser.setFirstName("Suman");
-		currentUser.setLastName("Singh");
-
-		Post post = new Post();
-		post.setBody("Testing Custom Post");
-
-		LinkedHashMap<String, Post> messageToReturn = new LinkedHashMap<String, Post>();
+		Map<String, User> friendsAndThierPostsWithTime=new HashMap<>();
+		friendsAndThierPostsWithTime.put(post1.getTimeStamp(), user);
+		friendsAndThierPostsWithTime.put(post2.getTimeStamp(), user);
+		friendsAndThierPostsWithTime.put(post3.getTimeStamp(), user);
 		
+		
+		 List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
+		 assertEquals(post1.getTimeStamp(), sortedTimeStamp.get(0)); //thirst post is latest post
 
 	}
-
 	
 	
+	@Test
+	public void testfriendsAndThierPostsWithTime() {
+		
+		ArrayList<Post> posts=new ArrayList<>();
+		
+		User user = new User();
+		user.setId(1);
+		user.setFirstName("Yash");
+		user.setLastName("Desai");
+		
+		Post post3=new Post();
+		post3.setTimeStamp(new Timestamp(1));
+		post3.setBody("First Post");
+		Post post2=new Post();
+		post2.setTimeStamp(new Timestamp(2));
+		post2.setBody("Second Post");
+		Post post1=new Post();
+		post1.setTimeStamp(new Timestamp(3));
+		post1.setBody("Third Post");
+		
+		posts.add(post1);
+		posts.add(post2);
+		posts.add(post3);
+		
+		user.setPosts(posts);
+		
+		User loggedInUser = new User();
+		loggedInUser.setId(2);
+		loggedInUser.setFirstName("Sudarshan");
+		loggedInUser.setLastName("Suresh");
+		
+		Map<String, User> friendsAndThierPostsWithTime=new HashMap<>();
+		friendsAndThierPostsWithTime.put(post1.getTimeStamp(), user);
+		friendsAndThierPostsWithTime.put(post2.getTimeStamp(), user);
+		friendsAndThierPostsWithTime.put(post3.getTimeStamp(), user);
+		
+		
+		 List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
+		 LinkedHashMap<String, Post> messageToReturn=(LinkedHashMap<String, Post>) messageService.createSeperatePostSortedByTimeStamp(friendsAndThierPostsWithTime, sortedTimeStamp, loggedInUser);
+		 Post updatedPost=messageToReturn.get(0);
+		 //assertEquals(post3.getTimeStamp(),updatedPost.getTimeStamp());
 
+	}
 }
