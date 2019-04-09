@@ -1,14 +1,11 @@
 CREATE TABLE `friends` (
-  `userid` bigint(20) NOT NULL,
-  `friendid` bigint(20) NOT NULL,
+  `userid` bigint(20) DEFAULT NULL,
+  `friendid` bigint(20) DEFAULT NULL,
   UNIQUE KEY `unique_index` (`userid`,`friendid`),
   KEY `friends_users_friendid_fk` (`friendid`),
   CONSTRAINT `friends_users_friendid_fk` FOREIGN KEY (`friendid`) REFERENCES `users` (`id`),
   CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-ALTER TABLE `friends` 
-CHANGE COLUMN `friend_token` `friend_token` TINYINT(4) NULL DEFAULT 0 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -23,19 +20,12 @@ CREATE TABLE `users` (
   `confirmation_token` varchar(255) DEFAULT NULL,
   `enabled` char(1) DEFAULT NULL,
   `province` varchar(255) DEFAULT NULL,
+  `friend_confirm_token` tinyint(4) DEFAULT '0',
+  `friend_token` tinyint(4) DEFAULT '0',
+  `user_image` mediumblob,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_uindex` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE `friends` (
-  `userid` bigint(20) NOT NULL,
-  `friendid` bigint(20) NOT NULL,
-  UNIQUE KEY `unique_index` (`userid`,`friendid`),
-  KEY `friends_users_friendid_fk` (`friendid`),
-  CONSTRAINT `friends_users_friendid_fk` FOREIGN KEY (`friendid`) REFERENCES `users` (`id`),
-  CONSTRAINT `friends_users_userid_fk` FOREIGN KEY (`userid`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 
 
@@ -43,10 +33,10 @@ CREATE TABLE `post` (
   `post_id` int(11) NOT NULL AUTO_INCREMENT,
   `post` varchar(255) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
-  `recipient_id` int(11) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT NULL,
+  `post_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`post_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+
 
 
 CREATE TABLE `comment` (
@@ -59,7 +49,7 @@ CREATE TABLE `comment` (
   PRIMARY KEY (`comment_id`),
   KEY `post_id_fk_idx` (`post_id_fk`),
   CONSTRAINT `post_id_fk` FOREIGN KEY (`post_id_fk`) REFERENCES `post` (`post_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 CREATE TABLE `logs` (
   `user_id` varchar(20) NOT NULL,
@@ -69,142 +59,147 @@ CREATE TABLE `logs` (
   `message` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-####User #####
+#STORED PROCEDURES
 
-CREATE PROCEDURE `getUserById` (IN id BIGINT(20))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `addFriend`(IN friendid INT(11), id INT(11))
+BEGIN
+INSERT INTO friends (friendid, userid) VALUES (friendid,id);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `addNewComment`(IN sender INT(11),IN reciever INT(11), IN commentVal VARCHAR(255),IN post_id INT(11))
+BEGIN
+INSERT INTO comment (sender_id,receiver_id,comment,post_id_fk) VALUES (sender,reciever,commentVal,post_id);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `addNewPost`(IN senderID INT(11), IN post VARCHAR(255))
+BEGIN
+INSERT INTO post (sender_id, post) VALUES (senderID,post);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `addUser`(IN emailVal VARCHAR(255), IN passwordVal VARCHAR(255), IN firstName VARCHAR(255), IN lastName VARCHAR(255))
+BEGIN
+INSERT INTO users
+(`first_name`,`last_name`,`email`,`password`)
+VALUE(firstName,lastName,emailVal,passwordVal);
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `clearFriendConfirmToken`(IN id INT(11))
+BEGIN
+UPDATE users  SET friend_confirm_token = false where id = id;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `clearFriendToken`(IN id INT(11))
+BEGIN
+UPDATE users  SET friend_token = false where id = id;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findFriend`(IN idVal INT(11))
+BEGIN
+select * from friends where userid=idVal OR friendid=idVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findFriends`(IN inpID INT(11))
+BEGIN
+SELECT * FROM friends
+inner join users on users.id = friends.userid
+where userid = inpID or friendid = inpID;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findUserByResetToken`(IN confirmation_tokenVal VARCHAR(255))
+BEGIN
+SELECT * FROM users WHERE confirmation_token = confirmation_tokenVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getComment`(IN post_id INT(11))
+BEGIN
+SELECT * from comment
+INNER JOIN  post ON comment.post_id_fk = post.post_id
+where comment.post_id_fk  = post_id;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getMessage`(IN recipientIDVal INT(11))
+BEGIN
+SELECT * from post where recipient_id = recipientIDVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getMessageByUserID`(IN id INT(11))
+BEGIN
+select * from post where sender_id = id;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getPostCreator`(IN postID INT(11))
+BEGIN
+select * from post where post_id = postID;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getUserByEmail`(IN emailVal VARCHAR(255))
+BEGIN
+SELECT * FROM users WHERE email = emailVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getUserByEmailPassword`(IN emailVal VARCHAR(45), passwordVal VARCHAR(45))
+BEGIN
+SELECT * FROM users WHERE email = emailVal and password = passwordVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getUserById`(IN id BIGINT(20))
 BEGIN
 SELECT * FROM users WHERE users.id = id;
 END
 
-CREATE PROCEDURE `getUserByEmailPassword`(IN email VARCHAR(45), password VARCHAR(45))
-BEGIN
-SELECT * FROM users WHERE email = email and password = password;
-END
-
-CREATE PROCEDURE `getUserByEmail` (IN email VARCHAR(255))
-BEGIN
-SELECT * FROM users WHERE email = email;
-END
-
-PROCEDURE `addUser`(IN email VARCHAR(255), password VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255))
-BEGIN
-INSERT INTO users (email, password, first_name, last_name) values  (email = email , password = password , first_name = first_name, last_name = last_name);
-END
-
-CREATE PROCEDURE `updateUser`(IN confirmation_token VARCHAR(255), email VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255), password VARCHAR(255), province VARCHAR(255), country VARCHAR(255), enabled CHAR(1))
-BEGIN
-UPDATE users SET confirmation_token=confirmation_token , email=email, enabled=enabled, first_name=first_name, last_name=last_name, password =password, province=province ,country=country WHERE  id=id;
-END
-
-CREATE PROCEDURE `findUserByResetToken` (IN confirmation_token VARCHAR(255))
-BEGIN
-SELECT * FROM users WHERE confirmation_token = confirmation_token;
-END
-
-CREATE PROCEDURE `getUserList`()
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `getUserList`(IN firstName VARCHAR(255), lastName VARCHAR(255), city VARCHAR(255), state VARCHAR(255), country VARCHAR(255))
 BEGIN
 select * from
 users
-where  first_name LIKE '%%'AND last_name LIKE '%%' AND city LIKE '%Halifax%' AND country LIKE '%%';
+where  first_name LIKE firstName AND last_name LIKE lastName AND city LIKE city AND state LIKE state AND country LIKE country;
 END
 
-###POST SECTION######
-
-CREATE PROCEDURE `addNewPost` (IN sender_id INT(11), recipient_id INT(11), post VARCHAR(255), timestamp TIMESTAMP)
-BEGIN
-INSERT INTO post (sender_id, recipient_id, post, timestamp) VALUES (sender_id = sender_id, recipient_id = recipient_id, post = post, timestamp = timestamp);
-END
-
-CREATE PROCEDURE `removePost`(IN post_id INT(11))
-BEGIN
-DELETE from post WHERE post_id = post_id;
-END
-
-CREATE PROCEDURE `getMessage` (IN sender_id INT(11))
-BEGIN
-SELECT * from post where sender_id = sender_id;
-END
-
-###COMMENT SECTION #####
-
-CREATE PROCEDURE `addNewComment` (sender_id INT(11), receiver_id INT(11), comment VARCHAR(255), timestamp TIMESTAMP, comment_id INT(11))
-BEGIN
-INSERT INTO comment (sender_id, receiver_id, comment, timestamp, comment_id) VALUES (sender_id = sender_id, receiver_id =receiver_id, comment =comment, timestamp =timestamp, comment_id=comment_id);
-END
-
-CREATE PROCEDURE `getComment` (IN post_id INT(11))
-BEGIN
-SELECT * from comment where post_id = comment_id;
-END
-
-#####FRIENDS####
-CREATE PROCEDURE `addFriend`(IN friendid BIGINT(20))
-BEGIN
-INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
-END
-
-CREATE PROCEDURE `removeFriend`(IN id BIGINT(20))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `removeFriend`(IN id BIGINT(20))
 BEGIN
 DELETE FROM friends WHERE  friends.friendid = id;
 END
 
-##Change parameters to pass different fields
-CREATE PROCEDURE `findFriends`(IN id INT(11))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `removeFriendUser`(IN id BIGINT(20))
 BEGIN
-SELECT * FROM users 
-INNER JOIN  friends ON friends.friendid = users.id
-where id = friends.userid and friends.friend_token = 1;
+DELETE FROM friends WHERE  friends.userid = id;
 END
 
-CREATE PROCEDURE `confirmFriend` (id INT(20))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `removePost`(IN post_id INT(11))
 BEGIN
-UPDATE `friends` SET `friend_token` = '1' WHERE (`friendid` = id);
+DELETE from post WHERE post_id = post_id;
 END
 
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `resetUserPassword`(IN passwordVal VARCHAR(255),IN confirmation_token VARCHAR(255), IN emailVal VARCHAR(255),IN enabledVal CHAR(1))
+BEGIN
+UPDATE users SET password=passwordVal , confirmation_token=confirmation_token , enabled=enabledVal WHERE  email=emailVal;
+END
 
-
-#session Management
-CREATE TABLE CSCI5308_1_DEVINT.SPRING_SESSION (
-PRIMARY_ID CHAR(36) NOT NULL,
-SESSION_ID CHAR(36) NOT NULL,
-CREATION_TIME BIGINT NOT NULL,
-LAST_ACCESS_TIME BIGINT NOT NULL,
-MAX_INACTIVE_INTERVAL INT NOT NULL,
-EXPIRY_TIME BIGINT NOT NULL,
-PRINCIPAL_NAME VARCHAR(100),
-CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (PRIMARY_ID)
-);
-CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON CSCI5308_1_DEVINT.SPRING_SESSION (SESSION_ID);
-CREATE INDEX SPRING_SESSION_IX2 ON CSCI5308_1_DEVINT.SPRING_SESSION (EXPIRY_TIME);
-CREATE INDEX SPRING_SESSION_IX3 ON CSCI5308_1_DEVINT.SPRING_SESSION (PRINCIPAL_NAME);
-
-CREATE TABLE CSCI5308_1_DEVINT.SPRING_SESSION_ATTRIBUTES (
-SESSION_PRIMARY_ID CHAR(36) NOT NULL,
-ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
-ATTRIBUTE_BYTES BLOB NOT NULL,
-CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_PRIMARY_ID, ATTRIBUTE_NAME),
-CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_PRIMARY_ID) REFERENCES CSCI5308_1_DEVINT.SPRING_SESSION(PRIMARY_ID) ON DELETE CASCADE
-);
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateConfirmToken`(IN id INT(11))
+BEGIN
+UPDATE users  SET friend_confirm_token = true  WHERE (users.id = id);
+END
 
 CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateFriendToken`(IN id INT(11))
 BEGIN
-UPDATE friends  SET friend_token = '1'  WHERE (friends.friendid = id);
+UPDATE users  SET friend_token = true  WHERE (users.id = id);
 END
 
-CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateConfirmToken`(IN friendid INT(11))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateUser`(IN confirmation_token VARCHAR(255), IN emailVal VARCHAR(255),IN enabledVal CHAR(1))
 BEGIN
-UPDATE `friends` SET `confirm_token` = '1'  WHERE (friends.friendid = friendid);
+UPDATE users SET confirmation_token=confirmation_token , enabled=enabledVal WHERE  email=emailVal;
 END
 
-CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `confirmFriend`(IN friendid BIGINT(20))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateUserImage`(IN userImage MEDIUMBLOB, IN emailVal VARCHAR(255))
 BEGIN
-INSERT INTO friends (friendid) VALUES (friends.friendid = friendid);
-UPDATE friends SET confirm_token = 1 WHERE (friends.friendid = friendid) AND friend_token =1;
+update users set user_image=userImage where email=emailVal;
 END
 
-CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `findFriends`(IN id INT(11))
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateUserImageDefault`(IN userImage MEDIUMBLOB, IN emailVal VARCHAR(255))
 BEGIN
-SELECT * FROM users 
-inner join friends on friends.userid = users.id
-where id = friends.userid and friends.friend_token = 1; 
+update users set user_image=userImage where email=emailVal;
+END
+
+CREATE DEFINER=`CSCI5308_1_DEVINT_USER`@`%` PROCEDURE `updateUserLocation`(IN countryVal VARCHAR(255), IN stateVal VARCHAR(255),IN cityVal VARCHAR(255),IN emailVal VARCHAR(255))
+BEGIN
+UPDATE users SET country=countryVal , province=stateVal,city=cityVal WHERE  email=emailVal;
 END

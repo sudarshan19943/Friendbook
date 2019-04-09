@@ -90,7 +90,7 @@ public class ProfileController {
 		return Constants.REDIRECT_TIMELINE;
 	}
 
-	// Going to reset page without a token redirects to login page
+
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
 		return new ModelAndView(Constants.REDIRECT_LOGIN);

@@ -1,31 +1,32 @@
 package com.macs.groupone.friendbookapplication.dao.impl;
 
-import com.macs.groupone.friendbookapplication.dao.CommentDao;
-import com.macs.groupone.friendbookapplication.dao.FriendsDao;
-import com.macs.groupone.friendbookapplication.dao.MessageDao;
-import com.macs.groupone.friendbookapplication.dao.UserDao;
+
+import com.macs.groupone.friendbookapplication.dao.ICommentDao;
+import com.macs.groupone.friendbookapplication.dao.IFriendsDao;
+import com.macs.groupone.friendbookapplication.dao.IMessageDao;
+import com.macs.groupone.friendbookapplication.dao.IUserDao;
 
 public class DAOFactory implements IDAOFactory{
 	
 	private static DAOFactory daoFactory;
 
 	@Override
-	public UserDao getUserDao() {
+	public IUserDao getUserDao() {
 		return new UserDaoImpl();
 	}
 
 	@Override
-	public FriendsDao getFriendDao() {
+	public IFriendsDao getFriendDao() {
 		return new FriendsDaoImpl();
 	}
 
 	@Override
-	public MessageDao getMessageDao() {
+	public IMessageDao getMessageDao() {
 		return new MessageDaoImpl();
 	}
 
 	@Override
-	public CommentDao getCommentsDao() {
+	public ICommentDao getCommentsDao() {
 		return new CommentDaoImpl();
 	}
 

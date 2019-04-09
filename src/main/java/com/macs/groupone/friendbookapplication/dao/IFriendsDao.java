@@ -2,7 +2,7 @@ package com.macs.groupone.friendbookapplication.dao;
 
 import com.macs.groupone.friendbookapplication.model.User;
 
-public interface FriendsDao {
+public interface IFriendsDao {
 
 	long addFriend(User friend, User user);
 

@@ -3,9 +3,9 @@ package com.macs.groupone.friendbookapplication.validator.passwordandemailvalida
 import java.util.stream.Stream;
 import com.macs.groupone.friendbookapplication.validator.ValidationCode;
 
-public class PassWordValidator {
+public class PasswordValidator {
 
-	private PassWordValidator() {
+	private PasswordValidator() {
 
 	}
 

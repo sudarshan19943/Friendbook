@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 
-public interface MessageDao {
+public interface IMessageDao {
 	
 	void addNewPost(User sender, String post);
 
