@@ -11,13 +11,13 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
-import com.macs.groupone.friendbookapplication.dao.FriendsDao;
+import com.macs.groupone.friendbookapplication.dao.IFriendsDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.Friend;
 import com.macs.groupone.friendbookapplication.model.User;
 
 
-public class FriendsDaoImpl extends AbstractDao implements FriendsDao {
+public class FriendsDaoImpl extends AbstractDao implements IFriendsDao {
 	
 	public final  Logger logger = Logger.getLogger(FriendsDaoImpl.class);
 	

@@ -21,7 +21,7 @@ import com.macs.groupone.friendbookapplication.exceptions.DatabaseConnectionFail
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseOperationException;
 
-public class JdbcManagerImpl implements JdbcManager {
+public class JdbcManagerImpl implements IJdbcManager {
 	
 	private final  Logger logger = Logger.getLogger(JdbcManagerImpl.class);
 	private final  String URL="spring.datasource.url";

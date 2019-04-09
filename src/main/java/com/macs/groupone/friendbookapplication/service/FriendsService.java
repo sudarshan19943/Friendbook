@@ -80,9 +80,11 @@ public class FriendsService implements IService {
 		} catch (NullPointerException e) {
 			log.error(e);
 			e.printStackTrace();
+		} catch (IndexOutOfBoundsException er) {
+			log.error(er);
+			er.printStackTrace();
 		}
 	}
-
 	public void removeFriendsfromUserList(ArrayList<User> userList, ArrayList<User> friendList) {
 
 		try {
@@ -97,6 +99,9 @@ public class FriendsService implements IService {
 		} catch (NullPointerException e) {
 			log.error(e);
 			e.printStackTrace();
+		}catch (IndexOutOfBoundsException er) {
+			log.error(er);
+			er.printStackTrace();
 		}
 
 	}

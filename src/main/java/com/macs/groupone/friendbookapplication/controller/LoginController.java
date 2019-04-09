@@ -66,7 +66,6 @@ public class LoginController {
 		return Constants.REDIRECT_LOGIN;
 	}
 
-	// Going to reset page without a token redirects to login page
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public String handleMissingParams(MissingServletRequestParameterException ex) {
 		return Constants.REDIRECT_LOGIN;

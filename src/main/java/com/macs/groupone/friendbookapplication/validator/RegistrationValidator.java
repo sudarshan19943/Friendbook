@@ -8,7 +8,7 @@ import com.macs.groupone.friendbookapplication.model.User;
 import com.macs.groupone.friendbookapplication.service.ServiceFactory;
 import com.macs.groupone.friendbookapplication.service.UserService;
 import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.EmailValidator;
-import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.PassWordValidator;
+import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.PasswordValidator;
 import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
 public class RegistrationValidator implements Validator {
@@ -63,7 +63,7 @@ public class RegistrationValidator implements Validator {
             errors.rejectValue(PASSWORD,ValidationCode.PASSWORD_DOES_NOT_MATCH.getPropertyName() );
             return ;
         }
-        if (PassWordValidator.validatePasswordPolicy(user.getPassword())!=null){
+        if (PasswordValidator.validatePasswordPolicy(user.getPassword())!=null){
             errors.rejectValue(PASSWORD,ValidationCode.PASSWORD_POLICY_DOES_NOT_SATISFY.getPropertyName() );
         }
     }

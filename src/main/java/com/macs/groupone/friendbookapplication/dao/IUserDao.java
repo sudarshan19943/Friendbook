@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import com.macs.groupone.friendbookapplication.model.User;
 
-public interface UserDao {
+public interface IUserDao {
 
 	User getUserById(int id);
 

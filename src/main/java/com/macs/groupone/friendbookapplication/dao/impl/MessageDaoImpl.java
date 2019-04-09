@@ -8,12 +8,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
-import com.macs.groupone.friendbookapplication.dao.MessageDao;
+import com.macs.groupone.friendbookapplication.dao.IMessageDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.Post;
 import com.macs.groupone.friendbookapplication.model.User;
 
-public class MessageDaoImpl extends AbstractDao implements MessageDao 
+public class MessageDaoImpl extends AbstractDao implements IMessageDao 
 {
 	final  Logger logger = Logger.getLogger(MessageDaoImpl.class);
 	private static final String ADD_NEW_POST = "{call addNewPost(?, ?)}";
