@@ -5,6 +5,8 @@
 .metadata
 .mvn/wrapper
 /bin/
+mvnw
+mvnw.cmd
 
 ### STS ###
 .apt_generated

@@ -1,16 +1,17 @@
 package com.macs.groupone.friendbookapplication.dao.impl;
 
-import com.macs.groupone.friendbookapplication.dao.CommentDao;
-import com.macs.groupone.friendbookapplication.dao.FriendsDao;
-import com.macs.groupone.friendbookapplication.dao.MessageDao;
-import com.macs.groupone.friendbookapplication.dao.UserDao;
+
+import com.macs.groupone.friendbookapplication.dao.IFriendsDao;
+import com.macs.groupone.friendbookapplication.dao.ICommentDao;
+import com.macs.groupone.friendbookapplication.dao.IMessageDao;
+import com.macs.groupone.friendbookapplication.dao.IUserDao;
 
 public interface IDAOFactory {
-	UserDao getUserDao();
+	IUserDao getUserDao();
 
-	FriendsDao getFriendDao();
+	IFriendsDao getFriendDao();
 
-	MessageDao getMessageDao();
+	IMessageDao getMessageDao();
 
-	CommentDao getCommentsDao();
+	ICommentDao getCommentsDao();
 }

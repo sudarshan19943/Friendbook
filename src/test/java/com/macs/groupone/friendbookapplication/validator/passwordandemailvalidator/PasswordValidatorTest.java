@@ -16,22 +16,22 @@ import org.slf4j.LoggerFactory;
 
 import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
-public class PassWordValidatorTest {
+public class PasswordValidatorTest {
 	
-	private static final Logger log = LoggerFactory.getLogger(PassWordValidatorTest.class);
+	private static final Logger log = LoggerFactory.getLogger(PasswordValidatorTest.class);
 	public static final String VALIDATION_PROPERTIES = "src/main/resources/validation.properties";
 	public static final String PASSWORD_POLICY_NOT_SATISFIED="Password Policy is not satisfied.";
 	
 	
 	@Test
 	public void tesValidatePasswordPolicy() {
-		String passwordSatisfied=PassWordValidator.validatePasswordPolicy("passWOrd");
+		String passwordSatisfied=PasswordValidator.validatePasswordPolicy("passWOrd");
 		assertTrue(null==passwordSatisfied);
-		String passwordSatisfiedTest1=PassWordValidator.validatePasswordPolicy("password");
+		String passwordSatisfiedTest1=PasswordValidator.validatePasswordPolicy("password");
 		assertEquals(defaultProps.getProperty(passwordSatisfiedTest1),PASSWORD_POLICY_NOT_SATISFIED);
-		String passwordSatisfiedTest2=PassWordValidator.validatePasswordPolicy("PASSWORD");
+		String passwordSatisfiedTest2=PasswordValidator.validatePasswordPolicy("PASSWORD");
 		assertEquals(defaultProps.getProperty(passwordSatisfiedTest2),PASSWORD_POLICY_NOT_SATISFIED);
-		String passwordSatisfiedTest3=PassWordValidator.validatePasswordPolicy("PASSWORD");
+		String passwordSatisfiedTest3=PasswordValidator.validatePasswordPolicy("PASSWORD");
 		assertEquals(defaultProps.getProperty(passwordSatisfiedTest3),PASSWORD_POLICY_NOT_SATISFIED);
 	}
 	

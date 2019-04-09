@@ -7,11 +7,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
-import com.macs.groupone.friendbookapplication.dao.CommentDao;
+import com.macs.groupone.friendbookapplication.dao.ICommentDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.Comment;
 
-public class CommentDaoImpl extends AbstractDao implements CommentDao 
+public class CommentDaoImpl extends AbstractDao implements ICommentDao 
 {
 
 	final  Logger logger = Logger.getLogger(CommentDaoImpl.class);

@@ -11,12 +11,12 @@ import org.apache.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import com.macs.groupone.friendbookapplication.dao.AbstractDao;
-import com.macs.groupone.friendbookapplication.dao.UserDao;
+import com.macs.groupone.friendbookapplication.dao.IUserDao;
 import com.macs.groupone.friendbookapplication.jdbc.RowMapper;
 import com.macs.groupone.friendbookapplication.model.User;
 
 
-public class UserDaoImpl extends AbstractDao implements UserDao {
+public class UserDaoImpl extends AbstractDao implements IUserDao {
 	
 	final  Logger logger = Logger.getLogger(UserDaoImpl.class);
 
