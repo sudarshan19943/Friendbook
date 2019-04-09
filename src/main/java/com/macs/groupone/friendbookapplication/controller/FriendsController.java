@@ -81,6 +81,7 @@ public class FriendsController {
 		ArrayList<User> userList=(ArrayList<User>) userService.findUsers(usersForm);
 		ArrayList<User> friendList=(ArrayList<User>) userService.findFriendsFromDatabase(user);
 		friendsService.removeUserFromFriendsList(user, friendList);
+		friendsService.removeUserFromFriendsList(user, userList);
 		friendsService.removeFriendsfromUserList(userList, friendList);
 		getButtonState(user);
 		model.addAttribute("enableConfirmButton", enableConfirmButton);
