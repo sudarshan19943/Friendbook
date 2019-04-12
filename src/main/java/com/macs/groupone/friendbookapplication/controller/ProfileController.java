@@ -57,7 +57,6 @@ public class ProfileController {
 		return Constants.REDIRECT_TIMELINE;
 	}
 
-	// update Profile
 	@PostMapping(params = "Update")
 	public String updateProfile(Model model, @ModelAttribute("profileForm") User profileForm,
 			BindingResult bindingResult, HttpServletRequest request,

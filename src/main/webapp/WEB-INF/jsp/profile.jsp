@@ -16,7 +16,7 @@
    <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
 <script>
-   /* Be sure that ur dom is loaded */    
+   
    $(document).ready(function(){
        $("div.form-group-lastname label.tbh:empty").parent().hide()
    });
@@ -37,8 +37,7 @@
       }
    </style>
    <script>
-      // bind the on-change event for the input element (triggered when a file
-      // is chosen)
+
       $(document).ready(function() {
         
         $("#profilepic").on("click", function(){

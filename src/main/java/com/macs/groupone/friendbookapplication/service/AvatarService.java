@@ -14,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
-//Ravi Zala from Team 3 helped us in persisting the Data into Database.
-
 public class AvatarService implements IService {
 
 	private final static Logger logger = Logger.getLogger(AvatarService.class);
