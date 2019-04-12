@@ -44,7 +44,7 @@ class TimelineController {
 			return Constants.REDIRECT_LOGIN;
 
 		User findUserFromEmail = userService.getUserByEmail(currentUseremail);
-		Collection<User> listOfFriends = friendsService.findFriendsSuman(findUserFromEmail);
+		Collection<User> listOfFriends = friendsService.findFriends(findUserFromEmail);
 		Map<String, Post> listOfPostsFromAllMyFriendsSorted = messageService
 				.GetPostsSortedByTimeStamp(findUserFromEmail, listOfFriends);
 		model.addAttribute("types", listOfPostsFromAllMyFriendsSorted);
