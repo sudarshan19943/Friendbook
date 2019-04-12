@@ -16,7 +16,6 @@
    <%@include file="js/bootstrap.min.js"%>
    <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
-<!DOCTYPE html>
 <html lang="en">
    <head>
       <meta charset="utf-8">
