@@ -40,7 +40,7 @@ public class FriendsService implements IService {
 
 	}
 
-	public Collection<User> findFriendsSuman(User user) {
+	public Collection<User> findFriends(User user) {
 		Collection<User> friends = (Collection<User>) friendsDaoImpl.findFriends(user);
 		return friends;
 	}
