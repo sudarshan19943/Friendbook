@@ -17,6 +17,10 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
 
+//References:
+//https://www.tutorialspoint.com/java/java_sending_email.htm
+//https://stackoverflow.com/questions/3649014/send-email-using-java
+
 public class EmailService implements IService 
 {
 

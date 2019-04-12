@@ -27,6 +27,9 @@ import com.macs.groupone.friendbookapplication.validator.ForgetPasswordValidator
 import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.ResetPasswordValidator;
 
+//References-
+//https://www.codebyamir.com/blog/forgot-password-feature-with-java-and-spring-boot
+
 @Controller
 public class ForgetPasswordController {
 
