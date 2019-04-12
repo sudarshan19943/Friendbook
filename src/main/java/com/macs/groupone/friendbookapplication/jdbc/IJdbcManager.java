@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.macs.groupone.friendbookapplication.exceptions.DatabaseAccessException;
 
+//References:
+//https://docs.spring.io/spring-framework/docs/3.0.0.M3/reference/html/ch13s05.html
+//https://www.javatpoint.com/RowMapper-example
 
 public interface IJdbcManager
 {
@@ -12,3 +15,6 @@ public interface IJdbcManager
 	int update(final String procedureName, final Object... parameters) throws DatabaseAccessException;
 
 }
+
+
+

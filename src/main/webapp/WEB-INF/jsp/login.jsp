@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <style type="text/css">
-   <%@include file="css/chat.css"%>
    <%@include file="css/bootstrap.min.css"%>
    <%@include file="css/bootstrap-formhelpers.min.css"%>
    <%@include file="css/style.css"%>
@@ -16,11 +15,11 @@
    <%@include file="js/bootstrap.min.js"%>
    <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
+
 <fmt:setBundle basename="locale" var="loc"/>
 <fmt:message bundle="${loc}" key="local.label.sign_up_here" var="sign_up_here"/>
 <fmt:message bundle="${loc}" key="local.label.new_user" var="new_user"/>
 <fmt:message bundle="${loc}" key="local.label.forgot_password" var="forgot_password"/>
-<!DOCTYPE html>
 <html lang="en">
    <head>
       <meta charset="utf-8">
@@ -97,6 +96,5 @@
       </div>
       <script
          src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-      <%-- <script src="${contextPath}/resources/js/bootstrap.min.js"></script> --%>
    </body>
 </html>

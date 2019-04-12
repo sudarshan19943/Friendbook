@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <style type="text/css">
-   <%@include file="css/chat.css"%>
    <%@include file="css/bootstrap.min.css"%>
    <%@include file="css/bootstrap-formhelpers.min.css"%>
    <%@include file="css/style.css"%>
@@ -17,7 +16,7 @@
    <%@include file="js/bootstrap-formhelpers.min.js"%>
 </script>
 <script>
-   /* Be sure that ur dom is loaded */    
+   
    $(document).ready(function(){
        $("div.form-group-lastname label.tbh:empty").parent().hide()
    });
@@ -38,8 +37,7 @@
       }
    </style>
    <script>
-      // bind the on-change event for the input element (triggered when a file
-      // is chosen)
+
       $(document).ready(function() {
         
         $("#profilepic").on("click", function(){
@@ -75,27 +73,21 @@
       <div class="container" style="margin-top:40px">
          <div class="row centered-form">
             <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-               <!--   <img class="avatar" id="profilepic" src="../../icons/avatar.png"/>
-                  <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />			  -->
                <div class="panel panel-default" style="margin-top: 10px">
                   <div class="panel-body">
                      <form:form method="POST" modelAttribute="profileForm" enctype="multipart/form-data" class="form-signin" autocomplete="off">
-                        <!-- Images -->
                         <div class="form-group-profilepic" align="center">
                            <img style="width: 200px; height: 200px" src="data:image/jpeg;base64,${avatarpic}" class="img-thumbnail" alt="Cinque Terre" id="profilepic">
                         </div>
                         <div class="form-group-profilepic">
                            <input id="upload-file-input" type="file" name="profilepic" id="profilepic"   accept="*" />	
                         </div>
-                        <!--  full name  -->
                         <div class="form-group-firstname" style="text-align:center">
                            <label for="fullName">${fullName}</label>
                         </div>
-                        <!-- City Name --> 
                         <div class="form-group-lastname">
                            <label for="city" class="tbh">${city}</label>
                         </div>
-                        <!-- Dropdown -->
                         <div class="form-group">
                            <spring:bind path="countryId">
                               <form:select name="country" class="countries" id="countryId" path="countryId" >
@@ -137,7 +129,6 @@
                               </strong>
                            </div>
                         </c:if>
-                        <!--  end of form -->
                      </form:form>
                   </div>
                </div>

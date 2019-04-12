@@ -9,6 +9,10 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.EmailValidator;
 import com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator.StringUtils;
 
+//References -
+//https://www.journaldev.com/2668/spring-validation-example-mvc-validator
+//https://dzone.com/tutorials/java/spring/spring-form-validation-1.html
+
 public class LoginValidator implements Validator {
 
 	public static final String EMAIL = "email";

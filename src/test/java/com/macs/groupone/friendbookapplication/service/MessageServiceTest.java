@@ -7,9 +7,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.After;
 import org.junit.Before;
@@ -181,7 +183,13 @@ public class MessageServiceTest {
 
 		List<String> sortedTimeStamp=messageService.SortTimeStampPostMap(friendsAndThierPostsWithTime);
 		LinkedHashMap<String, Post> messageToReturn=(LinkedHashMap<String, Post>) messageService.createSeperatePostSortedByTimeStamp(friendsAndThierPostsWithTime, sortedTimeStamp, loggedInUser);
-		Post updatedPost=messageToReturn.get(0);
-		//assertEquals(post3.getTimeStamp(),updatedPost.getTimeStamp());
+		Iterator<Entry<String, Post>> messageToReturnIterator = messageToReturn.entrySet().iterator();
+	    while (messageToReturnIterator.hasNext()) {
+	        Map.Entry pair = messageToReturnIterator.next();
+	        Post post=(Post) pair.getValue();
+	        assertEquals(post1.getTimeStamp(),post.getTimeStamp());
+	        break;
+	    }
+		
 	}
 }

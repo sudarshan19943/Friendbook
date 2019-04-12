@@ -20,6 +20,10 @@ import com.macs.groupone.friendbookapplication.service.UserService;
 import com.macs.groupone.friendbookapplication.validator.FormValidatorFactory;
 import com.macs.groupone.friendbookapplication.validator.RegistrationValidator;
 
+//References-
+//https://www.codebyamir.com/blog/user-account-registration-with-spring-boot
+//https://www.codebyamir.com/blog/create-rest-api-with-spring-boot
+	
 @Controller
 public class RegistrationController {
 

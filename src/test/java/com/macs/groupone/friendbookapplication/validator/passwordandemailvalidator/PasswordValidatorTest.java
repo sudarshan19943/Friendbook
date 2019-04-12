@@ -1,7 +1,6 @@
 package com.macs.groupone.friendbookapplication.validator.passwordandemailvalidator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
@@ -9,12 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.macs.groupone.friendbookapplication.config.ApplicationConfigPropertyConfigurator;
 
 public class PasswordValidatorTest {
 	

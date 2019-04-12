@@ -11,6 +11,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.log4j.Logger;
 
+//Referred from Rob's Lecture and Tutorials - Refactoring
+
 public class PasswordEncryptionService implements IService {
 	
 	private PasswordEncryptionService() {
