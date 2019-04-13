@@ -2,7 +2,7 @@
 
 Your journey to networking starts here!
 
-##Prerequisites
+## Prerequisites
 
 A computer with a 4GB RAM with modern browser support such as Google Chrome, Mozilla Firefox, etc.
 
@@ -21,7 +21,7 @@ The application has been deployed on the heroku cloud from the master branch of 
 
 ## Authors
 
-* **Suman Singh*
+* **Suman Singh**
 * **Sudarshan Suresh**
 * **Yash Desai**
 
