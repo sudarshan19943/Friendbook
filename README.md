@@ -21,6 +21,17 @@ On localhost:
 
 The application has been deployed on the heroku cloud from the master branch of the Github project with the follwoing URL: https://friendbook-app.herokuapp.com/login
 
+## Application screenshots
+
+Landing page:
+![](Picture1.png)
+
+Friends page:
+![](Picture2.png)
+
+Forgot password page:
+![](Picture3.png)
+
 ## Authors
 
 * **Suman Singh**
